@@ -54,7 +54,20 @@ const userSchema = new Schema({
     timestamps: true,
 });
 
-// 
+//methodes
+
+
+// methode for returning json object
+userSchema.methods.toJSON = function() {
+    const user = this;
+    const userObject = user.toObject();
+    delete userObject.password;
+    delete userObject.tokens;
+    delete userObject.createdAt;
+    delete userObject.updatedAt;
+
+    return userObject;
+};
 
 // create the user model
 const User = mongoose.model('User', userSchema);
