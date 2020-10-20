@@ -38,6 +38,9 @@ const userSchema = new Schema({
     birthday: {
         type: Date,
     },
+    avatar: {
+        type: String
+    },
     tokens: [{
         token: {
             type: String,
@@ -51,7 +54,7 @@ const userSchema = new Schema({
     timestamps: true,
 });
 
-
+// 
 
 // create the user model
 const User = mongoose.model('User', userSchema);
