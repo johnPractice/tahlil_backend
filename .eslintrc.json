@@ -1,0 +1,33 @@
+    {
+        "env": {
+            "browser": true,
+            "commonjs": true,
+            "es2020": true,
+            "es6": true
+        },
+        "extends": "eslint:recommended",
+        "parserOptions": {
+            "ecmaVersion": 12
+        },
+        "globals": {
+            "process": "off"
+        },
+        "rules": {
+            "brace-style": [2, "1tbs", {
+                "allowSingleLine": true
+            }],
+
+            "no-unused-vars": [
+                "warn"
+            ],
+            "no-var": [
+                "off"
+            ],
+            "one-var": [
+                "off"
+            ],
+            "no-undef": ["warn"],
+            "semi": "warn"
+
+        }
+    }
