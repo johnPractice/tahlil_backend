@@ -16,22 +16,10 @@ const swaggerOptions = {
         }
     },
 
-    apis: ['./src/swagger.config.js', './src/routers/*.swagger.js']
+    apis: ['./src/routers/*.swagger.js', './src/*.swagger.js']
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-// use middelware
-
-// Routes
-/**
- * @swagger
- * /test:
- *  get:
- *    description: Use to request all customers
- *    responses:
- *      '200':
- *        description: A successful response
- */
 
 module.exports = {
     swaggerDocs,
