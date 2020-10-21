@@ -59,16 +59,20 @@ const userSchema = new Schema({
 
 // create token
 userSchema.methods.genrateAuth = async function() {
-    const user = this;
-    const token = await jwt.sign({
-        _id: user._id.toString()
-    }, constants.jwtSecret);
-    // add to user token
-    user.tokens = user.tokens.constants({
-        token
-    });
-    await user.save();
-    return token;
+    try {
+        const user = this;
+        const token = await jwt.sign({
+            _id: user._id.toString()
+        }, constants.jwtSecret);
+        // add to user token
+        user.tokens = user.tokens.concat({
+            token
+        });
+        await user.save();
+        return token;
+    } catch (e) {
+        throw new Error(e);
+    }
 };
 
 // methode for returning json object
