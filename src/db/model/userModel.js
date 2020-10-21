@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require("validator");
+const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const Schema = mongoose.Schema;
 // create user schema
@@ -56,6 +57,19 @@ const userSchema = new Schema({
 
 //methodes
 
+// create token
+userSchema.methods.genrateAuth = async function() {
+    const user = this;
+    const token = await jwt.sign({
+        _id: user._id.toString()
+    }, constants.jwtSecret);
+    // add to user token
+    user.tokens = user.tokens.constants({
+        token
+    });
+    await user.save();
+    return token;
+};
 
 // methode for returning json object
 userSchema.methods.toJSON = function() {
