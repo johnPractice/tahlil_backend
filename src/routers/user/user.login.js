@@ -18,9 +18,9 @@ rout.post('/login', async (req, res) => {
 
         res.json({ user, token });
 
-    } catch (e) { res.json(e).status(400);}
+    } catch (e) { res.json(e).status(400); }
 
-})
+});
 
 
 // signup API

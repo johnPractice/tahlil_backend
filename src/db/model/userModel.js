@@ -69,7 +69,7 @@ userSchema.statics.findByCredentials = async ({ username, password }) => {
     if (!PassIsMatched) throw new Error("Wrong Password");
 
     return user;
-}
+};
 
 // create token
 userSchema.methods.genrateAuth = async function() {
