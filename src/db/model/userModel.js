@@ -101,6 +101,13 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
+//save password hash instead each time pass is modified
+userSchema.pre('save', async function (next) {
+    if (this.isModified("password"))
+        this.password = await bycrypt.hash(this.password, 8);
+    next();
+});
+
 // create the user model
 const User = mongoose.model('User', userSchema);
 module.exports = User;
