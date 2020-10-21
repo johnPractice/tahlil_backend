@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const validator = require("validator");
 const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
+const bycrypt = require('bcryptjs');
+const { use } = require('../../routers/user/user.login');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
@@ -56,6 +58,18 @@ const userSchema = new Schema({
 });
 
 //methodes
+
+//check username & password //static
+userSchema.statics.findByCredentials = async ({ username, password }) => {
+
+    const user = await User.findOne({ username });
+    if (!user) throw new Error("User not found");
+
+    const PassIsMatched = await bycrypt.compare(password, user.password);
+    if (!PassIsMatched) throw new Error("Wrong Password");
+
+    return user;
+}
 
 // create token
 userSchema.methods.genrateAuth = async function() {
