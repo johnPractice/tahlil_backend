@@ -3,17 +3,26 @@ const User = require('../../db/model/userModel');
 
 
 
-rout.get('/', (req, res) => {
-        res.json('in user');
-    })
-    // login API
+// login API
+rout.post('/login', async(req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) throw new Error("Wrong Input");
+
+        const user = await User.findByCredentials({ username, password });
+        const token = await user.genrateAuth();
+
+        res.json({ user, token });
+
+    } catch (e) { res.json(e).status(400); }
+
+});
 
 
 // signup API
 rout.post('/signup', async(req, res) => {
     try {
         const info = req.body;
-        console.log(info)
         const user = new User();
         const canUse = ['firstname', 'lastname', 'username', 'email', 'password', 'birthday'];
         let check = false;
