@@ -3,12 +3,8 @@ const User = require('../../db/model/userModel');
 
 
 
-rout.get('/', (req, res) => {
-        res.json('in user');
-    })
-
 // login API
-rout.post('/login', async (req, res) => {
+rout.post('/login', async(req, res) => {
     try {
         const { username, password } = req.body;
         if (!username || !password) throw new Error("Wrong Input");
@@ -27,7 +23,6 @@ rout.post('/login', async (req, res) => {
 rout.post('/signup', async(req, res) => {
     try {
         const info = req.body;
-        console.log(info)
         const user = new User();
         const canUse = ['firstname', 'lastname', 'username', 'email', 'password', 'birthday'];
         let check = false;
