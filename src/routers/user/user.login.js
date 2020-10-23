@@ -39,7 +39,7 @@ rout.post('/signup', async(req, res) => {
         } else {
             await user.save();
             const token = await user.genrateAuth();
-            res.json({ token, user }).status(200);
+            res.json({ token, user }).status(201);
         }
 
     } catch (e) {

@@ -2,6 +2,12 @@ const rout = require('express').Router();
 const auth = require('../../middelware/auth');
 
 //get profile user
+rout.get('/', auth, async(req, res) => {
+    try {
+        const user = req.user;
+        res.json({ user });
+    } catch (e) { res.json(e).status(400); }
+});
 
 // update user profile
 rout.put('/update', auth, async(req, res) => {
