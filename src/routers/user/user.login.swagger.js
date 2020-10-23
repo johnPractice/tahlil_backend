@@ -1,5 +1,30 @@
 // login
-
+/**
+ * @swagger
+ * /user/login:
+ *  post:
+ *    description: Use to login user
+ *    consumes:
+ *       - application/json
+ *    parameters:
+ *       - in: body
+ *         name: user
+ *         description: to login user.
+ *         schema:
+ *          type: object
+ *          required:
+ *            - username 
+ *            - password 
+ *          properties:
+ *           username:
+ *            type: string
+ *           password:
+ *            type: string
+ * 
+ *    responses:
+ *      '200':
+ *        description: user loged in :)
+ */
 
 // signup
 /**
