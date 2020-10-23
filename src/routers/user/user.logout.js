@@ -22,3 +22,6 @@ rout.post('/logoutall', auth, async(req, res) => {
 
     } catch (e) { res.json(e).status(400); }
 });
+
+
+module.exports = rout;

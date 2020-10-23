@@ -3,6 +3,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerConfig = require('./swagger.config');
 const userLogin = require('../src/routers/user/user.login');
 const userProfile = require('../src/routers/user/user.profile');
+const userLogout = require('../src/routers/user/user.logout');
 const dbStart = require('../src/db/mongoose');
 // create the app express
 const app = express();
@@ -20,6 +21,8 @@ app.use(express.static('public'));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerDocs));
 app.use('/user', userLogin);
 app.use('/user', userProfile);
+app.use('/user', userLogout);
+
 
 
 module.exports = app;
