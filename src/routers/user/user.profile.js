@@ -6,7 +6,7 @@ rout.get('/', auth, async(req, res) => {
     try {
         const user = req.user;
         res.json({ user });
-    } catch (e) { res.json(e).status(400); }
+    } catch (e) { res.status(400).json(e); }
 });
 
 // update user profile
@@ -25,7 +25,7 @@ rout.put('/update', auth, async(req, res) => {
         res.json({ 'message': 'user updated successfully', user });
     } catch (e) {
         // console.log(e);
-        res.json({ e, "error": "somthing wrong" }).status(400);
+        res.status(400).json({ e, "error": "somthing wrong" });
     }
 });
 
