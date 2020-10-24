@@ -7,13 +7,8 @@
  *    description: Used for user deletion
  *    consumes:
  *       - application/json
- *    parameters:
- *       - in: header
- *         name: Authorization
- *         description: token for check the auth
- *         schema:
- *          type: string
- *         required: true
+ *    security:
+        - bearerAuth: []
  *
  *    responses:
  *      '200':
