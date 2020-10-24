@@ -1,10 +1,8 @@
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const swaggerConfig = require('./swagger.config');
-const userLogin = require('../src/routers/user/user.login');
-const userProfile = require('../src/routers/user/user.profile');
-const userLogout = require('../src/routers/user/user.logout');
 const dbStart = require('../src/db/mongoose');
+const userRouts = require('../src/routers/user/userRouts');
 // create the app express
 const app = express();
 // start the db
@@ -19,9 +17,7 @@ app.get("/test", (req, res) => {
 app.use(express.json());
 app.use(express.static('public'));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerDocs));
-app.use('/user', userLogin);
-app.use('/user', userProfile);
-app.use('/user', userLogout);
+app.use('/user', userRouts);
 
 
 
