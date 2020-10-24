@@ -7,8 +7,13 @@
  *    description: Used for user deletion
  *    consumes:
  *       - application/json
- *    security:
-        - bearerAuth: []
+ *    parameters:
+ *       - in: header
+ *         name: Authorization
+ *         description: token for check the auth
+ *         schema:
+ *          type: string
+ *         required: true
  *
  *    responses:
  *      '200':
@@ -16,15 +21,13 @@
  *      '503':
  *        description: Database error :)
  *        content:
-            application/json:
-              schema:
-                type: object
-                description: error
+ *          application/json:
+ *            schema:
+ *              type: object
  *      '400':
  *        description: Error :)
  *        content:
-            application/json:
-              schema:
-                type: object
-                description: error
+ *          application/json:
+ *            schema:
+ *              type: object
  */

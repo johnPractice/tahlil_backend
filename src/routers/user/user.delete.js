@@ -7,7 +7,7 @@ rout.delete('/delete', auth, async (req, res) => {
     try {
         const user = req.user;
 
-        await User.remove(user, (err) => {
+        await User.findByIdAndRemove(user.id, (err) => {
             res.status(503).json(err);
         });
         res.sendStatus(200);
