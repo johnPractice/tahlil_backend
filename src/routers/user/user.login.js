@@ -6,15 +6,27 @@ const User = require('../../db/model/userModel');
 // login API
 rout.post('/login', async(req, res) => {
     try {
-        const { username, password } = req.body;
+        const {
+            username,
+            password
+        } = req.body;
         if (!username || !password) throw new Error("Wrong Input");
 
-        const user = await User.findByCredentials({ username, password });
+        const user = await User.findByCredentials({
+            username,
+            password
+        });
         const token = await user.genrateAuth();
 
-        res.json({ user, token });
+        res.status(200)
+            .json({
+                user,
+                token
+            });
 
-    } catch (e) { res.json(e).status(400); }
+    } catch (e) {
+        res.status(400).json(e);
+    }
 
 });
 
@@ -35,15 +47,25 @@ rout.post('/signup', async(req, res) => {
 
         // check fields are exist
         if (!check) {
-            res.json({ "error": "check your input" }).status(400);
+            res.status(400)
+                .json({
+                    "error": "check your input"
+                });
         } else {
             await user.save();
             const token = await user.genrateAuth();
-            res.json({ token, user }).status(201);
+            res.status(201).json({
+                token,
+                user
+            });
         }
 
     } catch (e) {
-        res.json({ e, "error": "some thing wrong " }).status(400);
+        res.status(400)
+            .json({
+                e,
+                "error": "some thing wrong "
+            });
     }
 });
 

@@ -6,7 +6,7 @@ const constants = require('../../constants');
 const auth = async(req, res, next) => {
     try {
         if (!req.header('Authorization')) {
-            res.json({ 'error': 'you must be auth' });
+            res.status(400).json({ 'error': 'you must be auth' });
         } else {
             const token = req.header('Authorization').replace('Bearer ', '');
             const decoded = await jwt.verify(token, constants.jwtSecret);
@@ -23,7 +23,7 @@ const auth = async(req, res, next) => {
 
     } catch (e) {
         console.error(e);
-        res.json({ 'error': 'something wrong' });
+        res.status(400).json({ 'error': 'something wrong' });
     }
 };
 
