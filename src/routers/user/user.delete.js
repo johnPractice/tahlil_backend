@@ -7,10 +7,16 @@ rout.delete('/delete', auth, async (req, res) => {
     try {
         const user = req.user;
 
-        await User.findByIdAndRemove(user.id, (err) => {
-            res.status(503).json(err);
+        await User.deleteOne(user, (err) => {
+            if (err)
+                res.status(503).json({ err });
         });
         res.sendStatus(200);
 
-    } catch (e) { res.status(400).json(e); }
+    } catch (e) {
+        console.log(e);
+        res.status(400).json(e);
+    }
 });
+
+module.exports = rout;
