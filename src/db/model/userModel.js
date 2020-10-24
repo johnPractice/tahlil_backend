@@ -3,25 +3,24 @@ const validator = require("validator");
 const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
-const { use } = require('../../routers/user/user.login');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
     firstname: {
         type: String,
-        require: true,
-        minlength: 4,
+        minlength: 3,
+        default: '****'
     },
     lastname: {
         type: String,
-        require: true,
-        minlength: 4,
+        minlength: 3,
+        default: '****'
     },
     username: {
         type: String,
         unique: true,
         require: true,
-        minlength: 6
+        minlength: 4
     },
     email: {
         type: String,
@@ -60,7 +59,7 @@ const userSchema = new Schema({
 //methodes
 
 //check username & password //static
-userSchema.statics.findByCredentials = async ({ username, password }) => {
+userSchema.statics.findByCredentials = async({ username, password }) => {
 
     const user = await User.findOne({ username });
     if (!user) throw new Error("User not found");
@@ -102,7 +101,7 @@ userSchema.methods.toJSON = function() {
 };
 
 //save password hash instead each time pass is modified
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function(next) {
     if (this.isModified("password"))
         this.password = await bycrypt.hash(this.password, 8);
     next();
