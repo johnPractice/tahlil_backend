@@ -6,6 +6,8 @@
  *    description: logout user at curent device
  *    consumes:
  *       - application/json
+ *    tags: 
+ *       - logout
  *    parameters:
  *       - in: header
  *         name: Authorization
@@ -28,6 +30,8 @@
  *    description: logout user at all device
  *    consumes:
  *       - application/json
+ *    tags: 
+ *       - logout
  *    parameters:
  *       - in: header
  *         name: Authorization
