@@ -41,15 +41,16 @@ const userSchema = new Schema({
         type: Date,
     },
     avatar: {
-        type: String
+        type: String,
+        default: null
+
     },
     tokens: [{
         token: {
             type: String,
             require: true
         }
-    }]
-
+    }],
 }, {
     autoCreate: true,
     autoIndex: true,
