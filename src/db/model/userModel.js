@@ -3,7 +3,7 @@ const validator = require("validator");
 const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
-const Schema = mongoose.Schema;
+const mailer = require('../../functions/mailer');
 // create user schema
 const userSchema = new Schema({
     firstname: {
@@ -100,12 +100,28 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
-//save password hash instead each time pass is modified
+//save password hash instead, each time pass is modified
 userSchema.pre('save', async function(next) {
     if (this.isModified("password"))
         this.password = await bycrypt.hash(this.password, 8);
     next();
 });
+
+//send mail to user
+userSchema.methods.sendMail = async function (mailOptions) {
+    try {
+        if (!mailOptions.subject || !mailOptions.text)
+            throw new Error('subject or text missing');
+
+        mailOptions.to = this.email;
+        mailOptions.text.replace('(name)', this.firstname);
+
+        mailer.sendMail(mailOptions, (err, info) => {
+            if (err) throw err;
+            console.log(info.response);
+        });
+    } catch (e) { console.log(e);}
+}
 
 // create the user model
 const User = mongoose.model('User', userSchema);
