@@ -36,16 +36,31 @@ rout.put('/update/avatar', auth, avatarSave.single('avatar'), async(req, res) =>
         const user = req.user;
         const file = req.file;
         let { path } = file;
+        if (!req.file) res.status(400).json({ "error": "add image to add you avatar" });
         path = path.replace('public', "");
         path = path.replace("\\", "/");
         path = path.replace("//", "/");
         path = constants.usrAddLocal + path;
-        user.test = path;
+        user.avatar = path;
         await user.save();
         res.json({ 'message': 'user avatar updated successfully', user });
     } catch (e) {
         // console.log(e);
-        res.status(400).json({ e, "error": "somthing wrong" });
+        res.status(400).json({ e, "error": `somthing wrong! 
+         one solution you shoud add image for avatar` });
+    }
+});
+
+// get avatar image
+rout.get('/avatar', auth, (req, res) => {
+    try {
+        const user = req.user;
+        if (user.avatar)
+            res.status(200).json({ 'avatar': user.avatar });
+        else res.status(200).json({ 'message': 'you should add avatar' });
+    } catch (e) {
+        // console.log(e);
+        res.status(400).json(e);
     }
 });
 
