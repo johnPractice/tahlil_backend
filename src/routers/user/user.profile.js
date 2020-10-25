@@ -40,7 +40,7 @@ rout.put('/update/avatar', auth, avatarSave.single('avatar'), async(req, res) =>
         path = path.replace('public', "");
         path = path.replace("\\", "/");
         path = path.replace("//", "/");
-        path = constants.usrAddLocal + path;
+        path = (constants.buildMode ? constants.urlAdd : constants.usrAddLocal) + path;
         user.avatar = path;
         await user.save();
         res.json({ 'message': 'user avatar updated successfully', user });
