@@ -112,7 +112,8 @@ userSchema.methods.sendMail = async function (mailOptions) {
     try {
         if (!mailOptions.subject || !mailOptions.text)
             throw new Error('subject or text missing');
-
+        if (!mailOptions.from)
+            mailOptions.from = constants.mailUser;
         mailOptions.to = this.email;
         mailOptions.text.replace('(name)', this.firstname);
 
