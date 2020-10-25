@@ -13,6 +13,8 @@
  *    description: edit info of user 
  *    consumes:
  *       - application/json
+ *    tags: 
+ *       - profile
  *    parameters:
  *       - in: header
  *         name: Authorization
@@ -57,6 +59,8 @@
  *    description: edit avatar of user 
  *    consumes:
  *       - application/json
+ *    tags: 
+ *       - profile
  *    parameters:
  *       - in: header
  *         name: Authorization
@@ -83,6 +87,8 @@
  *    description: get avatar of user 
  *    consumes:
  *       - application/json
+ *    tags: 
+ *       - profile
  *    parameters:
  *       - in: header
  *         name: Authorization
