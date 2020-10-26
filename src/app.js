@@ -3,6 +3,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerConfig = require('./swagger.config');
 const dbStart = require('../src/db/mongoose');
 const userRouts = require('../src/routers/user/userRouts');
+const path = require('path');
 // create the app express
 const app = express();
 // start the db
@@ -14,11 +15,19 @@ app.get("/test", (req, res) => {
 });
 
 // middelware use
+app.use(express.static(__dirname + '/views/404/dist'));
+
 app.use(express.json());
 app.use(express.static('public'));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerDocs));
 app.use('/user', userRouts);
 
-
+// 404 page
+app.get('*', (req, res) => {
+    res.sendFile('index.html', {
+        root: path.join(__dirname, './views/404/dist')
+    });
+    // res.json('error')
+});
 
 module.exports = app;
