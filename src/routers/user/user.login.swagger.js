@@ -6,6 +6,8 @@
  *    description: Use to login user
  *    consumes:
  *       - application/json
+ *    tags: 
+ *       - login
  *    parameters:
  *       - in: body
  *         name: user
@@ -34,6 +36,8 @@
  *    description: Use to signup user
  *    consumes:
  *       - application/json
+ *    tags: 
+ *       - login
  *    parameters:
  *       - in: body
  *         name: createUser
