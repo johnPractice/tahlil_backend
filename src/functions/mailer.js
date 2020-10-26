@@ -13,7 +13,13 @@ const mailer = nodemailer.createTransport({
 const signupMailOptions = {
     from: constants.mailUser,
     subject: 'Welcome',
-    text: 'Hi (name),\nWelcome to our site!\n\nNokare shoma,\nesme site!'
+    text: 'Hi (username),\n     Welcome to our site!\n\nNokare shoma,\n(esme site!)'
 };
 
-module.exports = { mailer, signupMailOptions };
+const deleteUserMailOptions = {
+    from: constants.mailUser,
+    subject: 'GoodBye',
+    text: "Hi (username),\n     We're sorry to see you leave\n\nSomayye Naro,\n(esme site!)"
+};
+
+module.exports = { mailer, signupMailOptions, deleteUserMailOptions };

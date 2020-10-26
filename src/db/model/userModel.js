@@ -100,7 +100,7 @@ userSchema.methods.sendMail = async function (mailOptions) {
 
         //set recieving email address and text
         mailOptions.to = this.email;
-        mailOptions.text = mailOptions.text.replace('(name)', this.username.toString());
+        mailOptions.text = mailOptions.text.replace('(username)', this.username.toString());
 
         mailer.sendMail(mailOptions, (err, info) => {
             if (err) throw err;
