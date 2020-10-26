@@ -22,7 +22,6 @@ app.use(express.static('public'));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerDocs));
 app.use('/user', userRouts);
 
-
 // 404 page
 app.get('*', (req, res) => {
     res.sendFile('index.html', {

@@ -5,7 +5,7 @@ const constants = require('../../constants');
 // create auth function for using as middelware to check auth
 const auth = async(req, res, next) => {
     try {
-        if (!req.header('Authorization')) {
+        if (!req.header('Authorization') || !req.header('Authorization').includes('Bearer ')) {
             res.status(401).json({ 'error': 'you must be auth' });
         } else {
             const token = req.header('Authorization').replace('Bearer ', '');
