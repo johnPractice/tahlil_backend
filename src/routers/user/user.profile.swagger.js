@@ -33,6 +33,8 @@
  *            - firstname 
  *            - lastname 
  *            - email 
+ *            - avatar 
+ *            - avatarname 
  *          properties:
  *           username:
  *            type: string
@@ -43,6 +45,10 @@
  *           lastname:
  *            type: string
  *           email:
+ *            type: string
+ *           avatar:
+ *            type: string
+ *           avatarname:
  *            type: string
  *    responses:
  *      '200':
