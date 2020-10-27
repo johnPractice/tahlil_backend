@@ -5,3 +5,4 @@ constants.js
 uploads
 public
 .vs
+package-lock.json
