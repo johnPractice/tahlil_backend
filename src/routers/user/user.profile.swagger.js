@@ -1,6 +1,43 @@
-// /
+//get profile
 /**
- * 
+ * @swagger
+ * /user/:
+ *  get:
+ *    description: get user profile (identified by token)
+ *    consumes:
+ *       - application/json
+ *    tags:
+ *       - profile
+ *    parameters:
+ *       - in: header
+ *         name: Authorization
+ *         description: token for check the auth(Bearer + " " + token )
+ *         schema:
+ *          type: string
+ *         required: true
+ *    responses:
+ *      '200':
+ *        description: user profile is sent successfully :)
+ *        name: User
+ *        schema:
+ *          type: object
+ *          properties:
+ *                  user:
+ *                      type: object
+ *                      properties:
+ *                          username:
+ *                              type: string
+ *                          password:
+ *                              type: string
+ *                          firstname:
+ *                              type: string
+ *                          lastname:
+ *                              type: string
+ *                          email:
+ *                              type: string
+ *                  
+ *      '400':
+ *        description: somthing wrong :(
  */
 
 
