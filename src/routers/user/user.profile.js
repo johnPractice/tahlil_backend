@@ -83,7 +83,7 @@ rout.get('/avatar', auth, (req, res) => {
         const user = req.user;
         if (user.avatar)
             res.status(200).json({ 'avatar': user.avatar });
-        else res.status(200).json({ 'message': 'you should add avatar' });
+        else res.status(401).json({ 'message': 'you should add avatar' });
     } catch (e) {
         // console.log(e);
         res.status(400).json(e);

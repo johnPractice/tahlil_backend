@@ -10,24 +10,21 @@
  *    parameters:
  *       - in: header
  *         name: Authorization
- *         description: token for check the auth
+ *         description: Auth token ( Bearer + " " + token )
  *         schema:
  *          type: string
  *         required: true
  *
  *    responses:
  *      '200':
- *        description: user is deleted :)
+ *        description: User is deleted :)
  *      '503':
  *        description: Database error :)
- *        content:
- *          application/json:
- *            schema:
- *              type: object
  *      '400':
  *        description: Error :)
- *        content:
- *          application/json:
- *            schema:
- *              type: object
+ *        schema:
+ *          type: object
+ *          properties:
+ *              err:
+ *                  type: object
  */
