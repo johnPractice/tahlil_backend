@@ -46,6 +46,8 @@ rout.put('/update', auth, async(req, res) => {
                     path = path.replace("\\", "/");
                     path = path.replace("//", "/");
                     user.avatar = path;
+                    await user.save();
+
                 });
             }
         }
