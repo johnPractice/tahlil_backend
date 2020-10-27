@@ -1,16 +1,56 @@
-// /
+//get profile
 /**
- * 
+ * @swagger
+ * /user/:
+ *  get:
+ *    description: Gets user profile (user is identified by token)
+ *    consumes:
+ *       - application/json
+ *    tags:
+ *       - profile
+ *    parameters:
+ *       - in: header
+ *         name: Authorization
+ *         description: Auth token ( Bearer + " " + token )
+ *         schema:
+ *          type: string
+ *         required: true
+ *         
+ *    responses:
+ *      '200':
+ *        description: User profile is sent :)
+ *        name: User
+ *        schema:
+ *          type: object
+ *          properties:
+ *                  user:
+ *                      type: object
+ *                      properties:
+ *                          firstname:
+ *                              type: string
+ *                          lastname:
+ *                              type: string
+ *                          avatar:
+ *                              type: string
+ *                          _id:
+ *                              type: string
+ *                          username:
+ *                              type: string
+ *                          email:
+ *                              type: string
+ *                  
+ *      '400':
+ *        description: Something wrong :(
  */
 
 
-// edit profile
+// edit profile///////////////////////////////////////////////////////////
 
 /**
  * @swagger
  * /user/update:
  *  put:
- *    description: edit info of user 
+ *    description: Edits user info 
  *    consumes:
  *       - application/json
  *    tags: 
@@ -18,7 +58,7 @@
  *    parameters:
  *       - in: header
  *         name: Authorization
- *         description: token for check the auth(Bearer + " " + token )
+ *         description: Auth token ( Bearer + " " + token )
  *         schema:
  *          type: string
  *         required: true
@@ -33,6 +73,8 @@
  *            - firstname 
  *            - lastname 
  *            - email 
+ *            - avatar 
+ *            - avatarname 
  *          properties:
  *           username:
  *            type: string
@@ -44,19 +86,47 @@
  *            type: string
  *           email:
  *            type: string
+ *            
  *    responses:
  *      '200':
- *        description: user info updated :)
+ *        description: User info updated :)
+ *        schema:
+ *          type: object
+ *          properties:
+ *              message:
+ *                  type: string
+ *              user:
+ *                      type: object
+ *                      properties:
+ *                          firstname:
+ *                              type: string
+ *                          lastname:
+ *                              type: string
+ *                          avatar:
+ *                              type: string
+ *                          _id:
+ *                              type: string
+ *                          username:
+ *                              type: string
+ *                          email:
+ *                              type: string
  *      '400':
- *        description: somthing wrong :(
+ *        description: Something wrong :(
+ *        schema:
+ *          type: object
+ *          properties:
+ *              e:
+ *                  type:object
+ *              error:
+ *                  type: string
  */
 
-// avatar updated
+// avatar updated////////////////////////////////////////////////////
 /**
  * @swagger
  * /user/update/avatar:
  *  put:
- *    description: edit avatar of user 
+ *    description: Edits user avatar
  *    consumes:
  *       - application/json
  *    tags: 
@@ -64,7 +134,7 @@
  *    parameters:
  *       - in: header
  *         name: Authorization
- *         description: token for check the auth(Bearer + " " + token )
+ *         description: Auth token ( Bearer + " " + token )
  *         schema:
  *          type: string
  *         required: true
@@ -72,19 +142,47 @@
  *         name: avatar
  *         type: file
  *         description: to add avatar image.
+ *         
  *    responses:
  *      '200':
- *        description: user avatar atached :)
+ *        description: User avatar attached :)
+ *        schema:
+ *          type: object
+ *          properties:
+ *              message:
+ *                  type: string
+ *              user:
+ *                      type: object
+ *                      properties:
+ *                          firstname:
+ *                              type: string
+ *                          lastname:
+ *                              type: string
+ *                          avatar:
+ *                              type: string
+ *                          _id:
+ *                              type: string
+ *                          username:
+ *                              type: string
+ *                          email:
+ *                              type: string
  *      '400':
- *        description: somthing wrong :(
+ *        description: Something wrong :(
+ *        schema:
+ *          type: object
+ *          properties:
+ *              e:
+ *                  type:object
+ *              error:
+ *                  type: string
  */
 
-//get  avatar 
+//get  avatar ////////////////////////////////////////////////////////
 /**
  * @swagger
  * /user/avatar/:
  *  get:
- *    description: get avatar of user 
+ *    description: Get user avatar
  *    consumes:
  *       - application/json
  *    tags: 
@@ -92,13 +190,28 @@
  *    parameters:
  *       - in: header
  *         name: Authorization
- *         description: token for check the auth(Bearer + " " + token )
+ *         description: Auth token ( Bearer + " " + token )
  *         schema:
  *          type: string
  *         required: true
  *    responses:
  *      '200':
- *        description: user avatar atached :)
+ *        description: User avatar attached :)
+ *        schema:
+ *          type: object
+ *          properties:
+ *              avatar:
+ *                  type: string
  *      '400':
- *        description: somthing wrong :(
+ *        description: Something wrong :(
+ *        name: e
+ *        schema:
+ *          type: object
+ *      '401':
+ *        description: There is no image :(
+ *        schema:
+ *          type: object
+ *          properties:
+ *              message:
+ *                  type: string
  */

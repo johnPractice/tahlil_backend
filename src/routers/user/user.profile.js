@@ -2,6 +2,9 @@ const rout = require('express').Router();
 const auth = require('../../middelware/auth');
 const avatarSave = require('../../middelware/avatarSave');
 const constants = require('../../../constants');
+const existPath = require('./../../functions/existFolder');
+const fs = require('fs');
+const sharp = require('sharp');
 
 //get profile user
 rout.get('/', auth, async(req, res) => {
@@ -12,7 +15,7 @@ rout.get('/', auth, async(req, res) => {
 });
 
 // update user profile
-rout.put('/update', auth, avatarSave.single('avatar'), async(req, res) => {
+rout.put('/update', auth, async(req, res) => {
     try {
         const info = req.body;
         const canUse = ['firstname', 'lastname', 'username', 'email', 'password', 'birthday'];
@@ -23,6 +26,29 @@ rout.put('/update', auth, avatarSave.single('avatar'), async(req, res) => {
                 user[item] = info[item];
             }
         });
+        if (info.avatar) {
+            const add = await existPath(['public', 'uploads', 'avatar']);
+            if (add != false) {
+                const nameImage = info.avatarname;
+                const img = info.avatar;
+                // eslint-disable-next-line no-undef
+                var realFile = Buffer.from(img, "base64");
+                await sharp(realFile).resize({ width: 250, height: 250 }).png().toBuffer();
+                await fs.writeFile(add + '/' + nameImage + '-' + Date.now() + 'avatar' + user._id.toString() + '.png', realFile, async function(err) {
+                    if (err) {
+                        console.log(err);
+                        throw new Error('image file have some problem');
+                    }
+                    let path = add + '/' + nameImage + '.png';
+                    path = (constants.buildMode ? constants.urlName : constants.usrAddLocal) + path;
+                    path = path.replace('public', "");
+                    path = path.replace('./', '');
+                    path = path.replace("\\", "/");
+                    path = path.replace("//", "/");
+                    user.avatar = path;
+                });
+            }
+        }
         await user.save();
         res.json({ 'message': 'user updated successfully', user });
     } catch (e) {
@@ -57,7 +83,7 @@ rout.get('/avatar', auth, (req, res) => {
         const user = req.user;
         if (user.avatar)
             res.status(200).json({ 'avatar': user.avatar });
-        else res.status(200).json({ 'message': 'you should add avatar' });
+        else res.status(401).json({ 'message': 'you should add avatar' });
     } catch (e) {
         // console.log(e);
         res.status(400).json(e);

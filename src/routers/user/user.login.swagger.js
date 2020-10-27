@@ -25,10 +25,37 @@
  * 
  *    responses:
  *      '200':
- *        description: user loged in :)
+ *        description: User logged in :)
+ *        schema:
+ *          type: object
+ *          properties:
+ *                  user:
+ *                      type: object
+ *                      properties:
+ *                          firstname:
+ *                              type: string
+ *                          lastname:
+ *                              type: string
+ *                          avatar:
+ *                              type: string
+ *                          _id:
+ *                              type: string
+ *                          username:
+ *                              type: string
+ *                          email:
+ *                              type: string
+ *                  token:
+ *                      type: string
+ *      '400':
+ *          description: Error
+ *          schema:
+ *              type: object
+ *              properties:
+ *                  err:
+ *                   type: object
  */
 
-// signup
+// signup///////////////////////////////////////////////////////////////////
 /**
  * @swagger
  * /user/signup:
@@ -64,5 +91,32 @@
  * 
  *    responses:
  *      '201':
- *        description: created user
+ *        description: New user is created
+ *        schema:
+ *          type: object
+ *          properties:
+ *                  user:
+ *                      type: object
+ *                      properties:
+ *                          firstname:
+ *                              type: string
+ *                          lastname:
+ *                              type: string
+ *                          avatar:
+ *                              type: string
+ *                          _id:
+ *                              type: string
+ *                          username:
+ *                              type: string
+ *                          email:
+ *                              type: string
+ *                  token:
+ *                      type: string
+ *      '400':
+ *          description: Error
+ *          schema:
+ *              type: object
+ *              properties:
+ *                  err:
+ *                      type: object
  */

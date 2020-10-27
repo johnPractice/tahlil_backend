@@ -9,8 +9,8 @@ rout.post('/logout', auth, async(req, res) => {
         user.tokens = user.tokens.filter((obj) => obj.token != token);
         await user.save();
 
-        res.status(200).json({ 'message': 'logout successfully' });
-    } catch (e) { res.status(400).json(e); }
+        res.sendStatus(200);
+    } catch (err) { res.status(400).json({ err }); }
 });
 
 rout.post('/logoutall', auth, async(req, res) => {
@@ -18,9 +18,9 @@ rout.post('/logoutall', auth, async(req, res) => {
         const user = req.user;
         user.tokens = [];
         await user.save();
-        res.status(200).json({ 'message': 'logout all device' });
+        res.sendStatus(200);
 
-    } catch (e) { res.status(400).json(e); }
+    } catch (err) { res.status(400).json({ err }); }
 });
 
 
