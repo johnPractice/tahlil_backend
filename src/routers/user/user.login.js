@@ -24,8 +24,8 @@ rout.post('/login', async(req, res) => {
                 token
             });
 
-    } catch (e) {
-        res.status(400).json(e);
+    } catch (err) {
+        res.status(400).json({err});
     }
 
 });

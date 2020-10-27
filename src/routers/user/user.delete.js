@@ -9,7 +9,7 @@ rout.delete('/delete', auth, async (req, res) => {
 
         await User.deleteOne(user, (err) => {
             if (err)
-                res.status(503).json({ err });
+                res.sendStatus(503)
         });
         res.sendStatus(200);
 

@@ -3,7 +3,7 @@
  * @swagger
  * /user/logout:
  *  post:
- *    description: logout user at curent device
+ *    description: logs out user from current device
  *    consumes:
  *       - application/json
  *    tags: 
@@ -11,14 +11,14 @@
  *    parameters:
  *       - in: header
  *         name: Authorization
- *         description: token for check the auth
+ *         description: Auth token ( Bearer + " " + token )
  *         schema:
  *          type: string
  *         required: true
  * 
  *    responses:
  *      '200':
- *        description: user loged out
+ *        description: User logged out from current device
  */
 
 // logoutAll
@@ -27,7 +27,7 @@
  * @swagger
  * /user/logoutall:
  *  post:
- *    description: logout user at all device
+ *    description: logs out user from all devices
  *    consumes:
  *       - application/json
  *    tags: 
@@ -35,12 +35,12 @@
  *    parameters:
  *       - in: header
  *         name: Authorization
- *         description: token for check the auth
+ *         description: Auth token ( Bearer + " " + token )
  *         schema:
  *          type: string
  *         required: true
  * 
  *    responses:
  *      '200':
- *        description: user loged out all device
+ *        description: User logged out from all devices
  */
