@@ -3,6 +3,7 @@ const validator = require("validator");
 const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
+const { mailer } = require('../../functions/mailer');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
@@ -89,6 +90,25 @@ userSchema.methods.genrateAuth = async function() {
     }
 };
 
+//send mail to user
+userSchema.methods.sendMail = async function (mailOptions) {
+    try {
+        if (!mailOptions.subject || !mailOptions.text)
+            throw new Error('subject or text missing');
+        if (!mailOptions.from)
+            mailOptions.from = constants.mailUser;
+
+        //set recieving email address and text
+        mailOptions.to = this.email;
+        mailOptions.text = mailOptions.text.replace('(username)', this.username.toString());
+
+        mailer.sendMail(mailOptions, (err, info) => {
+            if (err) throw err;
+            console.log('Email Sent: ' + info.response);
+        });
+    } catch (e) { console.log(e); }
+}
+
 // methode for returning json object
 userSchema.methods.toJSON = function() {
     const user = this;
@@ -101,7 +121,7 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
-//save password hash instead each time pass is modified
+//save password hash instead, each time pass is modified
 userSchema.pre('save', async function(next) {
     if (this.isModified("password"))
         this.password = await bycrypt.hash(this.password, 8);
