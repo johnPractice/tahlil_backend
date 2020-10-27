@@ -86,14 +86,7 @@
  *            type: string
  *           email:
  *            type: string
-<<<<<<< HEAD
- *           avatar:
- *            type: string
- *           avatarname:
- *            type: string
-=======
  *            
->>>>>>> feature-userRout
  *    responses:
  *      '200':
  *        description: User info updated :)
