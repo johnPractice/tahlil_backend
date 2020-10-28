@@ -18,6 +18,7 @@ rout.get('/', auth, async(req, res) => {
 rout.put('/update', auth, async(req, res) => {
     try {
         const info = req.body;
+        if (!info) res.status().json();
         const canUse = ['firstname', 'lastname', 'username', 'email', 'password', 'birthday'];
         const user = req.user;
 
@@ -33,22 +34,21 @@ rout.put('/update', auth, async(req, res) => {
                 const img = info.avatar;
                 // eslint-disable-next-line no-undef
                 var realFile = Buffer.from(img, "base64");
-                await sharp(realFile).resize({ width: 250, height: 250 }).png().toBuffer();
-                await fs.writeFile(add + '/' + nameImage + '-' + Date.now() + 'avatar' + user._id.toString() + '.png', realFile, async function(err) {
+                realFile = await sharp(realFile).resize({ width: 250, height: 250 }).png().toBuffer();
+                const pathImage = add + '/' + nameImage + '-' + Date.now() + 'avatar' + user._id.toString() + '.png';
+                await fs.writeFile(pathImage, realFile, async function(err) {
                     if (err) {
                         console.log(err);
                         throw new Error('image file have some problem');
                     }
-                    let path = add + '/' + nameImage + '.png';
-                    path = (constants.buildMode ? constants.urlName : constants.usrAddLocal) + path;
-                    path = path.replace('public', "");
-                    path = path.replace('./', '');
-                    path = path.replace("\\", "/");
-                    path = path.replace("//", "/");
-                    user.avatar = path;
-                    await user.save();
-
                 });
+                let path = pathImage;
+                path = (constants.buildMode ? constants.urlName : constants.usrAddLocal) + path;
+                path = path.replace('public', "");
+                path = path.replace('./', '');
+                path = path.replace("\\", "/");
+                path = path.replace("//", "/");
+                user.avatar = path;
             }
         }
         await user.save();

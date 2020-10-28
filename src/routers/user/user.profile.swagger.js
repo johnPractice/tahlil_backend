@@ -67,14 +67,6 @@
  *         description: to edit user info.
  *         schema:
  *          type: object
- *          required:
- *            - username 
- *            - password 
- *            - firstname 
- *            - lastname 
- *            - email 
- *            - avatar 
- *            - avatarname 
  *          properties:
  *           username:
  *            type: string
@@ -86,6 +78,11 @@
  *            type: string
  *           email:
  *            type: string
+ *           avatar:
+ *            type: string
+ *           avatarname:
+ *            type: string
+
  *            
  *    responses:
  *      '200':
