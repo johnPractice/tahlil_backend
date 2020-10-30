@@ -1,9 +1,11 @@
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
-const swaggerConfig = require('./swagger.config');
+const YAML = require("yamljs");
+const path = require('path');
+const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
+const swaggerDocument = YAML.load(swagger_path)
 const dbStart = require('../src/db/mongoose');
 const userRouts = require('../src/routers/user/userRouts');
-const path = require('path');
 const bodyParser = require('body-parser');
 // create the app express
 const app = express();
@@ -22,7 +24,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 app.use(express.static('public'));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerDocs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/user', userRouts);
 
 // 404 page
