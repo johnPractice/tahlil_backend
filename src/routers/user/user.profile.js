@@ -47,7 +47,6 @@ rout.put('/update', auth, async(req, res) => {
                 path = path.replace('public', "");
                 path = path.replace('./', '');
                 path = path.replace("\\", "/");
-                path = path.replace("//", "/");
                 user.avatar = path;
             }
         }
@@ -67,7 +66,6 @@ rout.put('/update/avatar', auth, avatarSave.single('avatar'), async(req, res) =>
         if (!req.file) res.status(400).json({ "error": "add image to add you avatar" });
         path = path.replace('public', "");
         path = path.replace("\\", "/");
-        path = path.replace("//", "/");
         path = (constants.buildMode ? constants.urlName : constants.usrAddLocal) + path;
         user.avatar = path;
         await user.save();
