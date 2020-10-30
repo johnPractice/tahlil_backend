@@ -1,5 +1,6 @@
 const rout = require('express').Router();
 const User = require('../../db/model/userModel');
+const { signupMailOptions } = require('../../functions/mailer');
 
 
 
@@ -53,6 +54,9 @@ rout.post('/signup', async(req, res) => {
                 });
         } else {
             await user.save();
+
+            user.sendMail(signupMailOptions);
+
             const token = await user.genrateAuth();
             res.status(201).json({
                 token,
