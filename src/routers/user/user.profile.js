@@ -15,7 +15,7 @@ rout.get('/', auth, async(req, res) => {
 });
 
 // update user profile
-rout.put('/update', auth, async(req, res) => {
+rout.put('/', auth, async(req, res) => {
     try {
         const info = req.body;
         if (!info) res.status().json();
@@ -58,7 +58,7 @@ rout.put('/update', auth, async(req, res) => {
     }
 });
 // upload avatar
-rout.put('/update/avatar', auth, avatarSave.single('avatar'), async(req, res) => {
+rout.put('/avatar', auth, avatarSave.single('avatar'), async(req, res) => {
     try {
         const user = req.user;
         const file = req.file;
