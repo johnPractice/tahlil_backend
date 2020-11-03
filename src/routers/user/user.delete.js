@@ -4,7 +4,7 @@ const rout = require('express').Router();
 const { deleteUserMailOptions } = require('../../functions/mailer');
 
 //user delete account
-rout.delete('/delete', auth, async (req, res) => {
+rout.delete('/', auth, async (req, res) => {
     try {
         const user = req.user;
 
