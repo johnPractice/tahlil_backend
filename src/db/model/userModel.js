@@ -29,7 +29,7 @@ const userSchema = new Schema({
         unique: true,
         validate(value) {
             if (!validator.isEmail(value)) {
-                return new Error("email not valid");
+                throw new Error("email not valid");
             }
         },
     },
@@ -91,7 +91,7 @@ userSchema.methods.genrateAuth = async function() {
 };
 
 //send mail to user
-userSchema.methods.sendMail = async function (mailOptions) {
+userSchema.methods.sendMail = async function(mailOptions) {
     try {
         if (!mailOptions.subject || !mailOptions.text)
             throw new Error('subject or text missing');
