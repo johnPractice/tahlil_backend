@@ -1,16 +1,72 @@
-openapi: 3.0.3
+openapi: '3.0.3'
 info:
   title: API Title
   version: '1.0'
   
 paths:
   /test:
+    $ref: './test.swagger.yaml'
+
+  /user/:
     get:
+      description: Gets user profile (user is identified by token)
+      tags:
+        - "profile"
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: OK
+          description: User profile is sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/user'
+        '400':
+          description: Something wrong :(
 
-  /user/delete:
+    put:
+      description: Edits user info
+      tags:
+        - "profile"
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Info to edit
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                email:
+                  type: string
+                avatar:
+                  type: string
+                avatarname:
+                  type: string
+      responses:
+        '400':
+          description: Something wrong :(
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  e:
+                    type: object
+                  error:
+                    type: string
+
     delete:
       description: Used for user deletion
       security:
@@ -58,7 +114,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '#/components/Schemas/user'
+                    $ref: '#/components/schemas/user'
                   token:
                     type: string
         '400':
@@ -108,7 +164,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '#/components/Schemas/user'
+                    $ref: '#/components/schemas/user'
                   token:
                     type: string
         '400':
@@ -142,103 +198,6 @@ paths:
       responses:
         '200':
           description: User logged out from all devices
-      
-  /user/:
-    get:
-      description: Gets user profile (user is identified by token)
-      tags:
-        - "profile"
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: User profile is sent
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  user:
-                    $ref: '#/components/Schemas/user'
-        '400':
-          description: Something wrong :(
-
-  /user/update:
-    put:
-      description: Edits user info
-      tags:
-        - "profile"
-      security:
-        - bearerAuth: []
-      requestBody:
-        description: Info to edit
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-                firstname:
-                  type: string
-                lastname:
-                  type: string
-                email:
-                  type: string
-                avatar:
-                  type: string
-                avatarname:
-                  type: string
-      responses:
-        '400':
-          description: Something wrong :(
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  e:
-                    type: object
-                  error:
-                    type: string
-
-  /user/update/avatar:
-    put:
-      description: Edits user avatar
-      tags:
-        - "profile"
-      security:
-        - bearerAuth: []
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              description: Avatar image to add
-      responses:
-        '200':
-          description: User avatar attached
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  user:
-                    $ref: '#/components/Schemas/user'
-        '400':
-          description: Something wrong :(
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  e:
-                    type: object
-                  error:
-                    type: string
 
   /user/avatar:
     get:
@@ -271,6 +230,41 @@ paths:
                 type:  object
                 properties:
                   message:
+                    type: string
+
+    put:
+      description: Edits user avatar
+      tags:
+        - "profile"
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              description: Avatar image to add
+      responses:
+        '200':
+          description: User avatar attached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/user'
+        '400':
+          description: Something wrong :(
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  e:
+                    type: object
+                  error:
                     type: string
 
 components:
