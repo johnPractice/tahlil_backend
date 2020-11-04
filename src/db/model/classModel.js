@@ -41,6 +41,7 @@ const classSchema = Schema({
     timestamps: true,
 });
 
+
 //methods
 // methode for returning json object
 classSchema.methods.toJSON = function() {
@@ -61,6 +62,32 @@ classSchema.statics.findByClassId = async({ id, userId }) => {
     if (result.length == 0) return { "message": "nothing found" };
 
     return result;
+};
+classSchema.statics.deleteUserInClass = async({ id, user }) => {
+    try {
+        const userId = user._id;
+        let check = false;
+        const classSelect = await classModel.findOne({ classId: id });
+        if (!classSelect) return { "error": "class not found" };
+        for (let i = 0; i < classSelect.members.length; i++) {
+            if (classSelect.members[i].member.toString() == userId.toString()) {
+                classSelect.members.splice(i, 1);
+                check = true;
+                break;
+            }
+        }
+        // for check of user not in class
+        if (!check) return { "error": "your attempt falid" };
+
+        await classSelect.save();
+        return {
+            "message": "leave ok"
+        };
+
+    } catch (e) {
+        console.log(e);
+    }
+
 };
 
 const classModel = mongoose.model('Class', classSchema);
