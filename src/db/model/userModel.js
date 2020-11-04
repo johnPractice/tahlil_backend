@@ -20,22 +20,22 @@ const userSchema = new Schema({
     username: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
         minlength: 4
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         validate(value) {
             if (!validator.isEmail(value)) {
-                return new Error("email not valid");
+                throw new Error("email not valid");
             }
         },
     },
     password: {
         type: String,
-        require: true,
+        required: true,
         minlength: 6,
     },
     birthday: {
@@ -49,13 +49,19 @@ const userSchema = new Schema({
     tokens: [{
         token: {
             type: String,
-            require: true
+            required: true
         }
     }],
 }, {
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
+});
+
+userSchema.virtual('class', {
+    ref: 'Class',
+    localField: '_id',
+    foreignField: 'owner'
 });
 
 //methodes
@@ -91,7 +97,7 @@ userSchema.methods.genrateAuth = async function() {
 };
 
 //send mail to user
-userSchema.methods.sendMail = async function (mailOptions) {
+userSchema.methods.sendMail = async function(mailOptions) {
     try {
         if (!mailOptions.subject || !mailOptions.text)
             throw new Error('subject or text missing');
@@ -107,7 +113,7 @@ userSchema.methods.sendMail = async function (mailOptions) {
             console.log('Email Sent: ' + info.response);
         });
     } catch (e) { console.log(e); }
-}
+};
 
 // methode for returning json object
 userSchema.methods.toJSON = function() {

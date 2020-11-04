@@ -2,7 +2,7 @@
 
 /**
  * @swagger
- * /user/delete:
+ * /user/:
  *  delete:
  *    description: Used for user deletion
  *    consumes:

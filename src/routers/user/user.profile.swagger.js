@@ -48,7 +48,7 @@
 
 /**
  * @swagger
- * /user/update:
+ * /user/:
  *  put:
  *    description: Edits user info 
  *    consumes:
@@ -121,7 +121,7 @@
 // avatar updated////////////////////////////////////////////////////
 /**
  * @swagger
- * /user/update/avatar:
+ * /user/avatar:
  *  put:
  *    description: Edits user avatar
  *    consumes:
@@ -177,7 +177,7 @@
 //get  avatar ////////////////////////////////////////////////////////
 /**
  * @swagger
- * /user/avatar/:
+ * /user/avatar:
  *  get:
  *    description: Get user avatar
  *    consumes:

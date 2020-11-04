@@ -7,8 +7,9 @@ const swaggerParser = require('swagger-parser');
 const swaggerDocument = YAML.load(swagger_path)
 const dbStart = require('../src/db/mongoose');
 const userRouts = require('../src/routers/user/userRouts');
+const classRouts = require('../src/routers/class/classRouts');
+const path = require('path');
 const bodyParser = require('body-parser');
-const { log } = require("util");
 // create the app express
 const app = express();
 // start the db
@@ -34,6 +35,7 @@ func();
 console.log(parsedSwaggerDocument);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(parsedSwaggerDocument));
 app.use('/user', userRouts);
+app.use('/class', classRouts);
 
 // 404 page
 app.get('*', (req, res) => {
