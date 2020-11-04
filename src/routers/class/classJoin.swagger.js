@@ -32,17 +32,15 @@
  *        schema:
  *          type: object
  *          properties:
- *              type: object
- *              properties:
- *                  name:
- *                      type: string
- *                  description:
- *                      type: string
- *                  classId:
- *                      type: string
- *                  owner:
- *                      type: string
- *                  image:
- *                      type: string
+ *              name:
+ *                  type: string
+ *              description:
+ *                  type: string
+ *              classId:
+ *                  type: string
+ *              owner:
+ *                  type: string
+ *              image:
+ *                  type: string
  *        
  */
