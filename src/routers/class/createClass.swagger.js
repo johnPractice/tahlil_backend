@@ -15,6 +15,8 @@
  *          type: string
  *         required: true
  *       - in: body
+ *         name: class info
+ *         description: to create a class
  *         schema:
  *          type: object
  *          required:
@@ -35,7 +37,7 @@
  *
  *    responses:
  *      '200':
- *        description: User joined the class
+ *        description: Created the class
  *        schema:
  *          type: object
  *          properties:

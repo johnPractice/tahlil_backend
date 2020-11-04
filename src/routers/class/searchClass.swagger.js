@@ -1,8 +1,8 @@
 /**
  * @swagger
- * /class/leave:
- *  post:
- *    description: Leaves a class
+ * /class/search:
+ *  get:
+ *    description: Search for a class
  *    consumes:
  *       - application/json
  *    tags:
@@ -16,7 +16,7 @@
  *         required: true
  *       - in: body
  *         name: class info
- *         description: to leave a class
+ *         description: to find a class
  *         schema:
  *          type: object
  *          required:
@@ -27,13 +27,19 @@
  *
  *    responses:
  *      '200':
- *        description: User left the class
+ *        description: Found the class
  *        schema:
  *          type: object
  *          properties:
- *              error:
+ *              name:
  *                  type: string
- *              message:
+ *              description:
+ *                  type: string
+ *              classId:
+ *                  type: string
+ *              owner:
+ *                  type: string
+ *              image:
  *                  type: string
  *
  */

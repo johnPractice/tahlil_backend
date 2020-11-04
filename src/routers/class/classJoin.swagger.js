@@ -15,6 +15,8 @@
  *          type: string
  *         required: true
  *       - in: body
+ *         name: class info
+ *         description: to join a class
  *         schema:
  *          type: object
  *          required:
