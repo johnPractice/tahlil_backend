@@ -1,11 +1,11 @@
 /**
  * @swagger
- * /class/join:
+ * /class/leave:
  *  post:
- *    description: Joins a class
+ *    description: Leaves a class
  *    consumes:
  *       - application/json
- *    tags: 
+ *    tags:
  *       - class
  *    parameters:
  *       - in: header
@@ -18,17 +18,14 @@
  *         schema:
  *          type: object
  *          required:
- *            - classId 
- *            - password 
+ *            - classId
  *          properties:
  *           classId:
- *            type: string
- *           password:
  *            type: string
  *
  *    responses:
  *      '200':
- *        description: User joined the class
+ *        description: User left the class
  *        schema:
  *          type: object
  *          properties:
@@ -44,5 +41,5 @@
  *                      type: string
  *                  image:
  *                      type: string
- *        
+ *
  */
