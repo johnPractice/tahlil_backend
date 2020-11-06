@@ -6,9 +6,18 @@ const questionSchema = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    question: {
+        type: String,
+        required: true,
+    },
     type: {
         type: String,
+        required: true,
         enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
+    },
+    answer: {
+        type: String,
+        default: null
     },
     public: {
         type: Boolean,
