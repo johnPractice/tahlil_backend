@@ -12,16 +12,17 @@ rout.post('/create', auth, async(req, res) => {
             res.status(400).json({ "error": "must enter somthnig" });
             return;
         }
+        const question = new Question();
+        canUses.forEach(cansUse => {
+            if (info[cansUse]) question[cansUse] = info[cansUse];
+        });
         if (info.type == 'TEST' || info.type == 'MULTICHOISE') {
             if (!info.answer) {
                 res.status(400).json({ "error": "answer must be valid input" });
                 return;
             }
         }
-        const question = new Question();
-        canUses.forEach(cansUse => {
-            if (info[cansUse]) question[cansUse] = info[cansUse];
-        });
+
         question.owner = user._id;
         await question.save();
         res.status(200).json({ 'message': 'question added' });
