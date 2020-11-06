@@ -54,8 +54,8 @@ const userSchema = new Schema({
         }
     }],
     classes: [{
-        class: {
-            type: Schema.Types.ObjectId,
+        classId: {
+            type: String,
             required: true
         }
     }]

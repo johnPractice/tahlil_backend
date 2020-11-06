@@ -27,6 +27,10 @@ rout.post('/join', auth, async(req, res) => {
         }
         classesResult.members = classesResult.members.concat({ member: user._id });
         await classesResult.save();
+
+        user.classes = user.classes.concat({ classId: classesResult.classId });
+        await user.save();
+
         res.status(200).json(classesResult);
 
     } catch (e) {
