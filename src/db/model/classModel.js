@@ -51,6 +51,13 @@ classSchema.methods.toJSON = function() {
     delete userObject.password;
     delete userObject.createdAt;
     delete userObject.updatedAt;
+    delete userObject._id;
+    delete userObject.__v;
+    delete userObject.owner;
+    //delete userObject.name;
+    //delete userObject.description;
+    //delete userObject.image;
+    //delete userObject.classId;
 
     return userObject;
 };

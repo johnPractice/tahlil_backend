@@ -54,7 +54,7 @@ const userSchema = new Schema({
         }
     }],
     classes: [{
-        classId: {
+        objectId: {
             type: String,
             required: true
         }
@@ -135,6 +135,9 @@ userSchema.methods.toJSON = function() {
     delete userObject.tokens;
     delete userObject.createdAt;
     delete userObject.updatedAt;
+    delete userObject._id;
+    delete userObject.__v;
+    delete userObject.classes;
 
     return userObject;
 };

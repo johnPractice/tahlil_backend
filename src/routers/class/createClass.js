@@ -17,7 +17,7 @@ rout.post('/', auth, async(req, res) => {
         newClass.owner = user._id;
         await newClass.save();
 
-        user.classes = user.classes.concat({ classId: newClass.classId });
+        user.classes = user.classes.concat({ objectId: newClass._id });
         await user.save();
 
         res.status(200).json({ 'message': 'class created', 'info': newClass });
