@@ -1,4 +1,4 @@
-openapi: '3.0.3'
+openapi: '3.0.0'
 info:
   title: API Title
   version: '1.0'
@@ -241,8 +241,10 @@ paths:
       requestBody:
         content:
           multipart/form-data:
-            schema:
-              description: Avatar image to add
+            encoding:
+              image:
+                style: form
+
       responses:
         '200':
           description: User avatar attached
@@ -270,7 +272,7 @@ paths:
 components:
   securitySchemes:
     bearerAuth:
-      description: Auth token ( Bearer + " " + token )
+      description: Auth token ( Bearer + " " + Value )
       type: http
       scheme: bearer
       bearerFormat: JWT
