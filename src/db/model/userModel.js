@@ -53,6 +53,12 @@ const userSchema = new Schema({
             required: true
         }
     }],
+    classes: [{
+        class: {
+            type: Schema.Types.ObjectId,
+            required: true
+        }
+    }]
 }, {
     autoCreate: true,
     autoIndex: true,
