@@ -64,6 +64,11 @@ userSchema.virtual('class', {
     localField: '_id',
     foreignField: 'owner'
 });
+userSchema.virtual('question', {
+    ref: 'Question',
+    localField: '_id',
+    foreignField: 'owner'
+});
 
 //methodes
 
