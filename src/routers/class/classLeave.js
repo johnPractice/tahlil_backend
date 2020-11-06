@@ -10,6 +10,12 @@ rout.post('/leave', auth, async(req, res) => {
         if (!info.classId) res.status(400).json({ "error": "must input valid thing" });
         const classesResult = await classModel.deleteUserInClass({ id: info.classId, user });
         if (!classesResult) res.status(400).json({ "message": "somthing wrong" });
+
+        user.classes = user.classes.filter((obj) => {
+            obj.classId != classesResult.classId
+        });
+        await user.save();
+
         res.status(200).json(classesResult);
 
     } catch (e) {
