@@ -45,6 +45,7 @@ const userSchema = new Schema({
         type: String,
         default: null
 
+
     },
     tokens: [{
         token: {
@@ -60,6 +61,11 @@ const userSchema = new Schema({
 
 userSchema.virtual('class', {
     ref: 'Class',
+    localField: '_id',
+    foreignField: 'owner'
+});
+userSchema.virtual('question', {
+    ref: 'Question',
     localField: '_id',
     foreignField: 'owner'
 });

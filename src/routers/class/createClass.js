@@ -6,7 +6,7 @@ rout.post('/', auth, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;
-        const canUse = ['name', 'image', 'description', 'classId'];
+        const canUse = ['name', 'image', 'description', 'classId', 'password'];
         const newClass = new classModel();
         if (Object.keys(info).length == 0) res.status(400).json({ "error": "check your input input must be somthing" });
         canUse.forEach(use => {

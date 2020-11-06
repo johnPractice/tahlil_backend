@@ -1,14 +1,13 @@
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
-//const YAML = require("yamljs");
-const path = require('path');
-const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
-const swaggerParser = require('swagger-parser');
-//const swaggerDocument = YAML.load(swagger_path)
 const dbStart = require('../src/db/mongoose');
 const userRouts = require('../src/routers/user/userRouts');
 const classRouts = require('../src/routers/class/classRouts');
+const questionRouts = require('./routers/question/questionRouts');
+const path = require('path');
 const bodyParser = require('body-parser');
+const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
+const swaggerParser = require('swagger-parser');
 
 const initiate = async () => {
     // create the app express
@@ -28,8 +27,8 @@ const initiate = async () => {
     app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
     app.use(express.static('public'));
-
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(await swaggerParser.bundle(swagger_path)));
+    app.use('/question', questionRouts);
     app.use('/user', userRouts);
     app.use('/class', classRouts);
 
@@ -40,7 +39,6 @@ const initiate = async () => {
         });
         // res.json('error')
     });
-
     return app;
 }
 
