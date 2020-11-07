@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
 const { mailer } = require('../../functions/mailer');
+const { schema } = require('./classModel');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
@@ -55,7 +56,7 @@ const userSchema = new Schema({
     }],
     classes: [{
         objectId: {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true
         }
     }]
