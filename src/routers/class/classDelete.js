@@ -28,7 +28,6 @@ rout.delete('/:classId', auth, async (req, res) => {
         res.sendStatus(200);
 
     } catch (err) {
-        console.log(err);
         if (!err.code)
             err.code = 400;
         res.status(err.code).json({ error: err.message });
