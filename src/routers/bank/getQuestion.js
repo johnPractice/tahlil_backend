@@ -16,6 +16,10 @@ rout.get('/', auth, async(req, res) => {
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
+        if (!bank || bank.length == 0) {
+            res.json({ 'message': 'nothing found' });
+            return;
+        }
         // // get total documents in the Posts collection 
         const count = await Bank.countDocuments();
 
