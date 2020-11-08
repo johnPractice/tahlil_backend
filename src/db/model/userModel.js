@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
 const { mailer } = require('../../functions/mailer');
+const { schema } = require('./classModel');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
@@ -54,8 +55,8 @@ const userSchema = new Schema({
         }
     }],
     classes: [{
-        classId: {
-            type: String,
+        objectId: {
+            type: Schema.Types.ObjectId,
             required: true
         }
     }]
@@ -135,6 +136,9 @@ userSchema.methods.toJSON = function() {
     delete userObject.tokens;
     delete userObject.createdAt;
     delete userObject.updatedAt;
+    delete userObject._id;
+    delete userObject.__v;
+    delete userObject.classes;
 
     return userObject;
 };

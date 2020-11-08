@@ -12,7 +12,7 @@ rout.post('/leave', auth, async(req, res) => {
         if (!classesResult) res.status(400).json({ "message": "somthing wrong" });
 
         user.classes = user.classes.filter((obj) => {
-            obj.classId != classesResult.classId
+            obj.objectId != classesResult._id
         });
         await user.save();
 
