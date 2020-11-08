@@ -7,7 +7,7 @@ rout.post('/create', auth, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;
-        const canUses = ['type', 'public'];
+        const canUses = ['type', 'public', 'question'];
         if (Object.keys(info).length == 0) {
             res.status(400).json({ "error": "must enter somthnig" });
             return;
