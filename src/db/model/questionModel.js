@@ -18,8 +18,12 @@ const questionSchema = Schema({
     },
     base: {
         type: String,
-        enum: ['1', '2', '3', '4', '5'],
+        enum: ['10', '11', '12'],
         required: true,
+    },
+    course: {
+        type: String,
+        enum: ['MATH', 'PHYSIC', 'CHEMISTRY', 'BIOLOGY']
     },
     hardness: {
         type: String,
