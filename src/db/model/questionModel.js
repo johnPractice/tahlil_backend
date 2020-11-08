@@ -16,6 +16,11 @@ const questionSchema = Schema({
         required: true,
         enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
     },
+    hardness: {
+        type: String,
+        required: true,
+        enum: ['LOW', 'MEDIUM', 'HARD']
+    },
     answer: { type: Number },
     options: [{
         option: { type: String }
@@ -32,6 +37,7 @@ const questionSchema = Schema({
 // methode
 questionSchema.pre('save', async function(next) {
     const question = this;
+    if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
         if (!question.answer || !question.options) throw new Error('for test and multi option should set answer and options');
         question.answer = parseInt(question.answer);
