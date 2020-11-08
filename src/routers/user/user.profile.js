@@ -9,24 +9,8 @@ const sharp = require('sharp');
 //get profile user
 rout.get('/', auth, async(req, res) => {
     try {
-        const user = await req.user.populate({ path: 'class' }).execPopulate();
-        let resultClass = [];
-        if (user.class.length > 0) {
-
-            user.class.forEach(item => {
-                let userClass = {};
-                userClass.name = item.name;
-                userClass.classId = item.classId;
-                userClass.iamge = item.image;
-                userClass.description = item.description;
-                resultClass.push(userClass);
-            });
-
-        }
-        const userObject = user.toObject();
-        delete userObject.class;
-
-        res.json({ user: userObject, class: resultClass });
+        const user = req.user;
+        res.json({ user });
     } catch (e) { res.status(400).json(e); }
 });
 
