@@ -53,6 +53,7 @@ const userSchema = new Schema({
             required: true
         }
     }],
+    //doto:must be deleted
     classes: [{
         objectId: {
             type: Schema.Types.ObjectId,
@@ -61,24 +62,37 @@ const userSchema = new Schema({
     }],
 
 }, {
-    // toJSON: { virtuals: true },
-    // toObject: { virtuals: true },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
 });
 
-
-userSchema.virtual('class', {
+// virtual for classOwner 
+userSchema.virtual('classOwner', {
     ref: 'Class',
     localField: '_id',
     foreignField: 'owner'
 });
+// virtual for member in some class
+userSchema.virtual('memberin', {
+    ref: 'Class',
+    localField: '_id',
+    foreignField: 'members'
+});
+// virtual for member in some own question
 userSchema.virtual('question', {
     ref: 'Question',
     localField: '_id',
     foreignField: 'owner'
 });
+// userSchema.pre('findOne', autoPopulateComments);
+
+// function autoPopulateComments(next) {
+//     this.populate('classOwner', 'body');
+//     next();
+// }
 
 //methodes
 
