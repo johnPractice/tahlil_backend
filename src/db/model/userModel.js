@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
 const { mailer } = require('../../functions/mailer');
-const { schema } = require('./classModel');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
@@ -59,12 +58,16 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId,
             required: true
         }
-    }]
+    }],
+
 }, {
+    // toJSON: { virtuals: true },
+    // toObject: { virtuals: true },
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
 });
+
 
 userSchema.virtual('class', {
     ref: 'Class',
