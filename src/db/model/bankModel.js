@@ -1,5 +1,3 @@
-//     'TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER'
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bankSchema = Schema({
@@ -20,11 +18,33 @@ const bankSchema = Schema({
     }],
     qId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
-    }
+        required: true,
+        ref: "Question"
+    },
+    course: {
+        type: String,
+        enum: ['MATH', 'PHYSIC', 'CHEMISTRY', 'BIOLOGY']
+    },
+    hardness: {
+        type: String,
+        required: true,
+        enum: ['LOW', 'MEDIUM', 'HARD']
+    },
 
 });
 
+//methodes 
+bankSchema.methods.toJSON = function() {
+    const bank = this;
+    const bankObject = bank.toObject();
+    delete bankObject.qId;
+    delete bankObject.hardness;
+    delete bankObject.course;
+    delete bankObject._id;
+    delete bankObject.__v;
 
+
+    return bankObject;
+};
 const bankModel = mongoose.model('Bank', bankSchema);
 module.exports = bankModel;
