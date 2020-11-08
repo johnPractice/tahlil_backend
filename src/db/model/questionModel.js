@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Bank = require('./bankModel');
 
 const questionSchema = Schema({
     owner: {
@@ -28,6 +29,15 @@ const questionSchema = Schema({
 
 
 
+// methode
+questionSchema.pre('save', async function(next) {
+    const question = this;
+    if (question.public) {
+        const bank = new Bank({ question: question.question, type: question.type, answer: question.answer, qId: question._id });
+        await bank.save();
+    }
+    next();
 
+});
 const questionModel = mongoose.model('Question', questionSchema);
 module.exports = questionModel;

@@ -5,6 +5,8 @@ const dbStart = require('../src/db/mongoose');
 const userRouts = require('../src/routers/user/userRouts');
 const classRouts = require('../src/routers/class/classRouts');
 const questionRouts = require('./routers/question/questionRouts');
+const bankRouts = require('../src/routers/bank/bankRouts');
+
 const path = require('path');
 const bodyParser = require('body-parser');
 // create the app express
@@ -28,6 +30,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerDocs)
 app.use('/question', questionRouts);
 app.use('/user', userRouts);
 app.use('/class', classRouts);
+app.use('/bank', bankRouts);
+
 
 
 // 404 page
