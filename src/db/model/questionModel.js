@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Bank = require('./bankModel');
-const bank = new Bank();
 
 const questionSchema = Schema({
     owner: {
@@ -33,17 +32,9 @@ const questionSchema = Schema({
 // methode
 questionSchema.pre('save', async function(next) {
     const question = this;
-    const qType = question.type.toLocaleLowerCase();
-    if (!qType) throw new Error('type must be valid thing');
     if (question.public) {
-        try {
-            bank[qType] = bank[qType].concat({ q: question._id });
-            await bank.save();
-        } catch (e) {
-            console.log(e);
-            throw new Error('some thing wrong');
-        }
-
+        const bank = new Bank({ question: question.question, type: question.type, answer: question.answer, qId: question._id });
+        await bank.save();
     }
     next();
 
