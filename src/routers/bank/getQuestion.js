@@ -3,15 +3,13 @@ const Bank = require('../../db/model/bankModel');
 const auth = require('../../middelware/auth');
 rout.get('/', auth, async(req, res) => {
     try {
-        const { page = 1, limit = 10, } = req.query;
-        console.log(page, limit);
+        const { page = 1, limit = 1, } = req.query;
         const canUses = ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER'];
         let finalSearch = [];
         canUses.forEach(use => {
             if (req.query[use] == 'true' || req.query[use] == true) finalSearch.push(use);
         });
-        console.log(finalSearch)
-            // execute query with page and limit values
+        // execute query with page and limit values
         const bank = await Bank.find().where('type').in(finalSearch)
             .limit(limit * 1)
             .skip((page - 1) * limit)
