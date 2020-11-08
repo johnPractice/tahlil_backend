@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Bank = require('./bankModel');
-
 const questionSchema = Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     question: {
         type: String,
@@ -16,10 +16,10 @@ const questionSchema = Schema({
         required: true,
         enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
     },
-    answer: {
-        type: String,
-        default: null
-    },
+    answer: { type: Number },
+    options: [{
+        option: { type: String }
+    }],
     public: {
         type: Boolean,
         default: false
@@ -32,12 +32,19 @@ const questionSchema = Schema({
 // methode
 questionSchema.pre('save', async function(next) {
     const question = this;
+    if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
+        if (!question.answer || !question.options) throw new Error('for test and multi option should set answer and options');
+        question.answer = parseInt(question.answer);
+        if (question.options.length > 4) throw new Error('test or multi question have 4 option cant add more ');
+    }
     if (question.public) {
-        const bank = new Bank({ question: question.question, type: question.type, answer: question.answer, qId: question._id });
+        const bank = new Bank({ question: question.question, type: question.type, qId: question._id });
+        if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
+            bank.options = question.options;
+        }
         await bank.save();
     }
     next();
-
 });
 const questionModel = mongoose.model('Question', questionSchema);
 module.exports = questionModel;

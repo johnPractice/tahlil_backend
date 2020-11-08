@@ -12,10 +12,12 @@ const bankSchema = Schema({
         required: true,
         enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
     },
-    answer: {
-        type: String,
-        default: null
-    },
+    options: [{
+        option: {
+            type: String,
+            required: true
+        }
+    }],
     qId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
