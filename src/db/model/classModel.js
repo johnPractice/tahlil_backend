@@ -17,23 +17,13 @@ const classSchema = Schema({
         required: true,
         unique: true,
     },
-    password: {
-        type: String,
-        required: true,
-        minLength: 6,
-    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    image: {
-        type: String,
-        default: null
-    },
     members: [{
-        member: {
-            type: Schema.Types.ObjectId,
-        }
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }]
 }, {
     autoCreate: true,

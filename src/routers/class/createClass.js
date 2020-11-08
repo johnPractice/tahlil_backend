@@ -6,7 +6,7 @@ rout.post('/', auth, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;
-        const canUse = ['name', 'image', 'description', 'classId', 'password'];
+        const canUse = ['name', 'description', 'classId'];
         const newClass = new classModel();
         if (Object.keys(info).length == 0) res.status(400).json({ "error": "check your input input must be something" });
         canUse.forEach(use => {
@@ -16,9 +16,6 @@ rout.post('/', auth, async(req, res) => {
         });
         newClass.owner = user._id;
         await newClass.save();
-
-        user.classes = user.classes.concat({ objectId: newClass._id });
-        await user.save();
 
         res.status(200).json({ 'message': 'class created', 'info': newClass });
     } catch (e) {
