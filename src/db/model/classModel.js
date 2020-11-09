@@ -44,7 +44,6 @@ classSchema.methods.toJSON = function() {
     delete userObject._id;
     delete userObject.__v;
     delete userObject.owner;
-    //delete userObject.image;
 
     return userObject;
 };

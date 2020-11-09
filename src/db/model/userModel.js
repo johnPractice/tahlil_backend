@@ -70,13 +70,13 @@ const userSchema = new Schema({
 });
 
 // virtual for classOwner 
-userSchema.virtual('classOwner', {
+userSchema.virtual('ownedClasses', {
     ref: 'Class',
     localField: '_id',
     foreignField: 'owner'
 });
 // virtual for member in some class
-userSchema.virtual('memberin', {
+userSchema.virtual('joinedClasses', {
     ref: 'Class',
     localField: '_id',
     foreignField: 'members'

@@ -11,10 +11,10 @@ rout.post('/leave', auth, async(req, res) => {
         const classesResult = await classModel.deleteUserInClass({ id: info.classId, user });
         if (!classesResult) res.status(400).json({ "message": "somthing wrong" });
 
-        user.classes = user.classes.filter((obj) => {
-            obj.objectId != classesResult._id
-        });
-        await user.save();
+        //user.classes = user.classes.filter((obj) => {
+        //    obj.objectId != classesResult._id
+        //});
+        //await user.save();
 
         res.status(200).json(classesResult);
 
