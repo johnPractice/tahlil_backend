@@ -53,14 +53,6 @@ const userSchema = new Schema({
             required: true
         }
     }],
-    //doto:must be deleted
-    classes: [{
-        objectId: {
-            type: Schema.Types.ObjectId,
-            required: true
-        }
-    }],
-
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
@@ -70,13 +62,13 @@ const userSchema = new Schema({
 });
 
 // virtual for classOwner 
-userSchema.virtual('classOwner', {
+userSchema.virtual('ownedClasses', {
     ref: 'Class',
     localField: '_id',
     foreignField: 'owner'
 });
 // virtual for member in some class
-userSchema.virtual('memberin', {
+userSchema.virtual('joinedClasses', {
     ref: 'Class',
     localField: '_id',
     foreignField: 'members'
@@ -155,7 +147,6 @@ userSchema.methods.toJSON = function() {
     delete userObject.updatedAt;
     delete userObject._id;
     delete userObject.__v;
-    delete userObject.classes;
 
     return userObject;
 };

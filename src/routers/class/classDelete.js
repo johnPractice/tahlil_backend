@@ -1,7 +1,6 @@
 const rout = require('express').Router();
 const auth = require('../../middelware/auth');
 const classModel = require('../../db/model/classModel');
-const User = require('../../db/model/userModel');
 
 rout.delete('/:classId', auth, async (req, res) => {
     try {
@@ -14,15 +13,6 @@ rout.delete('/:classId', auth, async (req, res) => {
         if (!user._id.equals(classToDelete.owner))
             throw { "message": "Permission denied", code: 403 };
 
-        //remove class from every member.classes
-        await classToDelete.members.forEach(async (obj) => {
-            let member = await User.findById(obj.member);
-            member.classes = member.classes.filter(obj => !classToDelete._id.equals(obj.objectId));
-            await member.save();
-        });
-        //remove class from owner.classes
-        user.classes = user.classes.filter(obj => !classToDelete._id.equals(obj.objectId));
-        await user.save();
         //delete class
         await classModel.deleteOne(classToDelete);
         res.sendStatus(200);

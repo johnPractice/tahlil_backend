@@ -17,7 +17,7 @@ rout.put('/:classId', auth, async (req, res) => {
         if (Object.keys(newInfo).length == 0)
             throw { message: "Request body is empty", code: 400 };
 
-        const canUpdate = ['name', 'image', 'description', 'classId', 'password'];
+        const canUpdate = ['name', 'description', 'classId', 'password'];
         canUpdate.forEach(property => {
             if (newInfo[property])
                 classToEdit[property] = newInfo[property];
