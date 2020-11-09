@@ -1,0 +1,39 @@
+/**
+ * @swagger
+ * /user/classes:
+ *  get:
+ *    description: get users classes
+ *    consumes:
+ *       - application/json
+ *    tags:
+ *       - class
+ *    parameters:
+ *       - in: header
+ *         name: Authorization
+ *         description: Auth token ( Bearer + " " + token )
+ *         schema:
+ *          type: string
+ *         required: true
+ *       
+ *    responses:
+ *      '200':
+ *        description: User edited the class
+ *        schema:
+ *          type: object
+ *          properties:
+ *              classes:
+ *                  type: array
+ *                  items:
+ *                      type: object
+ *                      properties:
+ *                          name:
+ *                              type: string
+ *                          classId:
+ *                              type: string
+ *                          ownerFullname:
+ *                              type: string
+ *                          
+ *      '400':
+ *          description: error
+ *
+ */

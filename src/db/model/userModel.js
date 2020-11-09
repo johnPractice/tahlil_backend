@@ -53,14 +53,6 @@ const userSchema = new Schema({
             required: true
         }
     }],
-    //doto:must be deleted
-    classes: [{
-        objectId: {
-            type: Schema.Types.ObjectId,
-            required: true
-        }
-    }],
-
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
