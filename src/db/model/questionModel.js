@@ -54,7 +54,7 @@ questionSchema.pre('save', async function(next) {
         if (question.options.length > 4) throw new Error('test or multi question have 4 option cant add more ');
     }
     if (question.public) {
-        const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course });
+        const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base });
         if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
             bank.options = question.options;
         }
