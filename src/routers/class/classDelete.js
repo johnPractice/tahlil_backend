@@ -1,7 +1,6 @@
 const rout = require('express').Router();
 const auth = require('../../middelware/auth');
 const classModel = require('../../db/model/classModel');
-const User = require('../../db/model/userModel');
 
 rout.delete('/:classId', auth, async (req, res) => {
     try {

@@ -155,7 +155,6 @@ userSchema.methods.toJSON = function() {
     delete userObject.updatedAt;
     delete userObject._id;
     delete userObject.__v;
-    delete userObject.classes;
 
     return userObject;
 };
