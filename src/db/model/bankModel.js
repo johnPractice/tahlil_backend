@@ -43,7 +43,6 @@ bankSchema.methods.toJSON = function() {
     const bank = this;
     const bankObject = bank.toObject();
     delete bankObject.qId;
-    delete bankObject.hardness;
     delete bankObject.course;
     delete bankObject._id;
     delete bankObject.__v;
