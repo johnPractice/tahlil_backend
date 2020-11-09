@@ -30,6 +30,11 @@ const bankSchema = Schema({
         required: true,
         enum: ['LOW', 'MEDIUM', 'HARD']
     },
+    base: {
+        type: String,
+        enum: ['10', '11', '12'],
+        required: true
+    }
 
 });
 

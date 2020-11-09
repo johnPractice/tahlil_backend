@@ -7,6 +7,7 @@ rout.get('/', auth, async(req, res) => {
         const canUsesTypes = ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER'];
         const canUsesCourse = ['MATH', 'PHYSIC', 'CHEMISTRY', 'BIOLOGY'];
         const canUsesHardnes = ['LOW', 'MEDIUM', 'HARD'];
+        const userBases = ['10', '11', '12'];
 
         let finalSearch = [];
         canUsesTypes.forEach(use => {
@@ -18,11 +19,16 @@ rout.get('/', auth, async(req, res) => {
         canUsesHardnes.forEach(use => {
             if (req.query[use] == 'true' || req.query[use] == true) finalSearch.push(use);
         });
+        userBases.forEach(use => {
+            if (req.query[use] == 'true' || req.query[use] == true) finalSearch.push(use);
+        });
         // execute query with page and limit values
         const bank = await Bank.find().where('type').in(finalSearch)
             .where('hardness').in(finalSearch)
             .where('course').in(finalSearch)
-            .limit(limit * 1)
+            .where('base').in(finalSearch)
+
+        .limit(limit * 1)
             .skip((page - 1) * limit)
             .exec();
         if (!bank || bank.length == 0) {
