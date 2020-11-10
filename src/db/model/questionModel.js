@@ -62,5 +62,13 @@ questionSchema.pre('save', async function(next) {
     }
     next();
 });
+//to json methode
+questionSchema.methods.toJSON = function() {
+    const questionObject = this.toObject();
+    delete questionObject.createdAt;
+    delete questionObject.updatedAt;
+    delete questionObject.__v;
+};
+
 const questionModel = mongoose.model('Question', questionSchema);
 module.exports = questionModel;
