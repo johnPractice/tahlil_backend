@@ -1,7 +1,7 @@
 /**
  * @swagger
  * /question:
- *  put:
+ *  delete:
  *    description: edit question
  *    consumes:
  *       - application/json
@@ -16,7 +16,7 @@
  *         required: true
  *       - in: body
  *         name: question info
- *         description: for edit question
+ *         description: for delete  question
  *         schema:
  *          type: object
  *          required:
@@ -24,26 +24,10 @@
  *          properties:
  *           questionId:
  *            type: string
- *           type:
- *            type: string
- *           public:
- *            type: string
- *           question:
- *            type: string
- *           answer:
- *            type: string
- *           options:
- *            type: string
- *           base:
- *            type: string
- *           hardness:
- *            type: string
- *           course:
- *            type: string
- *
+ * 
  *    responses:
  *      '200':
- *        description: edit question question
+ *        description: delete question 
  *      '400':
  *        description: Erro
  *        
