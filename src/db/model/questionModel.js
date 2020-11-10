@@ -47,6 +47,11 @@ const questionSchema = Schema({
 // methode
 questionSchema.pre('save', async function(next) {
     const question = this;
+    // for update question  
+    const checkBank = Bank.findOne({ qId: question._id });
+    if (checkBank) {
+        await checkBank.remove();
+    }
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
         if (!question.answer || !question.options) throw new Error('for test and multi option should set answer and options');
