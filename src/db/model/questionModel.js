@@ -62,12 +62,22 @@ questionSchema.pre('save', async function(next) {
     }
     next();
 });
+// methode for find and chec the owner
+questionSchema.statics.findAndOwner = async function({ qId, owner }) {
+    if (!qId || !owner) throw new Error('questionId and ower must be valid thing');
+    const question = await questionModel.findOne({ _id: qId });
+    if (!question) throw new Error('nothing found');
+    if (owner != question.owner.toString()) throw new Error('just author can edit question');
+    return question;
+};
 //to json methode
 questionSchema.methods.toJSON = function() {
     const questionObject = this.toObject();
     delete questionObject.createdAt;
     delete questionObject.updatedAt;
     delete questionObject.__v;
+    questionObject._id = questionObject._id.toString();
+    return questionObject;
 };
 
 const questionModel = mongoose.model('Question', questionSchema);
