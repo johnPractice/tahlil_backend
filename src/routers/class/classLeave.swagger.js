@@ -28,12 +28,12 @@
  *    responses:
  *      '200':
  *        description: User left the class
+ *      '400':
+ *        description: error detail in response
  *        schema:
  *          type: object
  *          properties:
  *              error:
- *                  type: string
- *              message:
  *                  type: string
  *
  */

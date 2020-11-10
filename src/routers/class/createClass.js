@@ -23,9 +23,7 @@ rout.post('/', auth, async(req, res) => {
         res.status(200).json({ newClass });
 
     } catch (err) {
-        console.log(typeof err);
-        
-        if (!err.code || err.code>=600)
+        if (!err.code || err.code >= 600)
             err.code = 400;
         res.status(err.code).json({ error: err.message });
     }

@@ -17,7 +17,7 @@ rout.post('/leave', auth, async(req, res) => {
         res.sendStatus(200);
 
     } catch (err) {
-        if (!err.code)
+        if (!err.code || err.code >= 600)
             err.code = 400;
         res.status(err.code).json({ error: err.message });
     }
