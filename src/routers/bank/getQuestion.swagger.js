@@ -14,6 +14,14 @@
  *         schema:
  *          type: string
  *         required: true
+ *       - in: query
+ *         name: page
+ *         schema:
+ *          type: string
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *          type: string
  *       - in: body
  *         name: searchBank
  *         schema:
