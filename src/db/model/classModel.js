@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { nanoid } = require('nanoid');
 
 const classSchema = Schema({
     name: {
@@ -13,6 +14,7 @@ const classSchema = Schema({
     },
     classId: {
         type: String,
+        default: () => nanoid(6),
         minLength: 4,
         required: true,
         unique: true,
@@ -38,7 +40,6 @@ classSchema.methods.toJSON = function() {
     // this refer to clas
     const userObject = this.toObject();
     delete userObject.members;
-    delete userObject.password;
     delete userObject.createdAt;
     delete userObject.updatedAt;
     delete userObject._id;
@@ -56,30 +57,23 @@ classSchema.statics.findByClassId = async({ id, userId }) => {
 
     return result;
 };
-classSchema.statics.deleteUserInClass = async({ id, user }) => {
-    if (!user) throw new Error("user must be enter");
+classSchema.methods.removeUser = async function(userId) {
+    if (!userId)
+        throw { message: "userId is required", code: 400 };
 
-    const userId = user._id;
-    let check = false;
-    const classSelect = await classModel.findOne({ classId: id });
-    if (!classSelect) throw new Error("class not found");
-    for (let i = 0; i < classSelect.members.length; i++) {
-        if (classSelect.members[i].member.toString() == userId.toString()) {
-            classSelect.members.splice(i, 1);
-            check = true;
-            break;
-        }
-    }
-    // for check of user not in class
-    if (!check) throw new Error("your attempt falid");
+    const Class = this;
 
-    await classSelect.save();
-    return {
-        "message": "leave ok"
-    };
+    let userIndexInMembers = Class.members.indexOf(userId);
+    if (userIndexInMembers == -1)
+        throw { message: "User is not a member of the class", code: 400 };
 
+    Class.members.remove(userId);
 
+    userIndexInMembers = Class.members.indexOf(userId);
+    if (userIndexInMembers != -1)
+        throw { message: "Failed", code: 503 };
 
+    await Class.save();
 };
 
 const classModel = mongoose.model('Class', classSchema);

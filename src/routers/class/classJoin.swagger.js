@@ -21,28 +21,19 @@
  *          type: object
  *          required:
  *            - classId 
- *            - password 
  *          properties:
  *           classId:
- *            type: string
- *           password:
  *            type: string
  *
  *    responses:
  *      '200':
  *        description: User joined the class
+ *      '400':
+ *        description: error detail in response
  *        schema:
  *          type: object
  *          properties:
- *              name:
- *                  type: string
- *              description:
- *                  type: string
- *              classId:
- *                  type: string
- *              owner:
- *                  type: string
- *              image:
+ *              error:
  *                  type: string
  *        
  */
