@@ -3,7 +3,7 @@ const Question = require('../../db/model/questionModel');
 const auth = require('../../middelware/auth');
 
 
-rout.post('/create', auth, async(req, res) => {
+rout.post('/', auth, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;

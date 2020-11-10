@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /question/create:
+ * /question:
  *  post:
  *    description: create question
  *    consumes:
