@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { nanoid } = require('nanoid');
 
 const classSchema = Schema({
     name: {
@@ -13,6 +14,7 @@ const classSchema = Schema({
     },
     classId: {
         type: String,
+        default: () => nanoid(6),
         minLength: 4,
         required: true,
         unique: true,
@@ -38,7 +40,6 @@ classSchema.methods.toJSON = function() {
     // this refer to clas
     const userObject = this.toObject();
     delete userObject.members;
-    delete userObject.password;
     delete userObject.createdAt;
     delete userObject.updatedAt;
     delete userObject._id;
