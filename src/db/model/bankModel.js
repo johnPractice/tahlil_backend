@@ -34,6 +34,10 @@ const bankSchema = Schema({
         type: String,
         enum: ['10', '11', '12'],
         required: true
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 
 });

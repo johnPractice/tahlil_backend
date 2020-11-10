@@ -62,6 +62,13 @@ questionSchema.pre('save', async function(next) {
     }
     next();
 });
+// methode for after delete ==>delete from Bank
+questionSchema.pre('remove', async function(next) {
+    const bank = await Bank.findOne({ qId: this._id });
+    bank.deleted = true;
+    await bank.save();
+    next();
+});
 // methode for find and chec the owner
 questionSchema.statics.findAndOwner = async function({ qId, owner }) {
     if (!qId || !owner) throw new Error('questionId and ower must be valid thing');
