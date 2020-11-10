@@ -82,6 +82,16 @@ questionSchema.statics.findAndOwner = async function({ qId, owner }) {
     if (owner != question.owner.toString()) throw new Error('just author can edit question');
     return question;
 };
+questionSchema.statics.findByOwner = async function({ owner, page = 1, limit = 1 }) {
+    if (!owner) throw new Error('ower must be valid thing');
+    const question = await questionModel.find({ owner })
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
+    if (!question || !question.length > 0) throw new Error('nothing found');
+    return question;
+};
+
 //to json methode
 questionSchema.methods.toJSON = function() {
     const questionObject = this.toObject();
