@@ -17,7 +17,7 @@
  *       
  *    responses:
  *      '200':
- *        description: User edited the class
+ *        description: the array of class objects in the response
  *        schema:
  *          type: object
  *          properties:

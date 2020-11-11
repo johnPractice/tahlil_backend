@@ -28,6 +28,18 @@
  *    responses:
  *      '200':
  *        description: User joined the class
+ *        schema:
+ *          type: object
+ *          properties:
+ *              joinedClass:
+ *                  type: object
+ *                  properties:
+ *                      name:
+ *                          type: string
+ *                      classId:
+ *                          type: string
+ *                      ownerFullname:
+ *                          type: string
  *      '400':
  *        description: error detail in response
  *        schema:

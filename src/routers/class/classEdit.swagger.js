@@ -46,8 +46,6 @@
  *                          type: string
  *                      classId:
  *                          type: string
- *                      owner:
- *                          type: string
  *      '400':
  *          description: error in classid or request body or something else!
  *          schema:

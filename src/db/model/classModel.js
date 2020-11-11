@@ -48,6 +48,18 @@ classSchema.methods.toJSON = function() {
 
     return userObject;
 };
+classSchema.methods.toListedView = async function () {
+    //returns an object with selected properties
+    //to show in the list of user's classes
+    if(!this.populated('owner'))
+        await this.populate('owner', 'firstname lastname').execPopulate();
+
+    let { firstname, lastname } = this.owner;
+    const listedView = this.toJSON();
+    delete listedView.description;
+    listedView.ownerFullname = firstname + " " + lastname;
+    return listedView;
+}
 // static mehodes
 classSchema.statics.findByClassId = async({ id, userId }) => {
     const classes = await classModel.find();

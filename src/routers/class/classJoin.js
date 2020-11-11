@@ -24,7 +24,7 @@ rout.post('/join', auth, async(req, res) => {
         await classToJoin.members.push(user._id);
         await classToJoin.save();
 
-        res.sendStatus(200);
+        res.status(200).json({ joinedClass: await classToJoin.toListedView() });
 
     } catch (err) {
         if (!err.code || err.code >= 600)
