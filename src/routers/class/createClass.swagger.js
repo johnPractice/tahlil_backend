@@ -38,9 +38,9 @@
  *                  properties:
  *                      name:
  *                          type: string
- *                      description:
- *                          type: string
  *                      classId:
+ *                          type: string
+ *                      ownerFullname:
  *                          type: string
  *
  */

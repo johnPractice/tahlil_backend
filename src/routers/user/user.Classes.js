@@ -10,11 +10,9 @@ rout.get('/classes', auth, async (req, res) => {
 
 		const classes = [].concat(user.ownedClasses, user.joinedClasses);
 
-		for (let i = 0; i < classes.length; i++) {
-			let { firstname, lastname } = classes[i].owner;
-			classes[i] = classes[i].toJSON();
-			classes[i].ownerFullname = firstname + " " + lastname;
-        }
+		for (let i = 0; i < classes.length; i++)
+			classes[i] = await classes[i].toListedView();
+
 		res.status(200).json({ classes });
 
 	} catch (err) { console.log(err); res.sendStatus(400);}
