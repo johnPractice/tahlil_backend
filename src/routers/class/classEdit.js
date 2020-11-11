@@ -1,23 +1,24 @@
 const rout = require('express').Router();
 const auth = require('../../middelware/auth');
-const classModel = require('../../db/model/classModel');
+//const classModel = require('../../db/model/classModel');
+const checkClassAdmin = require('../../middelware/checkClassAdmin');
 
-rout.put('/:classId', auth, async (req, res) => {
+rout.put('/:classId', auth, checkClassAdmin, async (req, res) => {
     try {
-        const user = req.user;
+        //const user = req.user;
         const newInfo = req.body;
-        const classToEdit = await classModel.findOne({ classId: req.params.classId });
+        const classToEdit = req.ownedClass;//await classModel.findOne({ classId: req.params.classId });
 
-        if (!classToEdit)
-            throw { message: "Invalid classId", code: 400 };
+        //if (!classToEdit)
+        //    throw { message: "Invalid classId", code: 400 };
 
-        if (!user._id.equals(classToEdit.owner))
-            throw { message: "Permission denied", code: 403 };
+        //if (!user._id.equals(classToEdit.owner))
+        //    throw { message: "Permission denied", code: 403 };
 
         if (Object.keys(newInfo).length == 0)
             throw { message: "Request body is empty", code: 400 };
 
-        const canUpdate = ['name', 'description', 'classId', 'password'];
+        const canUpdate = ['name', 'description'];
         canUpdate.forEach(property => {
             if (newInfo[property])
                 classToEdit[property] = newInfo[property];

@@ -30,10 +30,6 @@
  *                  type: string
  *              description:
  *                  type: string
- *              classId:
- *                  type: string
- *              password:
- *                  type: string
  *
  *    responses:
  *      '200':
