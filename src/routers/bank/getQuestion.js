@@ -34,6 +34,13 @@ rout.post('/', auth, async(req, res) => {
                 finalSearch.push(newObject);
             });
         }
+        if (search.chapter && search.chapter.length > 0) {
+            search.type.forEach(chapter => {
+                const newObject = {};
+                newObject.chapter = chapter;
+                finalSearch.push(newObject);
+            });
+        }
         if (finalSearch == [] || Object.keys(search).length == 0) {
             const bank = await Bank.find()
                 .limit(limit * 1)
