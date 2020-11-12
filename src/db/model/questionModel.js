@@ -31,10 +31,7 @@ const questionSchema = Schema({
         required: true,
         enum: ['LOW', 'MEDIUM', 'HARD']
     },
-    answer: {
-        type: String,
-        default: null
-    },
+    answer: {},
     options: [{
         option: { type: String }
     }],
