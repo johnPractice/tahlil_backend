@@ -1,7 +1,9 @@
 const rout = require('express').Router();
 const Question = require('../../db/model/questionModel');
 const auth = require('../../middelware/auth');
-rout.put('/', auth, async(req, res) => {
+const checkAnswer = require('../../middelware/question/checkAnswer');
+
+rout.put('/', auth, checkAnswer, async(req, res) => {
     try {
         const info = req.body;
         const user = req.user;
