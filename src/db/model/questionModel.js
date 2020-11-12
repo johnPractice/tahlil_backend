@@ -36,7 +36,9 @@ const questionSchema = Schema({
         required: true,
         enum: ['LOW', 'MEDIUM', 'HARD']
     },
-    answer: {},
+    answers: [{
+        answer: {}
+    }],
     options: [{
         option: { type: String }
     }],
@@ -58,14 +60,9 @@ questionSchema.pre('save', async function(next) {
         await checkBank.remove();
     }
     if (!question.hardness) throw new Error('hardness must be valid thing');
-    if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
-        if (!question.answer || !question.options) throw new Error('for test and multi option should set answer and options');
-        question.answer = parseInt(question.answer);
-        if (question.options.length > 4) throw new Error('test or multi question have 4 option cant add more ');
-    }
     if (question.public) {
-        if (question.answer) {
-            const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, answer: question.answer });
+        if (question.answers) {
+            const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, answers: question.answers });
             if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
                 bank.options = question.options;
             }
