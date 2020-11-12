@@ -26,6 +26,11 @@ const questionSchema = Schema({
         required: true,
         enum: ['MATH', 'PHYSIC', 'CHEMISTRY', 'BIOLOGY']
     },
+    chapter: {
+        type: String,
+        required: true,
+        enum: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    },
     hardness: {
         type: String,
         required: true,

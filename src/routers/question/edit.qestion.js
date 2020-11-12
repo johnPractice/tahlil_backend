@@ -8,7 +8,7 @@ rout.put('/', auth, checkAnswer, async(req, res) => {
         const info = req.body;
         const user = req.user;
         const question = await Question.findAndOwner({ qId: info.questionId, owner: user._id.toString() });
-        const canUses = ['question', 'type', 'base', 'course', 'hardness', 'answer', 'options'];
+        const canUses = ['type', 'public', 'question', 'answer', 'options', 'hardness', 'base', 'course', 'chapter'];
         canUses.forEach(use => {
             if (info[use])
                 question[use] = info[use];
