@@ -10,6 +10,10 @@ const bankSchema = Schema({
         required: true,
         enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
     },
+    isImage: {
+        type: Boolean,
+        default: false
+    },
     options: [{
         option: {
             type: String,
@@ -20,6 +24,11 @@ const bankSchema = Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "Question"
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     course: {
         type: String,
@@ -55,10 +64,9 @@ bankSchema.methods.toJSON = function() {
     const bank = this;
     const bankObject = bank.toObject();
     delete bankObject.qId;
-    delete bankObject.course;
     delete bankObject._id;
     delete bankObject.__v;
-
+    delete bankObject.deleted;
 
     return bankObject;
 };

@@ -3,6 +3,7 @@ const Bank = require('../../db/model/bankModel');
 const auth = require('../../middelware/auth');
 rout.post('/', auth, async(req, res) => {
     try {
+        const user = req.user;
         const { page = 1, limit = 1, } = req.query;
         const search = req.body;
         let finalSearch = [];
@@ -14,35 +15,35 @@ rout.post('/', auth, async(req, res) => {
             });
         }
         if (search.course && search.course.length > 0) {
-            search.type.forEach(course => {
+            search.course.forEach(course => {
                 const newObject = {};
                 newObject.course = course;
                 finalSearch.push(newObject);
             });
         }
         if (search.hardness && search.hardness.length > 0) {
-            search.type.forEach(hardness => {
+            search.hardness.forEach(hardness => {
                 const newObject = {};
                 newObject.hardness = hardness;
                 finalSearch.push(newObject);
             });
         }
         if (search.base && search.base.length > 0) {
-            search.type.forEach(base => {
+            search.base.forEach(base => {
                 const newObject = {};
                 newObject.base = base;
                 finalSearch.push(newObject);
             });
         }
         if (search.chapter && search.chapter.length > 0) {
-            search.type.forEach(chapter => {
+            search.chapter.forEach(chapter => {
                 const newObject = {};
                 newObject.chapter = chapter;
                 finalSearch.push(newObject);
             });
         }
         if (finalSearch == [] || Object.keys(search).length == 0) {
-            const bank = await Bank.find()
+            const bank = await Bank.find({ owner: { $ne: user._id } })
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .exec();
@@ -62,7 +63,7 @@ rout.post('/', auth, async(req, res) => {
             });
             return;
         } else {
-            const bank = await Bank.find({ $or: finalSearch })
+            const bank = await Bank.find({ $or: finalSearch, owner: { $ne: user._id } })
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .exec();
@@ -72,7 +73,7 @@ rout.post('/', auth, async(req, res) => {
             }
 
             // // get total documents in the Posts collection 
-            const count = await Bank.countDocuments();
+            const count = bank.length;
 
             // return response with posts, total pages, and current page
             res.json({

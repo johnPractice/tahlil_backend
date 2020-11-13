@@ -43,6 +43,10 @@
  *            type: array
  *            items:
  *             type: string
+ *           chapter:
+ *            type: array
+ *            items:
+ *             type: string
  *    responses:
  *      '200':
  *        description: User joined the class
