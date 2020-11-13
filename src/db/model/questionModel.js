@@ -11,6 +11,10 @@ const questionSchema = Schema({
         type: String,
         required: true,
     },
+    isImage: {
+        type: Boolean,
+        default: false
+    },
     type: {
         type: String,
         required: true,
@@ -61,19 +65,14 @@ questionSchema.pre('save', async function(next) {
     }
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.public) {
+        const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, owner: question.owner, isImage: question.isImage });
         if (question.answers) {
-            const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, answers: question.answers });
+            bank.answers = question.answers;
             if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
                 bank.options = question.options;
             }
-            await bank.save();
-        } else {
-            const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter });
-            if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
-                bank.options = question.options;
-            }
-            await bank.save();
         }
+        await bank.save();
     }
     next();
 });

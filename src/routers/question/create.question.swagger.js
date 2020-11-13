@@ -35,6 +35,8 @@
  *            enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
  *           public:
  *            type: boolean
+ *           isImage:
+ *            type: boolean 
  *           question:
  *            type: string
  *           answers:
@@ -69,6 +71,5 @@
  *    responses:
  *      '200':
  *        description: created new question
-
  *        
  */
