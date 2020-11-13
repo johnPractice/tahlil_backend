@@ -32,13 +32,19 @@
  *           type:
  *            type: string
  *           public:
- *            type: string
+ *            type: boolean 
+ *           isImage:
+ *            type: boolean 
  *           question:
  *            type: string
- *           answer:
- *            type: string
+ *           answers:
+ *            type: array
+ *            items:
+ *             type: object
  *           options:
- *            type: string
+ *            type: array
+ *            items:
+ *             type: object
  *           base:
  *            type: string
  *           hardness:
