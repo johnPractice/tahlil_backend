@@ -43,6 +43,10 @@
  *            type: array
  *            items:
  *             type: string
+ *           chapter:
+ *            type: array
+ *            items:
+ *             type: string
  *    responses:
  *      '200':
  *        description: User joined the class
@@ -50,6 +54,12 @@
  *          type: object
  *          properties:
  *              questions:
- *                  type: object
+ *                  type: array
+ *                  items:
+ *                      type: object
+ *              totalPages:
+ *                  type: number
+ *              currentPage:
+ *                  type: number
  *        
  */

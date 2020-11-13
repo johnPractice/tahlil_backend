@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /question:
+ * /question/{questionId}:
  *  delete:
  *    description: edit question
  *    consumes:
@@ -14,16 +14,12 @@
  *         schema:
  *          type: string
  *         required: true
- *       - in: body
- *         name: question info
- *         description: for delete  question
+ *       - in: path
+ *         name: questionId
+ *         description: to edit a question
  *         schema:
- *          type: object
- *          required:
- *            - questionId 
- *          properties:
- *           questionId:
- *            type: string
+ *          type: string
+ *         required: true
  * 
  *    responses:
  *      '200':
