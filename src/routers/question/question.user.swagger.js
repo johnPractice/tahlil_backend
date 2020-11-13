@@ -2,7 +2,7 @@
  * @swagger
  * /question:
  *  get:
- *    description: get all users question with paginagtion
+ *    description: get all users question with pagination
  *    consumes:
  *       - application/json
  *    tags: 
@@ -29,6 +29,13 @@
  *        schema:
  *          type: object
  *          properties:
-
+ *              questions:
+ *                  type: array
+ *                  items:
+ *                      type: object
+ *              totalPages:
+ *                  type: number
+ *              currentPage:
+ *                  type: number
  *        
  */
