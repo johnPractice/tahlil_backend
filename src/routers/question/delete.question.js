@@ -1,11 +1,11 @@
 const rout = require('express').Router();
 const Question = require('../../db/model/questionModel');
 const auth = require('../../middelware/auth');
-rout.delete('/', auth, async(req, res) => {
+rout.delete('/:questionId', auth, async(req, res) => {
     try {
-        const info = req.body;
+        //const info = req.body;
         const user = req.user;
-        const question = await Question.findAndOwner({ qId: info.questionId, owner: user._id.toString() });
+        const question = await Question.findAndOwner({ qId: req.params.questionId, owner: user._id.toString() });
 
         await question.delete();
         res.json({ 'meesage': 'question deleted' });

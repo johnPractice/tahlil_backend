@@ -54,6 +54,12 @@
  *          type: object
  *          properties:
  *              questions:
- *                  type: object
+ *                  type: array
+ *                  items:
+ *                      type: object
+ *              totalPages:
+ *                  type: number
+ *              currentPage:
+ *                  type: number
  *        
  */
