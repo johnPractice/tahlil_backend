@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
 const { mailer } = require('../../functions/mailer');
+const classModel = require('./classModel');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
@@ -87,6 +88,23 @@ userSchema.virtual('question', {
 // }
 
 //methodes
+
+userSchema.methods.isMemberOf = function(Class) {
+    if (!Class instanceof classModel)
+        throw new Error("Invalid Class");
+
+    if (Class.members.includes(this._id))
+        return true;
+    return false;
+};
+userSchema.methods.isAdminOf = function (Class) {
+    if (!Class instanceof classModel)
+        throw new Error("Invalid Class");
+
+    if (this._id.equals(Class.owner))
+        return true;
+    return false;
+};
 
 //check username & password //static
 userSchema.statics.findByCredentials = async({ username, password }) => {

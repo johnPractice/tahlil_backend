@@ -1,6 +1,6 @@
-const classModel = require('../db/model/classModel');
+const classModel = require('../../db/model/classModel');
 
-const checkClassAdmin = async (req, res, next) => {
+const checkClassId = async (req, res, next) => {
     try {
         const { classId } = req.params;
         if (!classId)
@@ -9,11 +9,7 @@ const checkClassAdmin = async (req, res, next) => {
         if (!Class)
             throw { message: "Invalid classId", code: 400 };
 
-        const user = req.user;
-        if (!user._id.equals(Class.owner))
-            throw { message: "Permission denied", code: 403 };
-
-        req.ownedClass = Class;
+        req.Class = Class;
         next();
 
     } catch (err) {
@@ -22,4 +18,4 @@ const checkClassAdmin = async (req, res, next) => {
         res.status(err.code).json({ error: err.message });
     }
 };
-module.exports = checkClassAdmin;
+module.exports = checkClassId;
