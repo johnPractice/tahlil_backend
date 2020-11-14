@@ -63,7 +63,7 @@ rout.post('/', auth, async(req, res) => {
             });
             return;
         } else {
-            const bank = await Bank.find({ $or: finalSearch, owner: { $ne: user._id } })
+            const bank = await Bank.find({ $and: finalSearch, owner: { $ne: user._id } })
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .exec();
