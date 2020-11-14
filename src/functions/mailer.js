@@ -21,5 +21,10 @@ const deleteUserMailOptions = {
     subject: 'GoodBye',
     text: "Hi (username),\n     We're sorry to see you leave\n\nSomayye Naro,\n(esme site!)"
 };
+const forgotMail = {
+    from: constants.mailUser,
+    subject: 'forgot password',
+    text: 'Hi newpassword is: (password)'
+};
 
-module.exports = { mailer, signupMailOptions, deleteUserMailOptions };
+module.exports = { mailer, signupMailOptions, deleteUserMailOptions, forgotMail };
