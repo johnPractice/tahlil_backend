@@ -7,7 +7,7 @@ rout.get('/', auth, async(req, res) => {
         const { page = 1, limit = 1, } = req.query;
         const questions = await Question.findByOwner({ owner: user._id, page, limit });
         // // get total documents in the Posts collection 
-        const count = await Question.countDocuments();
+        const count = await Question.find({ owner: user._id }).countDocuments();
         // return response with posts, total pages, and current page
         res.json({
             'questions': questions,
