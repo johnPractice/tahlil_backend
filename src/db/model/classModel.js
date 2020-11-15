@@ -70,11 +70,14 @@ classSchema.statics.findByClassId = async({ id, userId }) => {
 
     return result;
 };
-classSchema.methods.removeUser = async function(userId) {
+classSchema.methods.removeUser = async function (userId) {
+    //removes a user from the class
     if (!userId)
         throw { message: "userId is required", code: 400 };
 
     const Class = this;
+    if (Class.populated('members'))
+        await Class.depopulate('members');
 
     let userIndexInMembers = Class.members.indexOf(userId);
     if (userIndexInMembers == -1)
@@ -87,6 +90,11 @@ classSchema.methods.removeUser = async function(userId) {
         throw { message: "Failed", code: 503 };
 
     await Class.save();
+};
+classSchema.methods.getMembersList = async function () {
+    //gets members of class to show in class page
+    await this.populate('members', 'username firstname lastname').execPopulate();
+    return this.members;
 };
 
 const classModel = mongoose.model('Class', classSchema);
