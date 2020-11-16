@@ -7,31 +7,29 @@ rout.post('/join', auth, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;
-        let checkUser = false;
-        if (!info.classId || !info.password) res.status(400).json({ "error": "must input valid thing" });
-        const classesResult = await classModel.findOne({ classId: info.classId });
-        if (!classesResult) {
-            res.status(400).json({ "error": "somthing wrong" });
-            return;
-        }
-        if (classesResult.owner.toString() == user._id.toString()) res.status(400).json({ "error": "owner cant join owns class" });
-        for (let i = 0; i < classesResult.members.length; i++) {
-            if (classesResult.members[i].member.toString() == user._id.toString()) {
-                checkUser = true;
-                break;
-            }
-        }
-        if (checkUser) {
-            res.status(400).json({ "error": "you joined this class before" });
-            return;
-        }
-        classesResult.members = classesResult.members.concat({ member: user._id });
-        await classesResult.save();
-        res.status(200).json(classesResult);
+        if (!info.classId)
+            throw { message: "Invalid classId", code: 400 };
 
-    } catch (e) {
-        console.log(e);
-        res.status(400).json(e);
+        const classToJoin = await classModel.findOne({ classId: info.classId });
+        if (!classToJoin)
+            throw { message: "Invalid classId", code: 400 };
+
+        if (classToJoin.owner.equals(user._id))
+            throw { message: "Owners can't join their own classes", code: 400 };
+
+        const checkUserInClass = classToJoin.members.indexOf(user._id);
+        if (checkUserInClass != -1)
+            throw { message: "Already joined", code: 400 };
+
+        await classToJoin.members.push(user._id);
+        await classToJoin.save();
+
+        res.status(200).json({ joinedClass: await classToJoin.toListedView() });
+
+    } catch (err) {
+        if (!err.code || err.code >= 600)
+            err.code = 400;
+        res.status(err.code).json({ error: err.message });
     }
 });
 

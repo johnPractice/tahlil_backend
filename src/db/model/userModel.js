@@ -54,21 +54,37 @@ const userSchema = new Schema({
         }
     }],
 }, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
 });
 
-userSchema.virtual('class', {
+// virtual for classOwner 
+userSchema.virtual('ownedClasses', {
     ref: 'Class',
     localField: '_id',
     foreignField: 'owner'
 });
+// virtual for member in some class
+userSchema.virtual('joinedClasses', {
+    ref: 'Class',
+    localField: '_id',
+    foreignField: 'members'
+});
+// virtual for member in some own question
 userSchema.virtual('question', {
     ref: 'Question',
     localField: '_id',
     foreignField: 'owner'
 });
+// userSchema.pre('findOne', autoPopulateComments);
+
+// function autoPopulateComments(next) {
+//     this.populate('classOwner', 'body');
+//     next();
+// }
 
 //methodes
 
@@ -129,6 +145,8 @@ userSchema.methods.toJSON = function() {
     delete userObject.tokens;
     delete userObject.createdAt;
     delete userObject.updatedAt;
+    delete userObject._id;
+    delete userObject.__v;
 
     return userObject;
 };

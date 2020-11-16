@@ -7,14 +7,19 @@ rout.post('/leave', auth, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;
-        if (!info.classId) res.status(400).json({ "error": "must input valid thing" });
-        const classesResult = await classModel.deleteUserInClass({ id: info.classId, user });
-        if (!classesResult) res.status(400).json({ "message": "somthing wrong" });
-        res.status(200).json(classesResult);
+        if (!info.classId)
+            throw { message: "Invalid classId", code: 400 };
+        const Class = await classModel.findOne({ classId: info.classId });
+        if (!Class)
+            throw { message: "Invalid classId", code: 400 };
 
-    } catch (e) {
-        // console.log(e);
-        res.status(400).json({ "error": e });
+        await Class.removeUser(user._id);
+        res.sendStatus(200);
+
+    } catch (err) {
+        if (!err.code || err.code >= 600)
+            err.code = 400;
+        res.status(err.code).json({ error: err.message });
     }
 });
 

@@ -21,11 +21,8 @@
  *          type: object
  *          required:
  *            - classId 
- *            - password 
  *          properties:
  *           classId:
- *            type: string
- *           password:
  *            type: string
  *
  *    responses:
@@ -34,15 +31,21 @@
  *        schema:
  *          type: object
  *          properties:
- *              name:
- *                  type: string
- *              description:
- *                  type: string
- *              classId:
- *                  type: string
- *              owner:
- *                  type: string
- *              image:
+ *              joinedClass:
+ *                  type: object
+ *                  properties:
+ *                      name:
+ *                          type: string
+ *                      classId:
+ *                          type: string
+ *                      ownerFullname:
+ *                          type: string
+ *      '400':
+ *        description: error detail in response
+ *        schema:
+ *          type: object
+ *          properties:
+ *              error:
  *                  type: string
  *        
  */

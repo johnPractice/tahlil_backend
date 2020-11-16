@@ -2,7 +2,7 @@
  * @swagger
  * /class/:
  *  post:
- *    description: Creates a class
+ *    description: Creates a class with random-generated classId
  *    consumes:
  *       - application/json
  *    tags:
@@ -21,18 +21,10 @@
  *          type: object
  *          required:
  *            - name
- *            - classId
- *            - password
  *          properties:
  *           name:
  *            type: string
- *           classId:
- *            type: string
- *           password:
- *            type: string
  *           description:
- *            type: string
- *           image:
  *            type: string
  *
  *    responses:
@@ -41,20 +33,14 @@
  *        schema:
  *          type: object
  *          properties:
- *              info:
+ *              newClass:
  *                  type: object
  *                  properties:
  *                      name:
  *                          type: string
- *                      description:
- *                          type: string
  *                      classId:
  *                          type: string
- *                      owner:
+ *                      ownerFullname:
  *                          type: string
- *                      image:
- *                          type: string
- *              message:
- *                  type: string
  *
  */

@@ -7,6 +7,8 @@
  *    description: Used for user deletion
  *    consumes:
  *       - application/json
+ *    tags:
+ *       - profile
  *    parameters:
  *       - in: header
  *         name: Authorization
