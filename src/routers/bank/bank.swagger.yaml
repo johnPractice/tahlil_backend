@@ -1,0 +1,57 @@
+get:
+  summary: Gets questions from bank
+  tags:
+    - "Bank"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: string
+    - in: query
+      name: limit
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            type:
+              type: array
+              items:
+                $ref: '../../swagger.config.yaml#/components/schemas/type'
+            course:
+              type: array
+              items:
+                $ref: '../../swagger.config.yaml#/components/schemas/course'
+            hardness:
+              type: array
+              items:
+                $ref: '../../swagger.config.yaml#/components/schemas/hardness'
+            base:
+              type: array
+              items:
+                $ref: '../../swagger.config.yaml#/components/schemas/base'
+            chapter:
+              type: array
+              items:
+                $ref: '../../swagger.config.yaml#/components/schemas/chapter'
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              questions:
+                type: array
+                items:
+                  $ref: '../../swagger.config.yaml#/components/schemas/question'
+              totalPages:
+                type: number
+              currentPage:
+                type: number
