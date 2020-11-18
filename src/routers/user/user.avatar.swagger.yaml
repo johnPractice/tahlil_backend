@@ -39,10 +39,13 @@ put:
   requestBody:
     required: true
     content:
-      image/*:
+      multipart/form-data:
         schema:
-          type: string
-          format: base64
+          type: object
+          properties:
+            avatar:
+              type: string
+              format: base64
   responses:
     '200':
       description: User avatar attached
