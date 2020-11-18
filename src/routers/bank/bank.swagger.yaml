@@ -1,4 +1,4 @@
-get:
+post:
   summary: Gets questions from bank
   tags:
     - "Bank"
