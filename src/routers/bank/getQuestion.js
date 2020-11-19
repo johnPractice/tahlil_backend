@@ -118,7 +118,6 @@ rout.post('/', auth, async(req, res) => {
 
             }
         }
-        console.log(finalSearch)
         if (finalSearch.length == 0) {
             const bank = await Bank.find({ owner: { $ne: user._id } })
                 .limit(limit * 1)
