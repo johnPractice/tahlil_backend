@@ -20,12 +20,12 @@ const userSchema = new Schema({
     username: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
         minlength: 4
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         validate(value) {
             if (!validator.isEmail(value)) {
@@ -35,7 +35,7 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        require: true,
+        required: true,
         minlength: 6,
     },
     birthday: {
@@ -45,18 +45,46 @@ const userSchema = new Schema({
         type: String,
         default: null
 
+
     },
     tokens: [{
         token: {
             type: String,
-            require: true
+            required: true
         }
     }],
 }, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
 });
+
+// virtual for classOwner 
+userSchema.virtual('ownedClasses', {
+    ref: 'Class',
+    localField: '_id',
+    foreignField: 'owner'
+});
+// virtual for member in some class
+userSchema.virtual('joinedClasses', {
+    ref: 'Class',
+    localField: '_id',
+    foreignField: 'members'
+});
+// virtual for member in some own question
+userSchema.virtual('question', {
+    ref: 'Question',
+    localField: '_id',
+    foreignField: 'owner'
+});
+// userSchema.pre('findOne', autoPopulateComments);
+
+// function autoPopulateComments(next) {
+//     this.populate('classOwner', 'body');
+//     next();
+// }
 
 //methodes
 
@@ -107,7 +135,7 @@ userSchema.methods.sendMail = async function(mailOptions) {
             console.log('Email Sent: ' + info.response);
         });
     } catch (e) { console.log(e); }
-}
+};
 
 // methode for returning json object
 userSchema.methods.toJSON = function() {
@@ -117,6 +145,8 @@ userSchema.methods.toJSON = function() {
     delete userObject.tokens;
     delete userObject.createdAt;
     delete userObject.updatedAt;
+    delete userObject._id;
+    delete userObject.__v;
 
     return userObject;
 };
