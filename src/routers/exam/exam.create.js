@@ -24,8 +24,24 @@ rout.post('/', auth, async(req, res) => {
 
         res.json(newExam);
     } catch (e) {
-        console.log(e);
-        res.json({ "error": e });
+        // console.log(e);
+        if (e.message) {
+            if (Object.keys(e.errors).length > 1) {
+                const errors = [];
+                const keys = Object.keys(e.errors);
+                keys.forEach(key => {
+                    const error = {};
+                    error.error = e.errors[key].message;
+                    errors.push(error);
+                });
+                res.status(400).json({ "error": errors });
+            } else {
+                res.status(400).json({ "error": e.message });
+            }
+        } else {
+            res.status(400).json({ "error": e });
+
+        }
     }
 });
 
