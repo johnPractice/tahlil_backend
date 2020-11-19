@@ -42,5 +42,7 @@
  *                          type: string
  *                      ownerFullname:
  *                          type: string
+ *                      isOwned:
+ *                          type: boolean
  *
  */

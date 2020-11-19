@@ -8,10 +8,17 @@ rout.get('/classes', auth, async (req, res) => {
 		await user.populate({ path: 'ownedClasses', select: 'name owner classId', populate: { path: 'owner', select: 'firstname lastname'} } ).execPopulate();
 		await user.populate({ path: 'joinedClasses', select: 'name owner classId', populate: { path: 'owner', select: 'firstname lastname'} } ).execPopulate();
 
-		const classes = [].concat(user.ownedClasses, user.joinedClasses);
+		const { ownedClasses, joinedClasses } = user;
 
-		for (let i = 0; i < classes.length; i++)
-			classes[i] = await classes[i].toListedView();
+		let length = ownedClasses.length;
+		for (let i = 0; i < length ; i++)
+			ownedClasses[i] = await ownedClasses[i].toListedView(true);
+
+		length = joinedClasses.length;
+		for (let i = 0; i < length ; i++)
+			joinedClasses[i] = await joinedClasses[i].toListedView(false);
+
+		const classes = [].concat(ownedClasses, joinedClasses);
 
 		res.status(200).json({ classes });
 
