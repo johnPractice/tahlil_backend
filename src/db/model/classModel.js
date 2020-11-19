@@ -49,7 +49,7 @@ classSchema.methods.toJSON = function() {
 
     return userObject;
 };
-classSchema.methods.toListedView = async function () {
+classSchema.methods.toListedView = async function (isOwned) {
     //returns an object with selected properties
     //to show in the list of user's classes
     if(!this.populated('owner'))
@@ -59,6 +59,12 @@ classSchema.methods.toListedView = async function () {
     const listedView = this.toJSON();
     delete listedView.description;
     listedView.ownerFullname = firstname + " " + lastname;
+
+    if (typeof isOwned === "boolean")
+        listedView.isOwned = isOwned;
+    else
+        throw new Error("isOwned must be of type boolean")
+
     return listedView;
 }
 // static mehodes

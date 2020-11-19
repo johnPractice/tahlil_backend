@@ -20,7 +20,7 @@ rout.post('/', auth, async(req, res) => {
 
         await newClass.save();
 
-        res.status(200).json({ newClass: await newClass.toListedView() });
+        res.status(200).json({ newClass: await newClass.toListedView(true) });
 
     } catch (err) {
         if (!err.code || err.code >= 600)
