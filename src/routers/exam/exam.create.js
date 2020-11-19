@@ -1,12 +1,11 @@
 const rout = require('express').Router();
 const Exam = require('../../db/model/examModel');
 const auth = require('../../middelware/auth');
-const mongoose = require('mongoose');
 rout.post('/', auth, async(req, res) => {
     try {
-        const canUses = ['name', 'startDate', 'endDate'];
+        const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength'];
         const info = req.body;
-        if (!info.questions) res.status(400).json({ 'error': 'you should enter some thing for questions to create exam' });
+        if (!info.questions || info.questions.length == 0) res.status(400).json({ 'error': 'لطفا سوالی را برای ازمون انتخاب کنید' });
         if (Object.keys(info).length == 0) {
             res.status(400).json({ "error": "must enter somthnig" });
             return;
@@ -15,20 +14,15 @@ rout.post('/', auth, async(req, res) => {
         canUses.forEach(use => {
             newExam[use] = info[use];
         });
-        newExam.questions = [];
-        info.questions.forEach(question => {
-            newExam.questions.push(mongoose.Types.ObjectId(question));
-        });
-
         await newExam.save();
 
         res.json(newExam);
     } catch (e) {
+        const keys = Object.keys(e.errors);
         // console.log(e);
         if (e.message) {
             if (Object.keys(e.errors).length > 1) {
                 const errors = [];
-                const keys = Object.keys(e.errors);
                 keys.forEach(key => {
                     const error = {};
                     error.error = e.errors[key].message;
@@ -36,10 +30,16 @@ rout.post('/', auth, async(req, res) => {
                 });
                 res.status(400).json({ "error": errors });
             } else {
-                res.status(400).json({ "error": e.message });
+                for (let i = 0; i < keys.length; i++) {
+                    if (e.errors[keys[i]].message) {
+                        res.status(400).json({ "error": e.errors[keys[i]].message });
+                        return;
+                    }
+                }
+                res.status(400).json({ "error": 'مشکلی رخ داده است' });
             }
         } else {
-            res.status(400).json({ "error": e });
+            res.status(400).json({ "error": 'مشکلی رخ داده است' });
 
         }
     }

@@ -23,6 +23,11 @@ const examSchema = new Schema({
     questions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Question",
+        validate(value) {
+            if (value)
+                mongoose.Types.ObjectId(value);
+        },
+
     }],
 
 }, {
