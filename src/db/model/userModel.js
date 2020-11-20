@@ -177,6 +177,26 @@ userSchema.pre('save', async function(next) {
     next();
 });
 
+userSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+    const user = this;
+
+    //deletes owned classes and leaves joined classes
+    await user.populate('ownedClasses', 'members').execPopulate();
+    await user.populate('joinedClasses', 'members').execPopulate();
+    const { ownedClasses, joinedClasses } = user;
+    await ownedClasses.forEach(ownedClass => { ownedClass.deleteOne(); });
+    await joinedClasses.forEach(joinedClass => { joinedClass.removeUser(user._id); });
+
+    //deletes private questions
+    await user.populate('question', 'public').execPopulate();
+    const { question } = user;
+    await question.forEach(q => {
+        if (!q.public)
+            q.deleteOne();
+    });
+    next();
+})
+
 // create the user model
 const User = mongoose.model('User', userSchema);
 module.exports = User;
