@@ -7,6 +7,8 @@ const classRouts = require('../src/routers/class/classRouts');
 const questionRouts = require('./routers/question/questionRouts');
 const bankRouts = require('../src/routers/bank/bankRouts');
 const examRouts = require('../src/routers/exam/examRouts');
+const publicApis = require('../src/routers/publicApi/publicRouts');
+
 
 
 const path = require('path');
@@ -34,6 +36,8 @@ app.use('/user', userRouts);
 app.use('/class', classRouts);
 app.use('/bank', bankRouts);
 app.use('/exam', examRouts);
+app.use('/public', publicApis);
+
 
 
 
