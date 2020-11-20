@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const examSchema = new Schema({
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    },
     name: {
         type: String,
         required: [true, 'نام امتحان باید وارد شود'],
@@ -19,16 +23,21 @@ const examSchema = new Schema({
         type: Number,
         required: [true, 'زمان ازمون باید مشخص شود'],
     },
-    // examLength: {},
     questions: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Question",
-        validate(value) {
-            if (value)
-                mongoose.Types.ObjectId(value);
-        },
+        question: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Question",
+            validate(value) {
+                if (value)
+                    mongoose.Types.ObjectId(value);
 
+            }
+        },
+        grade: {
+            type: Number
+        }
     }],
+
 
 }, {
     toJSON: { virtuals: true },
