@@ -97,9 +97,13 @@ classSchema.methods.removeUser = async function (userId) {
 
     await Class.save();
 };
-classSchema.methods.getMembersList = async function () {
+classSchema.methods.getMembersList = async function ({ forAdmin }) {
     //gets members of class to show in class page
-    await this.populate('members', 'username firstname lastname').execPopulate();
+    if (forAdmin === true)
+        await this.populate('members', 'username firstname lastname email avatar').execPopulate();
+    else
+        await this.populate('members', 'firstname lastname avatar').execPopulate();
+
     return this.members;
 };
 

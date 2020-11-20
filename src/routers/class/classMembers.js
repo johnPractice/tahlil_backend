@@ -7,10 +7,15 @@ rout.get('/:classId/members', auth, checkClassId, async (req, res) => {
     try {
         const { user, Class } = req;
 
-        if (!user.isMemberOf(Class) && !user.isAdminOf(Class))
+        var forAdmin;
+        if (user.isMemberOf(Class))
+            forAdmin = false;
+        else if (user.isAdminOf(Class))
+            forAdmin = true;
+        else
             throw { message: "Permission Denied", code: 403 };
 
-        res.status(200).json({ members: await Class.getMembersList() });
+        res.status(200).json({ members: await Class.getMembersList({ forAdmin }) });
 
     } catch (err) {
         if (!err.code || err.code >= 600)
@@ -29,7 +34,7 @@ rout.delete('/:classId/members/:username', auth, checkClassId, checkClassAdmin, 
             throw { message: "User is not a member of the class", code: 400 };
 
         await Class.removeUser(memberToRemove._id);
-        res.status(200).json({ members: await Class.getMembersList() });
+        res.sendStatus(200);
 
     } catch (err) {
         if (!err.code || err.code >= 600)
