@@ -2,20 +2,12 @@ const rout = require('express').Router();
 const auth = require('../../middelware/auth');
 const checkClassId = require('../../middelware/class/checkClassId');
 const checkClassAdmin = require('../../middelware/class/checkClassAdmin');
+const checkClassAccess = require('../../middelware/class/checkClassAccess');
 
-rout.get('/:classId/members', auth, checkClassId, async (req, res) => {
+rout.get('/:classId/members', auth, checkClassId,checkClassAccess, async (req, res) => {
     try {
-        const { user, Class } = req;
-
-        var forAdmin;
-        if (user.isMemberOf(Class))
-            forAdmin = false;
-        else if (user.isAdminOf(Class))
-            forAdmin = true;
-        else
-            throw { message: "Permission Denied", code: 403 };
-
-        res.status(200).json({ members: await Class.getMembersList({ forAdmin }) });
+        const { user,Class } = req;
+        res.status(200).json({ members: await Class.getMembersList({ forAdmin: user.isAdminOf(Class) }) });
 
     } catch (err) {
         if (!err.code || err.code >= 600)
