@@ -1,13 +1,14 @@
 const rout = require('express').Router();
 const auth = require('../../middelware/auth');
 //const classModel = require('../../db/model/classModel');
-const checkClassAdmin = require('../../middelware/checkClassAdmin');
+const checkClassId = require('../../middelware/class/checkClassId');
+const checkClassAdmin = require('../../middelware/class/checkClassAdmin');
 
-rout.put('/:classId', auth, checkClassAdmin, async (req, res) => {
+rout.put('/:classId', auth, checkClassId, checkClassAdmin, async (req, res) => {
     try {
         //const user = req.user;
         const newInfo = req.body;
-        const classToEdit = req.ownedClass;//await classModel.findOne({ classId: req.params.classId });
+        const classToEdit = req.Class;//await classModel.findOne({ classId: req.params.classId });
 
         //if (!classToEdit)
         //    throw { message: "Invalid classId", code: 400 };

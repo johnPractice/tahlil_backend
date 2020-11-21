@@ -40,6 +40,8 @@
  *                          type: string
  *                      ownerFullname:
  *                          type: string
+ *                      isOwned:
+ *                          type: boolean
  *      '400':
  *        description: error detail in response
  *        schema:

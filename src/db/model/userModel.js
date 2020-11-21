@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const constants = require('../../../constants');
 const bycrypt = require('bcryptjs');
 const { mailer } = require('../../functions/mailer');
+const classModel = require('./classModel');
 const Schema = mongoose.Schema;
 // create user schema
 const userSchema = new Schema({
@@ -88,6 +89,23 @@ userSchema.virtual('question', {
 
 //methodes
 
+userSchema.methods.isMemberOf = function(Class) {
+    if (!Class instanceof classModel)
+        throw new Error("Invalid Class");
+
+    if (Class.members.includes(this._id))
+        return true;
+    return false;
+};
+userSchema.methods.isAdminOf = function (Class) {
+    if (!Class instanceof classModel)
+        throw new Error("Invalid Class");
+
+    if (this._id.equals(Class.owner))
+        return true;
+    return false;
+};
+
 //check username & password //static
 userSchema.statics.findByCredentials = async({ username, password }) => {
 
@@ -146,6 +164,7 @@ userSchema.methods.toJSON = function() {
     delete userObject.createdAt;
     delete userObject.updatedAt;
     delete userObject._id;
+    delete userObject.id;
     delete userObject.__v;
 
     return userObject;
@@ -157,6 +176,26 @@ userSchema.pre('save', async function(next) {
         this.password = await bycrypt.hash(this.password, 8);
     next();
 });
+
+userSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+    const user = this;
+
+    //deletes owned classes and leaves joined classes
+    await user.populate('ownedClasses', 'members').execPopulate();
+    await user.populate('joinedClasses', 'members').execPopulate();
+    const { ownedClasses, joinedClasses } = user;
+    await ownedClasses.forEach(ownedClass => { ownedClass.deleteOne(); });
+    await joinedClasses.forEach(joinedClass => { joinedClass.removeUser(user._id); });
+
+    //deletes private questions
+    await user.populate('question', 'public').execPopulate();
+    const { question } = user;
+    await question.forEach(q => {
+        if (!q.public)
+            q.deleteOne();
+    });
+    next();
+})
 
 // create the user model
 const User = mongoose.model('User', userSchema);

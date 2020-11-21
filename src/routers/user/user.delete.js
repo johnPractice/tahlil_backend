@@ -8,7 +8,7 @@ rout.delete('/', auth, async (req, res) => {
     try {
         const user = req.user;
 
-        await User.findByIdAndDelete(user._id, (err) => {
+        await user.deleteOne( err => {
             if (err)
                 res.sendStatus(503)
         });

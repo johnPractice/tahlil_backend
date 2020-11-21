@@ -50,6 +50,12 @@ const questionSchema = Schema({
         type: Boolean,
         default: false
     },
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    autoCreate: true,
+    autoIndex: true,
+    timestamps: true,
 });
 
 
@@ -107,6 +113,17 @@ questionSchema.methods.toJSON = function() {
     delete questionObject.createdAt;
     delete questionObject.updatedAt;
     delete questionObject.__v;
+    delete questionObject.owner;
+    if (questionObject.answers.length > 0) {
+        questionObject.answers.forEach(item => {
+            delete item._id;
+        });
+    }
+    if (questionObject.options.length > 0) {
+        questionObject.options.forEach(item => {
+            delete item._id;
+        });
+    }
     questionObject._id = questionObject._id.toString();
     return questionObject;
 };
