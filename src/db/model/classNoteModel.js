@@ -5,18 +5,21 @@ const classNoteSchema = Schema({
     title: {
         type: String,
         minLenght: 5,
-        required: true
+        required: [true, 'title is required']
     },
     body: {
         type: String,
         minLenght: 5,
-        required: true
+        maxLength: 120,
+        required: [true, 'body is required']
     },
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
 }, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     autoCreate: true,
     autoIndex: true,
     timestamps: true
@@ -24,14 +27,17 @@ const classNoteSchema = Schema({
 
 //methods
 classNoteSchema.methods.toJSON = function () {
-    // this refer to clas
-    this.populate('creator', 'firstname lastname avatar').execPopulate();
-
-    const userObject = this.toObject();
-    delete userObject.createdAt;
-    delete userObject.__v;
-
-    return userObject;
+    // this refers to class
+    const creatorJSON = this.creator.toJSON();
+    const object = this.toObject();
+    object.creator = creatorJSON;
+    object.classNoteId = object._id;
+    delete object._id;
+    delete object.id;
+    delete object.updatedAt;
+    delete object.__v;
+    
+    return object;
 };
 
 const classNoteModel = mongoose.model('ClassNote', classNoteSchema);
