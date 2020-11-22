@@ -1,0 +1,28 @@
+post:
+  summary: Leaves a class
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - classId
+          properties:
+            classId:
+              type: string
+  responses:
+    '200':
+      description: User left the class
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string

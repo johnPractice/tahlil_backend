@@ -1,0 +1,9 @@
+post:
+  summary: logs out user from current device
+  tags:
+    - "Logout"
+  security:
+    - bearerAuth: []
+  responses:
+     '200':
+      description: User logged out from current device

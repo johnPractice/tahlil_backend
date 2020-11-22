@@ -1,0 +1,68 @@
+post:
+  summary: Creates a question
+  tags:
+    - "Question"
+  security:
+    - bearerAuth: []
+  requestBody:
+    description: question info
+    content:
+      application/json:
+        schema:
+          $ref: '../../swagger.config.yaml#/components/schemas/question'
+  responses:
+    '200':
+      description: New question is created
+
+put:
+  summary: Edits a question
+  tags:
+    - "Question"
+  security:
+    - bearerAuth: []
+  requestBody:
+    description: Question info
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../swagger.config.yaml#/components/schemas/question'
+            - type: object
+              properties:
+                questionId:
+                  type: string
+  responses:
+    '200':
+      description: Question is edited
+
+get:
+  summary: Gets users questions with pagination
+  tags:
+    - "Question"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: string
+    - in: query
+      name: limit
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              questions:
+                type: array
+                items:
+                  $ref: '../../swagger.config.yaml#/components/schemas/question'
+              totalPages:
+                type: number
+              currentPage:
+                type: number

@@ -1,0 +1,102 @@
+post:
+  summary: create new exam
+  tags:
+    - "Exam"
+  security:
+    - bearerAuth: []     
+  requestBody:
+    description: exam credentials
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - "name"
+            - "startDate"
+            - "endDate"
+            - "questions"
+            - "examLength"
+          properties:
+            name:
+              type: string
+            startDate:
+              type: string
+            endDate:
+              type: string
+            questions:
+              type: array
+              items:
+                type: object
+                required: 
+                  - "question"
+                  - "grade"
+                properties:
+                  question:
+                    type: string
+                  grade:
+                    type: string     
+            examLength:
+              type: integer                         
+  responses:
+    '200':
+      description: exam created
+      content:
+        application/json:
+
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              err:
+                type: object
+
+put:
+  summary: edit exam
+  tags:
+    - "Exam"
+  security:
+    - bearerAuth: []        
+  requestBody:
+    description: exam credentials
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - "examId"
+            - "name"
+            - "startDate"
+            - "endDate"
+            - "questions"
+            - "examLength"
+          properties:
+            examId:
+              type: string          
+            name:
+              type: string
+            startDate:
+              type: Date
+            endDate:
+              type: Date
+            questions:
+              type: Array     
+            examLength:
+              type: int                         
+  responses:
+    '200':
+      description: exam edited
+      content:
+        application/json:
+
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              err:
+                type: object                                

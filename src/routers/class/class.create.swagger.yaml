@@ -1,0 +1,28 @@
+post:
+  summary: Creates a class with random-generated classId
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+  responses:
+    '200':
+      description: User joined the class
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              newClass:
+                $ref: '../../swagger.config.yaml#/components/schemas/classInList'

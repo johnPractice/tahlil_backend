@@ -1,0 +1,33 @@
+delete:
+  summary: delete exam
+  tags:
+    - "Exam"
+  security:
+    - bearerAuth: []    
+  requestBody:
+    description: exam delete info
+  parameters:
+    - in: path
+      name: examId
+      required: true
+      schema:
+        type: string                      
+  responses:
+    '200':
+      description: exam deleted
+      content:
+        application/json:
+
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              err:
+                type: object
+
+
+
+                                
