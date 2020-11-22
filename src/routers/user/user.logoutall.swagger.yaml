@@ -1,0 +1,9 @@
+post:
+  summary: logs out user from all devices
+  tags:
+    - "Logout"
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: User logged out from all devices

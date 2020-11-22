@@ -1,0 +1,71 @@
+get:
+  summary: Gets user avatar
+  tags:
+    - "Profile"
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Got user avatar
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              avatar:
+                type: string
+    '400':
+      description: Something wrong :(
+      content:
+        application/json:
+          schema:
+            type: object
+    '401':
+      description: There is no image
+      content:
+        application/json:
+          schema:
+            type:  object
+            properties:
+              message:
+                type: string
+
+put:
+  summary: Edits user avatar
+  tags:
+    - "Profile"
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            avatar:
+              type: string
+              format: base64
+  responses:
+    '200':
+      description: User avatar attached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              user:
+                $ref: '../../swagger.config.yaml#/components/schemas/user'
+    '400':
+      description: Something wrong :(
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              e:
+                type: object
+              error:
+                type: string

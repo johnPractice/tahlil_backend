@@ -1,0 +1,157 @@
+openapi: '3.0.3'
+info:
+  title: Tahlil Backend
+  version: '1.0'
+  contact:
+    email: tahlil.backend@gmail.com
+
+  
+paths:
+  /test:
+    $ref: './test.swagger.yaml'
+
+################### USER #####################
+  /user/:
+    $ref: './routers/user/user.profile.swagger.yaml'
+
+  /user/login:
+    $ref: './routers/user/user.login.swagger.yaml'
+    
+  /user/signup:
+    $ref: './routers/user/user.signup.swagger.yaml'
+    
+  /user/logout:
+    $ref: './routers/user/user.logout.swagger.yaml'
+    
+  /user/logoutall:
+    $ref: './routers/user/user.logoutall.swagger.yaml'
+
+  /user/avatar:
+    $ref: './routers/user/user.avatar.swagger.yaml'
+
+################### Bank&Question #####################
+  /question:
+    $ref: './routers/question/question.swagger.yaml'
+
+  /question/{questionId}:
+    $ref: './routers/question/question.delete.swagger.yaml'
+
+  /bank:
+    $ref: './routers/bank/bank.swagger.yaml'
+
+################### CLASS #####################
+  /user/classes:
+    $ref: './routers/user/user.classes.swagger.yaml'
+
+  /class/join:
+    $ref: './routers/class/class.join.swagger.yaml'
+
+  /class/leave:
+    $ref: './routers/class/class.leave.swagger.yaml'
+
+  /class:
+    $ref: './routers/class/class.create.swagger.yaml'
+
+  /class/{classId}:
+    $ref: './routers/class/class.classId.swagger.yaml'
+
+
+
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      description: Auth token ( Bearer + " " + Value )
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    user:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        avatar:
+          type: string
+        _id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+
+    classInList:
+      type: object
+      properties:
+        name:
+          type: string
+        classId:
+          type: string
+        ownerFullname:
+          type: string
+
+    question:
+      type: object
+      required:
+        - type 
+        - public 
+        - question
+        - answers 
+        - hardness
+        - base 
+        - course
+        - chapter
+      properties:
+        type:
+          $ref: '#components/schemas/type' 
+        base:
+          $ref: '#components/schemas/base' 
+        hardness:
+          $ref: '#components/schemas/hardness' 
+        course:
+          $ref: '#components/schemas/course' 
+        chapter:
+          $ref: '#components/schemas/chapter' 
+        public:
+          type: boolean
+        isImage:
+          type: boolean 
+        question:
+          type: string
+        answers:
+          type: array
+          items:
+            type: object
+            properties:
+              answer:
+                oneOf:
+                  - type: string
+                  - type: number
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              option:
+                type: string
+
+    type:
+      type: string
+      enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
+    base:
+      type: string
+      enum: ['10', '11', '12']
+    hardness:
+      type: string
+      enum: ['LOW', 'MEDIUM', 'HARD']
+    course:
+      type: string
+      enum: ['MATH', 'PHYSIC', 'CHEMISTRY', 'BIOLOGY']
+    chapter:
+      type: string
+      enum: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
