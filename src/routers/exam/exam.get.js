@@ -11,7 +11,7 @@ rout.get('/', auth, async(req, res) => {
         }
         res.json(exam);
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         if (e.message) {
             res.json({ "error": e.message });
             return;
