@@ -55,7 +55,14 @@ paths:
   /class/{classId}:
     $ref: './routers/class/class.classId.swagger.yaml'
 
-
+################### Exam #####################
+  /exam:
+    $ref: './routers/exam/exam.swagger.yaml' 
+    
+  /exam/{examId}:
+    $ref: './routers/exam/exam.delete.swagger.yaml'    
+    
+        
 
 
 
