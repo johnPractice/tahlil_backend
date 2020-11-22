@@ -34,6 +34,6 @@ classNoteSchema.methods.toJSON = function () {
     return userObject;
 };
 
-const classNoteModel = mongoose.model('ClassNotes', classNoteSchema);
+const classNoteModel = mongoose.model('ClassNote', classNoteSchema);
 
 module.exports = classNoteModel;
