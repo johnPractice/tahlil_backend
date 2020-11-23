@@ -55,6 +55,19 @@ paths:
   /class/{classId}:
     $ref: './routers/class/class.classId.swagger.yaml'
 
+################### CLASS MEMBER #####################
+
+  /class/{classId}/members:
+      $ref: './routers/class/members.swagger.yaml'
+
+  /class/{classId}/members/{username}:
+    $ref: './routers/class/members.username.swagger.yaml'
+
+################### CLASS NOTE #####################
+
+  /class/{classId}/notes:
+    $ref: './routers/class/classNote/notes.swagger.yaml'
+
 ################### Exam #####################
   /exam:
     $ref: './routers/exam/exam.swagger.yaml' 
@@ -83,8 +96,6 @@ components:
         lastname:
           type: string
         avatar:
-          type: string
-        _id:
           type: string
         username:
           type: string
@@ -162,3 +173,53 @@ components:
     chapter:
       type: string
       enum: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+    ClassPage:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        classId:
+          type: string
+        admin:
+          type: object
+          properties:
+            firstname:
+              type: string
+            lastname:
+              type: string
+            email:
+              type: string
+              format: email
+            avatar:
+              type: string
+
+    ClassNote:
+      type: object
+      required:
+        - title
+        - body
+      properties:
+        classNoteId:
+          type: string
+        title:
+          type: string
+          minLength: 5
+        body:
+          type: string
+          minLength: 5
+          maxLength: 120
+        creator:
+          type: object
+          properties:
+            firstname:
+              type: string
+            lastname:
+              type: string
+            avatar:
+              type: string
+        createdAt:
+          type: string
+          format: date-time

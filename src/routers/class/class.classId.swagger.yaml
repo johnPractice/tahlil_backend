@@ -20,6 +20,8 @@ put:
               type: string
             description:
               type: string
+            generateNewClassId:
+              type: boolean
   responses:
     '200':
       description: User joined the class
@@ -29,7 +31,14 @@ put:
             type: object
             properties:
               editedClass:
-                $ref: '../../swagger.config.yaml#/components/schemas/classInList'
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  classId:
+                    type: string
     '400':
       description: error in classid or request body or something else!
       content:
@@ -82,3 +91,23 @@ delete:
             properties:
               error:
                 type: string
+
+get:
+  summary: Gets class info for class page
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../../swagger.config.yaml#/components/schemas/ClassPage'
