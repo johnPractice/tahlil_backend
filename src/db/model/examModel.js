@@ -47,8 +47,11 @@ const examSchema = new Schema({
             default: null
         }
     }],
-
-
+    classesOwner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Class',
+        required: [true, 'کلاس باید وارد شود']
+    }
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },

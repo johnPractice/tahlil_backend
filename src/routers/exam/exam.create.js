@@ -4,7 +4,7 @@ const auth = require('../../middelware/auth');
 rout.post('/', auth, async(req, res) => {
     try {
         const { user } = req;
-        const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength'];
+        const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength', 'useInClass'];
         const info = req.body;
         if (!info.questions || info.questions.length == 0) res.status(400).json({ 'error': 'لطفا سوالی را برای ازمون انتخاب کنید' });
         if (Object.keys(info).length == 0) {
