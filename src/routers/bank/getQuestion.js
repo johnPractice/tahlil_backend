@@ -129,7 +129,7 @@ rout.post('/', auth, async(req, res) => {
             }
 
             // // get total documents in the Posts collection 
-            const count = await Bank.countDocuments();
+            const count = await Bank.find({ owner: { $ne: user._id } }).countDocuments();
 
             // return response with posts, total pages, and current page
             res.json({
