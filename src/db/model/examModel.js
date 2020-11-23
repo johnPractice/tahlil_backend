@@ -37,6 +37,16 @@ const examSchema = new Schema({
             type: Number
         }
     }],
+    members: [{
+        member: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        grade: {
+            type: Number,
+            default: null
+        }
+    }],
 
 
 }, {
