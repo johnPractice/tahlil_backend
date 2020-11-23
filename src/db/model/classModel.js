@@ -30,8 +30,16 @@ const classSchema = Schema({
     notes: [{
         type: Schema.Types.ObjectId,
         ref: 'ClassNote'
-    }]
+    }],
+    // exams: [{
+    //     exam: {
+    //         type: Schema.Types.ObjectId,
+    //         ref: 'Exam'
+    //     }
+    // }]
 }, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
@@ -54,25 +62,25 @@ classSchema.methods.toJSON = function() {
 
     return userObject;
 };
-classSchema.methods.toListedView = async function (isOwned) {
-    //returns an object with selected properties
-    //to show in the list of user's classes
-    if(!this.populated('owner'))
-        await this.populate('owner', 'firstname lastname').execPopulate();
+classSchema.methods.toListedView = async function(isOwned) {
+        //returns an object with selected properties
+        //to show in the list of user's classes
+        if (!this.populated('owner'))
+            await this.populate('owner', 'firstname lastname').execPopulate();
 
-    let { firstname, lastname } = this.owner;
-    const listedView = this.toJSON();
-    delete listedView.description;
-    listedView.ownerFullname = firstname + " " + lastname;
+        let { firstname, lastname } = this.owner;
+        const listedView = this.toJSON();
+        delete listedView.description;
+        listedView.ownerFullname = firstname + " " + lastname;
 
-    if (typeof isOwned === "boolean")
-        listedView.isOwned = isOwned;
-    else
-        throw new Error("isOwned must be of type boolean")
+        if (typeof isOwned === "boolean")
+            listedView.isOwned = isOwned;
+        else
+            throw new Error("isOwned must be of type boolean")
 
-    return listedView;
-}
-// static mehodes
+        return listedView;
+    }
+    // static mehodes
 classSchema.statics.findByClassId = async({ id, userId }) => {
     const classes = await classModel.find();
     if (!classes) throw new Error('class not found');
@@ -81,7 +89,7 @@ classSchema.statics.findByClassId = async({ id, userId }) => {
 
     return result;
 };
-classSchema.methods.removeUser = async function (userId) {
+classSchema.methods.removeUser = async function(userId) {
     //removes a user from the class
     if (!userId)
         throw { message: "userId is required", code: 400 };
@@ -102,7 +110,7 @@ classSchema.methods.removeUser = async function (userId) {
 
     await Class.save();
 };
-classSchema.methods.getMembersList = async function ({ forAdmin }) {
+classSchema.methods.getMembersList = async function({ forAdmin }) {
     //gets members of class to show in class page
     if (forAdmin === true)
         await this.populate('members', 'username firstname lastname email avatar').execPopulate();
