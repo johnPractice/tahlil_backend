@@ -26,7 +26,7 @@ rout.post('/:classId/notes', auth, checkClassId, checkClassAdmin, async (req, re
         await Class.save();
 
         await newNote.populate('creator', 'firstname lastname avatar').execPopulate();
-        res.status(200).json({ newNote });
+        res.status(201).json({ newNote });
 
     } catch (err) {
         if (!err.code || err.code >= 600)

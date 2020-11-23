@@ -1,7 +1,7 @@
 get:
   summary: Gets class members
   tags:
-    - "Class"
+    - "Class Member"
   security:
     - bearerAuth: []
   parameters:
