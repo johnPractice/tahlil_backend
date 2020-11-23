@@ -74,6 +74,16 @@ paths:
     
   /exam/{examId}:
     $ref: './routers/exam/exam.delete.swagger.yaml'    
+
+
+
+################### PublicAPi #####################
+  /public/question/category:
+    $ref: './routers/publicApi/questionCategory.swagger.yaml' 
+
+
+
+
     
         
 

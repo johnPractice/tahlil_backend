@@ -1,0 +1,13 @@
+get:
+  summary: get category of question
+  tags:
+    - "PublicApi"
+  consumes:
+       - application/json
+  responses:
+    '200':
+      description: return category for question
+      content:
+        application/json:
+          schema:
+            type: object
