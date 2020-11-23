@@ -1,9 +1,9 @@
 const rout = require('express').Router();
 const Exam = require('../../db/model/examModel');
 const auth = require('../../middelware/auth');
-rout.delete('/', auth, async(req, res) => {
+rout.delete('/:examId', auth, async(req, res) => {
     try {
-        const { examId } = req.body;
+        const examId = req.params.examId;
         const { user } = req;
         if (!examId) {
             res.status(400).json({ "error": "شناسه ی امتحان باید مقدار صحیحی وارد شود" });
@@ -16,7 +16,7 @@ rout.delete('/', auth, async(req, res) => {
         }
         res.json({ "message": "امتحان با موفقیت حذف شد" });
     } catch (e) {
-        // console.log(e);
+        console.log(e);
         if (e.message) {
             res.status(400).json({ "error": e.message });
 
