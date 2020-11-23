@@ -38,6 +38,8 @@ const classSchema = Schema({
         }
     }]
 }, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
