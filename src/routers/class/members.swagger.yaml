@@ -1,0 +1,41 @@
+get:
+  summary: Gets class members
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - description: if class Admin
+                properties:
+                  username:
+                    type: string
+                  firstname:
+                    type: string
+                  lastname:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  avatar:
+                    type: string
+              - type: object
+                description: if class member
+                properties:
+                  firstname:
+                    type: string
+                  lastname:
+                    type: string
+                  avatar:
+                    type: string
