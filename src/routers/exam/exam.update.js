@@ -3,7 +3,7 @@ const auth = require('../../middelware/auth');
 const Exam = require('../../db/model/examModel');
 rout.put('/', auth, async(req, res) => {
     try {
-        const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength'];
+        const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength', 'useInClass'];
         const info = req.body;
         if (Object.keys(info).length == 0) {
             res.status(400).json({ "error": "برای ساخت آزمون فیلد های مربوطه را وارد کنید" });
