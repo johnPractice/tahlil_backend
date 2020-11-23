@@ -50,6 +50,7 @@ classSchema.methods.toJSON = function() {
     delete userObject.id;
     delete userObject.__v;
     delete userObject.owner;
+    delete userObject.notes;
 
     return userObject;
 };
