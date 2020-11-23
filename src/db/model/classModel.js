@@ -26,6 +26,10 @@ const classSchema = Schema({
     members: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
+    }],
+    notes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'ClassNote'
     }]
 }, {
     autoCreate: true,

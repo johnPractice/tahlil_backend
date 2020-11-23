@@ -1,7 +1,7 @@
 delete:
   summary: Kicks a member out of the class
   tags:
-    - "Class"
+    - "Class Member"
   security:
     - bearerAuth: []
   parameters:
