@@ -31,12 +31,12 @@ const classSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'ClassNote'
     }],
-    exams: [{
-        exam: {
-            type: Schema.Types.ObjectId,
-            ref: 'Exam'
-        }
-    }]
+    // exams: [{
+    //     exam: {
+    //         type: Schema.Types.ObjectId,
+    //         ref: 'Exam'
+    //     }
+    // }]
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
