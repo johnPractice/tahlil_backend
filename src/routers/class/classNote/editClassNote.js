@@ -5,7 +5,7 @@ const checkClassNoteId = require('../../../middelware/class/checkClassNoteId');
 
 const rout = require('express').Router();
 
-rout.put('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin,checkClassNoteId, async (req, res) => {
+rout.put('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin, checkClassNoteId, async (req, res) => {
     try {
         const { classNote } = req;
 
@@ -27,5 +27,5 @@ rout.put('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin,che
             err.code = 400;
         res.status(err.code).json({ error: err.message });
     }
-})
+});
 module.exports = rout;
