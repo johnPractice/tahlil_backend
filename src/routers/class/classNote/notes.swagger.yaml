@@ -33,3 +33,25 @@ post:
             properties:
                 newClassNote:
                     $ref: '../../../swagger.config.yaml#/components/schemas/ClassNote'
+
+get:
+  summary: Gets class notes
+  tags:
+    - "Class Note"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../../swagger.config.yaml#/components/schemas/ClassNote'

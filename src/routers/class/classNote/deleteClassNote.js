@@ -23,3 +23,4 @@ rout.delete('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin,
         res.status(err.code).json({ error: err.message });
     }
 });
+module.exports = rout;

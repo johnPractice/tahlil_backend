@@ -43,7 +43,7 @@ const initiate = async () => {
 
     // 404 page
     app.get('*', (req, res) => {
-        res.sendFile('index.html', {
+        res.status(404).sendFile('index.html', {
             root: path.join(__dirname, './views/404/dist')
         });
         // res.json('error')
