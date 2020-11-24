@@ -68,6 +68,9 @@ paths:
   /class/{classId}/notes:
     $ref: './routers/class/classNote/notes.swagger.yaml'
 
+  /class/{classId}/notes/{classNoteId}:
+    $ref: './routers/class/classNote/notes.classNoteId.swagger.yaml'
+
 ################### Exam #####################
   /exam:
     $ref: './routers/exam/exam.swagger.yaml' 
