@@ -4,13 +4,13 @@ const Schema = mongoose.Schema;
 const classNoteSchema = Schema({
     title: {
         type: String,
-        minLenght: 5,
+        minlength: 5,
         required: [true, 'title is required']
     },
     body: {
         type: String,
-        minLenght: 5,
-        maxLength: 120,
+        minlength: 5,
+        maxlength: 120,
         required: [true, 'body is required']
     },
     creator: {
@@ -26,8 +26,10 @@ const classNoteSchema = Schema({
 });
 
 //methods
-classNoteSchema.methods.toJSON = function () {
+classNoteSchema.methods.toJSON = async function () {
     // this refers to class
+    await this.populate('creator', 'firstname lastname avatar').execPopulate();
+
     const creatorJSON = this.creator.toJSON();
     const object = this.toObject();
     object.creator = creatorJSON;

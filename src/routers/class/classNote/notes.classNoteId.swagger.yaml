@@ -1,5 +1,5 @@
-post:
-  summary: Creates a class note
+put:
+  summary: Edits a class note
   tags:
     - "Class Note"
   security:
@@ -7,6 +7,11 @@ post:
   parameters:
     - in: path
       name: classId
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: classNoteId
       required: true
       schema:
         type: string
@@ -24,18 +29,18 @@ post:
               minLength: 5
               maxLength: 120
   responses:
-    '201':
+    '200':
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-                newClassNote:
+                editedClassNote:
                     $ref: '../../../swagger.config.yaml#/components/schemas/ClassNote'
 
-get:
-  summary: Gets class notes
+delete:
+  summary: Deletes a class note
   tags:
     - "Class Note"
   security:
@@ -46,12 +51,11 @@ get:
       required: true
       schema:
         type: string
+    - in: path
+      name: classNoteId
+      required: true
+      schema:
+        type: string
   responses:
     '200':
       description: OK
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '../../../swagger.config.yaml#/components/schemas/ClassNote'
