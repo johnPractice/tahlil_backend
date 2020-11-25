@@ -1,0 +1,33 @@
+get:
+  summary: all exam in class
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []     
+  requestBody:
+    description: class and exam credentials
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - "classId"
+          properties:
+            classId:
+              type: string                       
+  responses:
+    '200':
+      description: show exams in class
+      content:
+        application/json:
+
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              err:
+                type: object
+
