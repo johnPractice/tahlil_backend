@@ -36,7 +36,9 @@ post:
                   grade:
                     type: string     
             examLength:
-              type: integer                         
+              type: integer
+            useInClass:
+                type: string
   responses:
     '200':
       description: exam created
