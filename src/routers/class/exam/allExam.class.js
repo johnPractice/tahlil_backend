@@ -2,7 +2,7 @@ const rout = require('express').Router();
 const auth = require('../../../middelware/auth');
 const Exam = require('../../../db/model/examModel');
 const Class = require('../../../db/model/classModel');
-rout.get('/exam', auth, async(req, res) => {
+rout.get('/exams', auth, async(req, res) => {
     try {
         const { user } = req;
         const { classId } = req.body;
