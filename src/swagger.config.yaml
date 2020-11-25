@@ -63,9 +63,6 @@ paths:
   /class/{classId}/members/{username}:
     $ref: './routers/class/members.username.swagger.yaml'
 
-  /class/exams:
-      $ref: './routers/class/exam/allExam.class.swagger.yaml'    
-
 ################### CLASS NOTE #####################
 
   /class/{classId}/notes:
@@ -79,9 +76,10 @@ paths:
     $ref: './routers/exam/exam.swagger.yaml' 
     
   /exam/{examId}:
-    $ref: './routers/exam/exam.delete.swagger.yaml'    
+    $ref: './routers/exam/exam.delete.swagger.yaml'
 
-
+  /class/{classId}/exams:
+    $ref: './routers/class/exam/allExam.class.swagger.yaml'
 
 ################### PublicAPi #####################
   /public/question/category:
@@ -141,6 +139,8 @@ components:
         - course
         - chapter
       properties:
+        id:
+          type: string
         type:
           $ref: '#components/schemas/type' 
         base:
@@ -239,3 +239,23 @@ components:
         createdAt:
           type: string
           format: date-time
+
+    ExamInList:
+      type: object
+      required:
+        - "name"
+        - "startDate"
+        - "endDate"
+        - "examLength"
+      properties:
+        name:
+          type: string
+          minLength: 6
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        examLength:
+          type: integer

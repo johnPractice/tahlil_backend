@@ -47,9 +47,8 @@ const examSchema = new Schema({
             default: null
         }
     }],
-    classesOwner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class',
+    useInClass: {
+        type: String,
         required: [true, 'کلاس باید وارد شود']
     }
 }, {
@@ -59,6 +58,20 @@ const examSchema = new Schema({
     autoIndex: true,
     timestamps: true,
 });
+
+examSchema.methods.toJSON = function () {
+    // this refer to clas
+    const userObject = this.toObject();
+    delete userObject.createdAt;
+    delete userObject.updatedAt;
+    delete userObject._id;
+    delete userObject.id;
+    delete userObject.__v;
+    delete userObject.useInClass;
+    delete userObject.owner;
+
+    return userObject;
+};
 
 const examModel = mongoose.model('Exam', examSchema);
 module.exports = examModel;

@@ -2,24 +2,13 @@ const rout = require('express').Router();
 const auth = require('../../../middelware/auth');
 const Exam = require('../../../db/model/examModel');
 const Class = require('../../../db/model/classModel');
-rout.get('/exams', auth, async(req, res) => {
+const checkClassId = require('../../../middelware/class/checkClassId');
+const checkClassAccess = require('../../../middelware/class/checkClassAccess');
+rout.get('/:classId/exams', auth,checkClassId,checkClassAccess, async(req, res) => {
     try {
-        const { user } = req;
-        const { classId } = req.body;
-        if (!classId) {
-            res.status(400).json({ "error": "شناسه ی کلاس مقدار معتبری نیست" });
-            return;
-        }
-        const findClass = await Class.findOne({ _id: classId, owner: user._id });
-        if (!findClass) {
-            res.status(400).json({ "error": "شما مجاز به دسترسی این کلاس نیستید" });
-            return;
-        }
-        const exams = await Exam.find({ useInClass: classId, owner: user._id });
-        if (!findClass) {
-            res.status(400).json({ "error": "شما مجاز به دسترسی این کلاس نیستید" });
-            return;
-        }
+        const { Class } = req;
+        
+        const exams = await Exam.find({ useInClass: Class.classId});
         const results = [];
         const uses = ['startDate', 'name', 'endDate', 'examLength'];
         exams.forEach(exam => {
