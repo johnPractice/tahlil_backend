@@ -16,13 +16,16 @@ post:
             - "endDate"
             - "questions"
             - "examLength"
+            - "useInClass"
           properties:
             name:
               type: string
             startDate:
               type: string
+              format: date-time
             endDate:
               type: string
+              format: date-time
             questions:
               type: array
               items:
@@ -34,7 +37,7 @@ post:
                   question:
                     type: string
                   grade:
-                    type: string     
+                    type: integer     
             examLength:
               type: integer
             useInClass:
@@ -42,9 +45,6 @@ post:
   responses:
     '200':
       description: exam created
-      content:
-        application/json:
-
     '400':
       description: Error
       content:
@@ -90,9 +90,6 @@ put:
   responses:
     '200':
       description: exam edited
-      content:
-        application/json:
-
     '400':
       description: Error
       content:
