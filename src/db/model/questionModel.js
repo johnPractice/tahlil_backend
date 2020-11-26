@@ -11,9 +11,9 @@ const questionSchema = Schema({
         type: String,
         required: true,
     },
-    isImage: {
-        type: Boolean,
-        default: false
+    imageQuestion: {
+        type: String,
+        default: null
     },
     type: {
         type: String,
@@ -43,6 +43,10 @@ const questionSchema = Schema({
     answers: [{
         answer: {}
     }],
+    imageAnswer: {
+        type: String,
+        default: null
+    },
     options: [{
         option: { type: String }
     }],

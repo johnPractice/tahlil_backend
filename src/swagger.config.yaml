@@ -137,7 +137,7 @@ components:
         - hardness
         - base 
         - course
-        - chapter
+        - chapter       
       properties:
         id:
           type: string
@@ -153,8 +153,10 @@ components:
           $ref: '#components/schemas/chapter' 
         public:
           type: boolean
-        isImage:
-          type: boolean 
+        imageQuestion:
+          type: string 
+        imageAnswer:
+          type: string 
         question:
           type: string
         answers:
