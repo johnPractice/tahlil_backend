@@ -1,0 +1,61 @@
+put:
+  summary: Edits a class note
+  tags:
+    - "Class Note"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: classNoteId
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            title:
+              type: string
+              minLength: 5
+            body:
+              type: string
+              minLength: 5
+              maxLength: 120
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                editedClassNote:
+                    $ref: '../../../swagger.config.yaml#/components/schemas/ClassNote'
+
+delete:
+  summary: Deletes a class note
+  tags:
+    - "Class Note"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: classNoteId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK

@@ -71,7 +71,7 @@ rout.put('/avatar', auth, avatarSave.single('avatar'), async(req, res) => {
         await user.save();
         res.json({ 'message': 'user avatar updated successfully', user });
     } catch (e) {
-        // console.log(e);
+        console.log(e);
         res.status(400).json({ e, "error": `somthing wrong! 
          one solution you shoud add image for avatar` });
     }

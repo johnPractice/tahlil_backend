@@ -1,0 +1,57 @@
+post:
+  summary: Creates a class note
+  tags:
+    - "Class Note"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            title:
+              type: string
+              minLength: 5
+            body:
+              type: string
+              minLength: 5
+              maxLength: 120
+  responses:
+    '201':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                newClassNote:
+                    $ref: '../../../swagger.config.yaml#/components/schemas/ClassNote'
+
+get:
+  summary: Gets class notes
+  tags:
+    - "Class Note"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../../swagger.config.yaml#/components/schemas/ClassNote'

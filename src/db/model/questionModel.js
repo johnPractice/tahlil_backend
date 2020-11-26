@@ -11,9 +11,9 @@ const questionSchema = Schema({
         type: String,
         required: true,
     },
-    isImage: {
-        type: Boolean,
-        default: false
+    imageQuestion: {
+        type: String,
+        default: null
     },
     type: {
         type: String,
@@ -43,6 +43,10 @@ const questionSchema = Schema({
     answers: [{
         answer: {}
     }],
+    imageAnswer: {
+        type: String,
+        default: null
+    },
     options: [{
         option: { type: String }
     }],
@@ -50,6 +54,12 @@ const questionSchema = Schema({
         type: Boolean,
         default: false
     },
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    autoCreate: true,
+    autoIndex: true,
+    timestamps: true,
 });
 
 
@@ -65,7 +75,7 @@ questionSchema.pre('save', async function(next) {
     }
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.public) {
-        const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, owner: question.owner, isImage: question.isImage });
+        const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, owner: question.owner, imageQuestion: question.imageQuestion, imageAnswer: question.imageAnswer });
         if (question.answers) {
             bank.answers = question.answers;
             if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
@@ -107,6 +117,17 @@ questionSchema.methods.toJSON = function() {
     delete questionObject.createdAt;
     delete questionObject.updatedAt;
     delete questionObject.__v;
+    delete questionObject.owner;
+    if (questionObject.answers.length > 0) {
+        questionObject.answers.forEach(item => {
+            delete item._id;
+        });
+    }
+    if (questionObject.options.length > 0) {
+        questionObject.options.forEach(item => {
+            delete item._id;
+        });
+    }
     questionObject._id = questionObject._id.toString();
     return questionObject;
 };

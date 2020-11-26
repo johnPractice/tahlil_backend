@@ -1,0 +1,20 @@
+delete:
+  summary: Kicks a member out of the class
+  tags:
+    - "Class Member"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: username
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK

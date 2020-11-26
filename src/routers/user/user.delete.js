@@ -1,16 +1,15 @@
 const auth = require('../../middelware/auth');
-const User = require('../../db/model/userModel');
 const rout = require('express').Router();
 const { deleteUserMailOptions } = require('../../functions/mailer');
 
 //user delete account
-rout.delete('/', auth, async (req, res) => {
+rout.delete('/', auth, async(req, res) => {
     try {
         const user = req.user;
 
-        await User.deleteOne(user, (err) => {
+        await user.deleteOne(err => {
             if (err)
-                res.sendStatus(503)
+                res.sendStatus(503);
         });
 
         user.sendMail(deleteUserMailOptions);

@@ -1,0 +1,91 @@
+get:
+  summary: Gets user profile (user is identified by token)
+  tags:
+    - "Profile"
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: User profile is sent
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                $ref: '../../swagger.config.yaml#/components/schemas/user'
+    '400':
+      description: Something wrong :(
+
+put:
+  summary: Edits user info
+  tags:
+    - "Profile"
+  security:
+    - bearerAuth: []
+  requestBody:
+    description: Info to edit
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+            firstname:
+              type: string
+            lastname:
+              type: string
+            email:
+              type: string
+              format: email
+            avatar:
+              type: string
+            avatarname:
+              type: string
+  responses:
+    '200':
+      description: User profile is sent
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              user:
+                $ref: '../../swagger.config.yaml#/components/schemas/user'
+    '400':
+      description: Something wrong :(
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              e:
+                type: object
+              error:
+                type: string
+
+delete:
+  summary: Deletes user
+  tags:
+    - "Profile"
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+     description: User is deleted
+    '503':
+     description: Database error
+    '400':
+     description: Error
+     content:
+       application/json:
+        schema:
+          type: object
+          properties:
+            err:
+              type: object

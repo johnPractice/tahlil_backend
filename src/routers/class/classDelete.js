@@ -1,12 +1,14 @@
 const rout = require('express').Router();
 const auth = require('../../middelware/auth');
 const classModel = require('../../db/model/classModel');
-const checkClassAdmin = require('../../middelware/checkClassAdmin');
+const checkClassAdmin = require('../../middelware/class/checkClassAdmin');
+const checkClassId = require('../../middelware/class/checkClassId');
 
-rout.delete('/:classId', auth, checkClassAdmin, async (req, res) => {
+
+rout.delete('/:classId', auth, checkClassId, checkClassAdmin, async (req, res) => {
     try {
         //const user = req.user;
-        const classToDelete = req.ownedClass;//await classModel.findOne({ classId: req.params.classId });
+        const classToDelete = req.Class;//await classModel.findOne({ classId: req.params.classId });
 
         //if (!classToDelete)
         //    throw { "message": "Invalid classId", code: 400 };
@@ -15,7 +17,7 @@ rout.delete('/:classId', auth, checkClassAdmin, async (req, res) => {
         //    throw { "message": "Permission denied", code: 403 };
 
         //delete class
-        await classModel.deleteOne(classToDelete);
+        await classToDelete.deleteOne();
         res.sendStatus(200);
 
     } catch (err) {

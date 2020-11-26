@@ -1,0 +1,39 @@
+post:
+  summary: Logs in the user
+  tags:
+    - "Login"
+  requestBody:
+    description: login credentials
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - "username"
+            - "password"
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+  responses:
+    '200':
+      description: User logged in
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                $ref: '../../swagger.config.yaml#/components/schemas/user'
+              token:
+                type: string
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              err:
+                type: object
