@@ -8,7 +8,7 @@ rout.post('/', auth, checkAnswer, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;
-        const canUses = ['type', 'public', 'question', 'answers', 'options', 'hardness', 'base', 'course', 'chapter', 'isImage'];
+        const canUses = ['type', 'public', 'question', 'answers', 'options', 'hardness', 'base', 'course', 'chapter', 'imageQuestion', 'imageAnswer'];
         if (Object.keys(info).length == 0) {
             res.status(400).json({ "error": "must enter somthnig" });
             return;
