@@ -1,0 +1,113 @@
+put:
+  summary: Edits a class
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            generateNewClassId:
+              type: boolean
+  responses:
+    '200':
+      description: User joined the class
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              editedClass:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  classId:
+                    type: string
+    '400':
+      description: error in classid or request body or something else!
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    '403':
+      description: user is not the class owner
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+delete:
+  summary: Deletes a class
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: User deleted the class
+    '400':
+      description: error in classid or request body or something else!
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    '403':
+      description: user is not the class owner
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+get:
+  summary: Gets class info for class page
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../../swagger.config.yaml#/components/schemas/ClassPage'

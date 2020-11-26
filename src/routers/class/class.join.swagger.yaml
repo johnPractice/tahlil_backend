@@ -1,0 +1,35 @@
+post:
+  summary: Joins a class
+  tags:
+    - "Class"
+  security:
+    - bearerAuth: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - classId
+          properties:
+            classId:
+              type: string
+  responses:
+    '200':
+      description: User joined the class
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              joinedClass:
+                $ref: '../../swagger.config.yaml#/components/schemas/classInList'
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string

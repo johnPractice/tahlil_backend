@@ -1,0 +1,49 @@
+post:
+  summary: Signs up a new user
+  tags:
+    - "Login"
+  requestBody:
+    description: Signup information
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - "username"
+            - "firstname"
+            - "lastname"
+            - "password"
+            - "email"
+          properties:
+            username:
+              type: string
+            firstname:
+              type: string
+            lastname:
+              type: string
+            password:
+              type: string
+            email:
+              type: string
+              format: email
+  responses:
+    '201':
+      description: New user is created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                $ref: '../../swagger.config.yaml#/components/schemas/user'
+              token:
+                type: string
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              err:
+                type: object

@@ -1,0 +1,34 @@
+get:
+  summary: Gets class exams
+  tags:
+    - "Exam"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: classId
+      required: true
+      schema:
+        type: string   
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              exams:
+                type: array
+                items:
+                  $ref: '../../../swagger.config.yaml#/components/schemas/ExamInList'
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+

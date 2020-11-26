@@ -1,0 +1,15 @@
+delete:
+  summary: Deletes a question
+  tags:
+    - "Question"
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: questionId
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Question is deleted
