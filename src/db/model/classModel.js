@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { nanoid } = require('nanoid');
+const examModel = require('./examModel');
+const classNoteModel = require('./classNoteModel');
 
 const classSchema = Schema({
     name: {
@@ -119,6 +121,18 @@ classSchema.methods.getMembersList = async function({ forAdmin }) {
 
     return this.members;
 };
+
+classSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+    const Class = this;
+
+    //delete
+    await examModel.deleteMany({ useInClass: Class.classId });
+
+    await classNoteModel.deleteMany({ _id: { $in: Class.notes } });
+    
+    next();
+});
+
 
 const classModel = mongoose.model('Class', classSchema);
 
