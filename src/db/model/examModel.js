@@ -22,6 +22,7 @@ const examSchema = new Schema({
     examLength: {
         type: Number,
         required: [true, 'زمان ازمون باید مشخص شود'],
+        // value as second
     },
     questions: [{
         question: {
@@ -59,7 +60,22 @@ const examSchema = new Schema({
     timestamps: true,
 });
 
-examSchema.methods.toJSON = function () {
+examSchema.pre('save', async function(next) {
+    const exam = this;
+    const startDate = (new Date(exam.startDate).getTime());
+    const endDate = (new Date(exam.endDate).getTime());
+
+
+    if (exam.isModified('startDate') || exam.isModified('endDate')) {
+        if ((startDate > endDate) || (parseFloat(endDate - startDate) < exam.examLength)) {
+            const error = new Error();
+            error.error = "تاریخ امتحان مقادیر معتبری نیست";
+            next(error);
+        }
+    } else
+        next();
+});
+examSchema.methods.toJSON = function() {
     // this refer to clas
     const userObject = this.toObject();
     delete userObject.createdAt;
