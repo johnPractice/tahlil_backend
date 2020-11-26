@@ -75,7 +75,7 @@ questionSchema.pre('save', async function(next) {
     }
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.public) {
-        const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, owner: question.owner, isImage: question.isImage });
+        const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, owner: question.owner, imageQuestion: question.imageQuestion, imageAnswer: question.imageAnswer });
         if (question.answers) {
             bank.answers = question.answers;
             if (question.type == 'TEST' || question.type == 'MULTICHOISE') {

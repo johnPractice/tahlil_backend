@@ -10,9 +10,9 @@ const bankSchema = Schema({
         required: true,
         enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER']
     },
-    isImage: {
-        type: Boolean,
-        default: false
+    imageQuestion: {
+        type: String,
+        default: null
     },
     options: [{
         option: {
@@ -47,6 +47,10 @@ const bankSchema = Schema({
     answers: [{
         answer: {}
     }],
+    imageAnswer: {
+        type: String,
+        default: null
+    },
     base: {
         type: String,
         enum: ['10', '11', '12'],
