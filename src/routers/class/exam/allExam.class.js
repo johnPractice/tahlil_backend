@@ -8,25 +8,9 @@ rout.get('/:classId/exams', auth,checkClassId,checkClassAccess, async(req, res) 
     try {
         const { Class } = req;
         
-        const exams = await Exam.find({ useInClass: Class.classId});
-        const results = [];
-        const uses = ['startDate', 'name', 'endDate', 'examLength'];
-        exams.forEach(exam => {
-            const item = {};
-            uses.forEach(use => {
-                if (exam[use]) {
-                    item[use] = exam[use];
-                }
-            });
-            if (Object.keys(item).length != 0) {
-                results.push(item);
-            }
-        });
-        if (results.length == 0) {
-            res.status(400).json({ "error": "مشکلی رخ داده است" });
-            return;
-        }
-        res.json({ "exams": results });
+        const exams = await Exam.find({ useInClass: Class.classId }, 'startDate name endDate examLength');
+        
+        res.status(200).json({ exams });
     } catch (e) {
         // console.log(e);
         if (e.message) {

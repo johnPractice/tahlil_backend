@@ -16,7 +16,12 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../../swagger.config.yaml#/components/schemas/ExamInList'
+            type: object
+            properties:
+              exams:
+                type: array
+                items:
+                  $ref: '../../../swagger.config.yaml#/components/schemas/ExamInList'
     '400':
       description: Error
       content:
