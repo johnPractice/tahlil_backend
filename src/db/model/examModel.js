@@ -65,8 +65,17 @@ examSchema.pre('save', async function(next) {
     const exam = this;
     const startDate = (new Date(exam.startDate).getTime());
     const endDate = (new Date(exam.endDate).getTime());
+
     if (exam.isModified('startDate') || exam.isModified('endDate')) {
-        if ((startDate > endDate) || (parseFloat(endDate - startDate) < exam.examLength)) {
+        const nowDate = new Date().getTime();
+        if (
+            (startDate > endDate) ||
+            (parseFloat(endDate - startDate) < (3600 * exam.examLength))
+        ) {
+            const error = new Error();
+            error.error = "تاریخ امتحان مقادیر معتبری نیست";
+            next(error);
+        } else if (startDate < nowDate || endDate < nowDate) {
             const error = new Error();
             error.error = "تاریخ امتحان مقادیر معتبری نیست";
             next(error);
