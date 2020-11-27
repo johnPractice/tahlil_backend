@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const classModel = require('../model/classModel');
 const Schema = mongoose.Schema;
 const examSchema = new Schema({
     owner: {
@@ -61,6 +60,15 @@ const examSchema = new Schema({
     timestamps: true,
 });
 
+// const checkCLass = async({ id, owner }) => {
+//     const findClass = await classModel.findOne({ classId: id });
+//     if (!findClass) {
+//         const error = new Error();
+//         error.error = "شما مجاز به دسترسی به این کلاس نیستید";
+//         return error;
+//     }
+//     return findClass;
+// };
 examSchema.pre('save', async function(next) {
     const exam = this;
     const startDate = (new Date(exam.startDate).getTime());
@@ -75,20 +83,14 @@ examSchema.pre('save', async function(next) {
             const error = new Error();
             error.error = "تاریخ امتحان مقادیر معتبری نیست";
             next(error);
-        } else if (startDate < nowDate || endDate < nowDate) {
-            const error = new Error();
-            error.error = "تاریخ امتحان مقادیر معتبری نیست";
-            next(error);
         }
+        // else if (new Date(startDate) < nowDate || endDate < nowDate) {
+        //     const error = new Error();
+        //     error.error = "تاریخ امتحان مقادیر معتبری نیست";
+        //     next(error);
+        // }
     }
-    if (exam.isModified('useInClass')) {
-        const findClass = await classModel.findOne({ classId: exam.useInClass, owner: exam.owner });
-        if (!findClass) {
-            const error = new Error();
-            error.error = "شما مجاز به دسترسی به این کلاس نیستید";
-            next(error);
-        }
-    }
+
     next();
 
 });
