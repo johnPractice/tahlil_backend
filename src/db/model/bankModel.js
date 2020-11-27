@@ -67,10 +67,10 @@ const bankSchema = Schema({
 bankSchema.methods.toJSON = function() {
     const bank = this;
     const bankObject = bank.toObject();
-    delete bankObject.qId;
     delete bankObject._id;
     delete bankObject.__v;
     delete bankObject.deleted;
+    delete bankObject.owner;
 
     return bankObject;
 };

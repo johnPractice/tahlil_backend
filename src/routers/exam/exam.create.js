@@ -20,9 +20,9 @@ rout.post('/', auth, async(req, res) => {
 
         res.json(newExam);
     } catch (e) {
+        console.log(e);
         if (e && e.errors) {
             const keys = Object.keys(e.errors);
-            // console.log(e);
             if (e.message) {
                 if (Object.keys(e.errors).length > 1) {
                     const errors = [];

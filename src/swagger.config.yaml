@@ -139,8 +139,6 @@ components:
         - course
         - chapter       
       properties:
-        id:
-          type: string
         type:
           $ref: '#components/schemas/type' 
         base:

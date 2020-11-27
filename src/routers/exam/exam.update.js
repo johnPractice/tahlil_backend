@@ -19,7 +19,7 @@ rout.put('/', auth, async(req, res) => {
             return;
         }
         canUses.forEach(use => {
-            if (info[use]) findExam[use] = info[use];
+            if (info[use] && findExam[use] != info[use]) findExam[use] = info[use];
         });
         await findExam.save();
         res.json({ "message": "ازمون با موفیقت تغییر یافت" });
