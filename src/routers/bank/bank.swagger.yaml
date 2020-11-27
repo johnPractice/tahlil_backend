@@ -50,7 +50,12 @@ post:
               questions:
                 type: array
                 items:
-                  $ref: '../../swagger.config.yaml#/components/schemas/question'
+                  allOf:
+                    - type: object
+                      properties:
+                        qId:
+                          type: string
+                    - $ref: '../../swagger.config.yaml#/components/schemas/question'
               totalPages:
                 type: number
               currentPage:

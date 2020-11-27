@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ClassModel = require('./classModel');
+const classModel = require('../model/classModel');
 const Schema = mongoose.Schema;
 const examSchema = new Schema({
     owner: {
@@ -82,7 +82,7 @@ examSchema.pre('save', async function(next) {
         }
     }
     if (exam.isModified('useInClass')) {
-        const findClass = await ClassModel.findOne({ classId: exam.useInClass, owner: exam.owner });
+        const findClass = await classModel.findOne({ classId: exam.useInClass, owner: exam.owner });
         if (!findClass) {
             const error = new Error();
             error.error = "شما مجاز به دسترسی به این کلاس نیستید";
