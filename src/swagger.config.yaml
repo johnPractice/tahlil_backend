@@ -81,6 +81,32 @@ paths:
   /class/{classId}/exams:
     $ref: './routers/class/exam/allExam.class.swagger.yaml'
 
+  /class/{classId}/exams/{examId}:
+    get:
+      summary: Gets an exam for class admin
+      tags:
+        - "Exam"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: classId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: examId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
@@ -248,6 +274,8 @@ components:
         - "endDate"
         - "examLength"
       properties:
+        _id:
+          type: string
         name:
           type: string
           minLength: 6
@@ -259,3 +287,13 @@ components:
           format: date-time
         examLength:
           type: integer
+
+    Exam:
+      allOf:
+        - $ref: '#components/schemas/ExamInList'
+        - type: object
+          properties:
+            questions:
+              type: string
+
+        

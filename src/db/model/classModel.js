@@ -46,6 +46,11 @@ const classSchema = Schema({
     autoIndex: true,
     timestamps: true,
 });
+classSchema.virtual('exams', {
+    ref: 'Exam',
+    localField: 'classId',
+    foreignField: 'useInClass'
+});
 
 
 //methods
