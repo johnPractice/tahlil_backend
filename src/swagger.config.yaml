@@ -82,30 +82,7 @@ paths:
     $ref: './routers/class/exam/allExam.class.swagger.yaml'
 
   /class/{classId}/exams/{examId}:
-    get:
-      summary: Gets an exam for class admin
-      tags:
-        - "Exam"
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: path
-          name: classId
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: examId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Exam'
+    $ref: './routers/class/exam/exam.examId.swagger.yaml'
 
 ################### PublicAPi #####################
   /public/question/category:
@@ -294,6 +271,22 @@ components:
         - type: object
           properties:
             questions:
-              type: string
+              type: array
+              items:
+                type: object
+                properties:
+                  question:
+                    allOf:
+                      - $ref: '#/components/schemas/question'
+                      - type: object
+                        properties:
+                          _id:
+                            type: string
+                  grade:
+                    type: integer
+            members:
+              type: array
+              items:
+                type: object
 
         
