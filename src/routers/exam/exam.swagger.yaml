@@ -80,13 +80,15 @@ put:
             name:
               type: string
             startDate:
-              type: Date
+              type: string
+              format: date-time
             endDate:
-              type: Date
+              type: string
+              format: date-time
             questions:
               type: Array     
             examLength:
-              type: int                         
+              type: integer                        
   responses:
     '200':
       description: exam edited

@@ -81,6 +81,9 @@ paths:
   /class/{classId}/exams:
     $ref: './routers/class/exam/allExam.class.swagger.yaml'
 
+  /class/{classId}/exams/{examId}:
+    $ref: './routers/class/exam/exam.examId.swagger.yaml'
+
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
@@ -248,6 +251,8 @@ components:
         - "endDate"
         - "examLength"
       properties:
+        _id:
+          type: string
         name:
           type: string
           minLength: 6
@@ -259,3 +264,29 @@ components:
           format: date-time
         examLength:
           type: integer
+
+    Exam:
+      allOf:
+        - $ref: '#components/schemas/ExamInList'
+        - type: object
+          properties:
+            questions:
+              type: array
+              items:
+                type: object
+                properties:
+                  question:
+                    allOf:
+                      - $ref: '#/components/schemas/question'
+                      - type: object
+                        properties:
+                          _id:
+                            type: string
+                  grade:
+                    type: integer
+            members:
+              type: array
+              items:
+                type: object
+
+        

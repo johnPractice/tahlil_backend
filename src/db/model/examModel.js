@@ -96,15 +96,23 @@ examSchema.pre('save', async function(next) {
 });
 examSchema.methods.toJSON = function() {
     // this refer to clas
+    const questions = this.questions;
+
     const userObject = this.toObject();
     delete userObject.createdAt;
     delete userObject.updatedAt;
-    delete userObject._id;
     delete userObject.id;
     delete userObject.__v;
     delete userObject.useInClass;
     delete userObject.owner;
 
+    if (questions) {
+        for (let i = 0; i < questions.length; i++) {
+            delete userObject.questions[i]._id;
+            userObject.questions[i].question = questions[i].question.toJSON();
+        }
+    }
+    
     return userObject;
 };
 
