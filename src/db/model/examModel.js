@@ -78,7 +78,7 @@ examSchema.pre('save', async function(next) {
         const nowDate = new Date().getTime();
         if (
             (startDate > endDate) ||
-            (parseFloat(endDate - startDate) < (3600 * exam.examLength))
+            (parseFloat(endDate - startDate) < (60 * 1000 * exam.examLength))
         ) {
             const error = new Error();
             error.error = "تاریخ امتحان مقادیر معتبری نیست";
@@ -112,7 +112,7 @@ examSchema.methods.toJSON = function() {
             userObject.questions[i].question = questions[i].question.toJSON();
         }
     }
-    
+
     return userObject;
 };
 
