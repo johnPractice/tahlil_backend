@@ -21,7 +21,7 @@ rout.post('/', auth, checkAnswer, async(req, res) => {
         await question.save();
         res.status(200).json({ questionId: question._id });
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         if (e.message) {
             res.status(400).json(e.message);
         } else { res.status(400).json(e); }
