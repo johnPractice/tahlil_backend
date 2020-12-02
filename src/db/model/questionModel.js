@@ -98,8 +98,10 @@ questionSchema.pre('save', async function(next) {
 // methode for after delete ==>delete from Bank
 questionSchema.pre('remove', async function(next) {
     const bank = await Bank.findOne({ qId: this._id });
-    bank.deleted = true;
-    await bank.save();
+    if (bank) {
+        bank.deleted = true;
+        await bank.save();
+    }
     next();
 });
 // methode for find and chec the owner
