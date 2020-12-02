@@ -1,6 +1,7 @@
-const rout = require('express').Router();
+﻿const rout = require('express').Router();
 const User = require('../../db/model/userModel');
 const { signupMailOptions } = require('../../functions/mailer');
+const classModel = require('../../db/model/classModel');
 
 
 
@@ -54,6 +55,15 @@ rout.post('/signup', async(req, res) => {
                 });
         } else {
             await user.save();
+
+            //create Private Class
+            const privateClass = new classModel({
+                name: "کلاس شخصی",
+                description: "در این کلاس میتوانید برای خود آزمون های شخصی ایجاد کنید.",
+                isPrivate: true,
+                owner: user._id
+            });
+            await privateClass.save();
 
             user.sendMail(signupMailOptions);
 

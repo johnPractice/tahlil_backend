@@ -7,16 +7,10 @@ const checkClassId = require('../../middelware/class/checkClassId');
 
 rout.delete('/:classId', auth, checkClassId, checkClassAdmin, async (req, res) => {
     try {
-        //const user = req.user;
-        const classToDelete = req.Class;//await classModel.findOne({ classId: req.params.classId });
+        const classToDelete = req.Class;
+        if (classToDelete.isPrivate === true)
+            throw { message: "Action is not valid on private classes", code: 405 };
 
-        //if (!classToDelete)
-        //    throw { "message": "Invalid classId", code: 400 };
-
-        //if (!user._id.equals(classToDelete.owner))
-        //    throw { "message": "Permission denied", code: 403 };
-
-        //delete class
         await classToDelete.deleteOne();
         res.sendStatus(200);
 

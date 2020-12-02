@@ -33,6 +33,10 @@ const classSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'ClassNote'
     }],
+    isPrivate: {
+        type: Boolean,
+        default: false
+    }
     // exams: [{
     //     exam: {
     //         type: Schema.Types.ObjectId,
