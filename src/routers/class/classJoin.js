@@ -13,6 +13,8 @@ rout.post('/join', auth, async(req, res) => {
         const classToJoin = await classModel.findOne({ classId: info.classId });
         if (!classToJoin)
             throw { message: "Invalid classId", code: 400 };
+        if (classToJoin.isPrivate === true)
+            throw { message: "Action is not valid on private classes", code: 405 };
 
         if (classToJoin.owner.equals(user._id))
             throw { message: "Owners can't join their own classes", code: 400 };
