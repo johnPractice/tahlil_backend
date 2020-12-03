@@ -18,8 +18,15 @@ rout.put('/:classId', auth, checkClassId, checkClassAdmin, async (req, res) => {
                 classToEdit[property] = newInfo[property];
         });
 
-        if (newInfo.generateNewClassId === true)
-            classToEdit.classId = nanoid(6);
+        if (newInfo.generateNewClassId === true) {
+            const newClassId = nanoid(6);
+            await classToEdit.populate('exams', 'useInClass').execPopulate();
+            await classToEdit.exams.forEach(async (exam) => {
+                exam.useInClass = newClassId;
+                await exam.save();
+            });
+            classToEdit.classId = newClassId;
+        }
 
         await classToEdit.save();
         res.status(200).json({ editedClass: classToEdit });
