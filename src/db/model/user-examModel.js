@@ -8,7 +8,7 @@ const user_examSchema = new Schema({
     },
     exams: [{
         exam: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Exam',
             required: [true, 'ازمون باید مقدار معتبری داشته باشد']
         },
