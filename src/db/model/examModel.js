@@ -33,9 +33,6 @@ const examSchema = new Schema({
                     mongoose.Types.ObjectId(value);
 
             }
-        },
-        grade: {
-            type: Number
         }
     }],
     members: [{
@@ -75,7 +72,6 @@ examSchema.pre('save', async function(next) {
     const endDate = (new Date(exam.endDate).getTime());
 
     if (exam.isModified('startDate') || exam.isModified('endDate')) {
-        const nowDate = new Date().getTime();
         if (
             (startDate > endDate) ||
             (parseFloat(endDate - startDate) < (60 * 1000 * exam.examLength))
