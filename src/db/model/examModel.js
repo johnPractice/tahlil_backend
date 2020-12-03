@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const ClassModel = require('./classModel');
 const Schema = mongoose.Schema;
 const examSchema = new Schema({
     owner: {
@@ -61,6 +60,15 @@ const examSchema = new Schema({
     timestamps: true,
 });
 
+// const checkCLass = async({ id, owner }) => {
+//     const findClass = await classModel.findOne({ classId: id });
+//     if (!findClass) {
+//         const error = new Error();
+//         error.error = "شما مجاز به دسترسی به این کلاس نیستید";
+//         return error;
+//     }
+//     return findClass;
+// };
 examSchema.pre('save', async function(next) {
     const exam = this;
     const startDate = (new Date(exam.startDate).getTime());
@@ -70,38 +78,40 @@ examSchema.pre('save', async function(next) {
         const nowDate = new Date().getTime();
         if (
             (startDate > endDate) ||
-            (parseFloat(endDate - startDate) < (3600 * exam.examLength))
+            (parseFloat(endDate - startDate) < (60 * 1000 * exam.examLength))
         ) {
             const error = new Error();
             error.error = "تاریخ امتحان مقادیر معتبری نیست";
             next(error);
-        } else if (startDate < nowDate || endDate < nowDate) {
-            const error = new Error();
-            error.error = "تاریخ امتحان مقادیر معتبری نیست";
-            next(error);
         }
+        // else if (new Date(startDate) < nowDate || endDate < nowDate) {
+        //     const error = new Error();
+        //     error.error = "تاریخ امتحان مقادیر معتبری نیست";
+        //     next(error);
+        // }
     }
-    if (exam.isModified('useInClass')) {
-        const findClass = await ClassModel.findOne({ classId: exam.useInClass, owner: exam.owner });
-        if (!findClass) {
-            const error = new Error();
-            error.error = "شما مجاز به دسترسی به این کلاس نیستید";
-            next(error);
-        }
-    }
+
     next();
 
 });
 examSchema.methods.toJSON = function() {
     // this refer to clas
+    const questions = this.questions;
+
     const userObject = this.toObject();
     delete userObject.createdAt;
     delete userObject.updatedAt;
-    delete userObject._id;
     delete userObject.id;
     delete userObject.__v;
     delete userObject.useInClass;
     delete userObject.owner;
+
+    if (questions) {
+        for (let i = 0; i < questions.length; i++) {
+            delete userObject.questions[i]._id;
+            userObject.questions[i].question = questions[i].question.toJSON();
+        }
+    }
 
     return userObject;
 };

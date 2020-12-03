@@ -8,7 +8,7 @@ rout.post('/', auth, checkAnswer, async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;
-        const canUses = ['type', 'public', 'question', 'answers', 'options', 'hardness', 'base', 'course', 'chapter', 'isImage'];
+        const canUses = ['type', 'public', 'question', 'answers', 'options', 'hardness', 'base', 'course', 'chapter', 'imageQuestion', 'imageAnswer'];
         if (Object.keys(info).length == 0) {
             res.status(400).json({ "error": "must enter somthnig" });
             return;
@@ -19,9 +19,9 @@ rout.post('/', auth, checkAnswer, async(req, res) => {
         });
         question.owner = user._id;
         await question.save();
-        res.status(200).json({ 'message': 'question added' });
+        res.status(200).json({ questionId: question._id });
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         if (e.message) {
             res.status(400).json(e.message);
         } else { res.status(400).json(e); }

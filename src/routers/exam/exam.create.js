@@ -1,14 +1,21 @@
 const rout = require('express').Router();
 const Exam = require('../../db/model/examModel');
+const ClassModel = require('../../db/model/classModel');
 const auth = require('../../middelware/auth');
 rout.post('/', auth, async(req, res) => {
     try {
         const { user } = req;
+        const { useInClass } = req.body;
         const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength', 'useInClass'];
         const info = req.body;
         if (!info.questions || info.questions.length == 0) res.status(400).json({ 'error': 'لطفا سوالی را برای ازمون انتخاب کنید' });
         if (Object.keys(info).length == 0) {
             res.status(400).json({ "error": "برای ساخت آزمون فیلد های مربوطه را وارد کنید" });
+            return;
+        }
+        const findClass = await ClassModel.findOne({ classId: useInClass, owner: user._id });
+        if (!findClass) {
+            res.status(400).json({ "error": "شما مجاز به ذسترسی به این ازمون نیستید" });
             return;
         }
         const newExam = new Exam();
@@ -20,9 +27,9 @@ rout.post('/', auth, async(req, res) => {
 
         res.json(newExam);
     } catch (e) {
+        console.log(e);
         if (e && e.errors) {
             const keys = Object.keys(e.errors);
-            // console.log(e);
             if (e.message) {
                 if (Object.keys(e.errors).length > 1) {
                     const errors = [];

@@ -33,6 +33,10 @@ const classSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'ClassNote'
     }],
+    isPrivate: {
+        type: Boolean,
+        default: false
+    }
     // exams: [{
     //     exam: {
     //         type: Schema.Types.ObjectId,
@@ -45,6 +49,11 @@ const classSchema = Schema({
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
+});
+classSchema.virtual('exams', {
+    ref: 'Exam',
+    localField: 'classId',
+    foreignField: 'useInClass'
 });
 
 
@@ -61,6 +70,7 @@ classSchema.methods.toJSON = function() {
     delete userObject.__v;
     delete userObject.owner;
     delete userObject.notes;
+    delete userObject.exams;
 
     return userObject;
 };

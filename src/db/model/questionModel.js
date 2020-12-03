@@ -73,6 +73,15 @@ questionSchema.pre('save', async function(next) {
     if (checkBank) {
         await checkBank.remove();
     }
+    if (question.isModified('imageQuestion') || question.isModified('imageAnswer')) {
+        const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+        const tests = ['imageAnswer', 'imageQuestion'];
+        for (let i = 0; i < tests.length; i++) {
+            if (question[tests[i]] != null) {
+                if (!base64regex.test(question[tests[i]])) throw new Error("it's not base64 format");
+            }
+        }
+    }
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.public) {
         const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, owner: question.owner, imageQuestion: question.imageQuestion, imageAnswer: question.imageAnswer });
@@ -89,8 +98,10 @@ questionSchema.pre('save', async function(next) {
 // methode for after delete ==>delete from Bank
 questionSchema.pre('remove', async function(next) {
     const bank = await Bank.findOne({ qId: this._id });
-    bank.deleted = true;
-    await bank.save();
+    if (bank) {
+        bank.deleted = true;
+        await bank.save();
+    }
     next();
 });
 // methode for find and chec the owner
