@@ -20,23 +20,20 @@ const user_examSchema = new Schema({
         userAnswer: {
             type: String,
             default: null
+        },
+        answerGrade: {
+            type: Number,
+            default: null
         }
     }],
-    totalGrade: {
-        type: Number,
-        default: null
-    },
     startTime: {
         type: Date,
         required: [true, 'زمان شروع آزمون مقدار معتبری یاید داشته باشد']
     },
     //TODO: at pre save we should handel it
+    // TODO: check min (starttime+examLength or endDate-startTime)
     endTime: {
         type: Date,
-    },
-    startDate: {
-        type: Date,
-        required: [true, 'تاریخ شروع آزمون مقدار معتبری یاید داشته باشد']
     }
 });
 
