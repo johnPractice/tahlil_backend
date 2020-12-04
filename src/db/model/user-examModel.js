@@ -29,12 +29,29 @@ const user_examSchema = new Schema({
     startTime: {
         type: Date,
         required: [true, 'زمان شروع آزمون مقدار معتبری یاید داشته باشد']
-    },
+    }
     //TODO: at pre save we should handel it
     // TODO: check min (starttime+examLength or endDate-startTime)
-    endTime: {
-        type: Date,
-    }
+});
+
+user_examSchema.virtual('endTime').get(async function () {
+    console.log("startTime: " + this.startTime);
+    if (!this.startTime)
+        return this.startTime;
+
+    await this.populate('exam', 'examLength endDate').execPopulate();
+
+    //not sure if it always works!
+    const endTime =
+        new Date(this.startTime)
+            .setMinutes(this.startTime.getMinutes() + this.exam.examLength);
+
+    console.log("examLength: " + this.exam.examLength);
+    console.log("endTime: " + endTime);
+
+    if (endTime <= this.exam.endDate)
+        return endTime;
+    return this.exam.endDate;
 });
 
 const user_examModel = mongoose.model('UserExam', user_examSchema);
