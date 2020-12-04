@@ -35,19 +35,14 @@ const user_examSchema = new Schema({
 });
 
 user_examSchema.virtual('endTime').get(async function () {
-    console.log("startTime: " + this.startTime);
     if (!this.startTime)
         return this.startTime;
 
     await this.populate('exam', 'examLength endDate').execPopulate();
 
-    //not sure if it always works!
+    //not sure if it ((always)) works!
     const endTime =
-        new Date(this.startTime)
-            .setMinutes(this.startTime.getMinutes() + this.exam.examLength);
-
-    console.log("examLength: " + this.exam.examLength);
-    console.log("endTime: " + endTime);
+        new Date(this.startTime.getTime() + this.exam.examLength * 60000);
 
     if (endTime <= this.exam.endDate)
         return endTime;
