@@ -28,7 +28,8 @@ const user_examSchema = new Schema({
     }],
     startTime: {
         type: Date,
-        required: [true, 'زمان شروع آزمون مقدار معتبری یاید داشته باشد']
+        required: [true, 'زمان شروع آزمون مقدار معتبری یاید داشته باشد'],
+        default: Date.now()
     }
     //TODO: at pre save we should handel it
     // TODO: check min (starttime+examLength or endDate-startTime)
