@@ -5,6 +5,7 @@ const examDelete = require('./exam.delete');
 const examUpdate = require('./exam.update');
 const addMemeber = require('./exam.addUser');
 const editMemeber = require('./exam.editUser');
+const examAnswer = require('./uploadFilwAnswerExam');
 
 
 
@@ -15,5 +16,6 @@ app.use('/', examDelete);
 app.use('/', examUpdate);
 app.use('/', addMemeber);
 app.use('/', editMemeber);
+app.use('/', examAnswer);
 
 module.exports = app;
