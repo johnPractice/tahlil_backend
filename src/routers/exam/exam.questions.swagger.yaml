@@ -27,13 +27,13 @@ get:
                       type: object
                       properties:
                         question:
-                          $ref: '../../../swagger.config.yaml#/components/schemas/question/properties/question'
+                          $ref: '../../swagger.config.yaml#/components/schemas/question/properties/question'
                         imageQuestion:
-                          $ref: '../../../swagger.config.yaml#/components/schemas/question/properties/imageQuestion'
+                          $ref: '../../swagger.config.yaml#/components/schemas/question/properties/imageQuestion'
                         type:
-                          $ref: '../../../swagger.config.yaml#/components/schemas/type'
+                          $ref: '../../swagger.config.yaml#/components/schemas/type'
                         options:
-                          $ref: '../../../swagger.config.yaml#/components/schemas/question/properties/options'
+                          $ref: '../../swagger.config.yaml#/components/schemas/question/properties/options'
                     grade:
                       type: number
               user_examEndTime:
