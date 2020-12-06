@@ -3,20 +3,19 @@
 const checkExamTime = async (req, res, next) => {
     try {
         const currentTime = Date.now();
-        console.log("currentTime: " + currentDate);
         const { user, exam } = req;
 
         if (currentTime < exam.startDate)
-            throw { message: "زمان شروع آزمون فرا نرسیده است.", code: 403 };
-        if (currentTime >= exam.startDate)
-            throw { message: "زمان آزمون به پایان رسیده است.", code: 403 };
+            throw { message: "زمان شروع آزمون فرا نرسیده است", code: 403 };
+        if (currentTime >= exam.endDate)
+            throw { message: "زمان آزمون به پایان رسیده است", code: 403 };
 
         const user_exam = await user_examModel.findOne({ user: user._id, exam: exam._id });
         if (user_exam) {
             //user started the exam before
             const endTime = await user_exam.endTime;
             if (currentTime >= endTime)
-                throw { message: "زمان شما در آزمون به پایان رسیده است.", code: 403 };
+                throw { message: "زمان شما در آزمون به پایان رسیده است", code: 403 };
             req.user_examEndTime = endTime;
 
         } else {
