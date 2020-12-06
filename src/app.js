@@ -40,6 +40,13 @@ const initiate = async() => {
     app.use('/bank', bankRouts);
     app.use('/exam', examRouts);
     app.use('/public', publicApis);
+    app.use(function(err, req, res, next) {
+        // logic
+        if (err) {
+            res.status(400).json({ error: err.toString() });
+        }
+        next();
+    });
 
     // 404 page
     app.get('*', (req, res) => {
@@ -49,6 +56,6 @@ const initiate = async() => {
         // res.json('error')
     });
     return app;
-}
+};
 
 module.exports = initiate;

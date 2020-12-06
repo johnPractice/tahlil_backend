@@ -6,6 +6,7 @@ const examUpdate = require('./exam.update');
 const addMemeber = require('./exam.addUser');
 const editMemeber = require('./exam.editUser');
 const examQuestions = require('./exam.questions');
+const examAnswer = require('./uploadFilwAnswerExam');
 
 
 
@@ -17,5 +18,6 @@ app.use('/', examUpdate);
 app.use('/', addMemeber);
 app.use('/', editMemeber);
 app.use('/', examQuestions);
+app.use('/', examAnswer);
 
 module.exports = app;
