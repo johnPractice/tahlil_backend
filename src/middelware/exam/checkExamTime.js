@@ -1,6 +1,6 @@
 ﻿const user_examModel = require('../../db/model/user-examModel');
 
-const checkExamTime = async (req, res, next){
+const checkExamTime = async (req, res, next) => {
     try {
         const currentTime = Date.now();
         console.log("currentTime: " + currentDate);
@@ -35,3 +35,4 @@ const checkExamTime = async (req, res, next){
         res.status(err.code).json({ error: err.message });
     }
 }
+module.exports = checkExamTime;
