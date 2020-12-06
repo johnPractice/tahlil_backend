@@ -1,0 +1,13 @@
+get:
+  summary: get time server
+  tags:
+    - "PublicApi"
+  consumes:
+       - application/json
+  responses:
+    '200':
+      description: return time server
+      content:
+        application/json:
+          schema:
+            type: object

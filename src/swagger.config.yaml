@@ -87,6 +87,8 @@ paths:
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
+  /public/time:
+    $ref: './routers/publicApi/getTime.swagger.yaml' 
 
 
 
