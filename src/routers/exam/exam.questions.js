@@ -6,7 +6,7 @@ const checkQuestionId = require('../../middelware/exam/checkQuestionId');
 
 const rout = require('express').Router();
 
-rout.get('/:examId/questions', auth, checkExamId, checkQuestionId, checkClassAccess, checkExamTime, async (req, res) => {
+rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTime, async (req, res) => {
     try {
         const { exam, user_examEndTime } = req;
 
