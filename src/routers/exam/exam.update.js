@@ -22,7 +22,7 @@ rout.put('/', auth, async(req, res) => {
             if (info[use] && findExam[use] != info[use]) findExam[use] = info[use];
         });
         await findExam.save();
-        res.json({ "message": "ازمون با موفیقت تغییر یافت" });
+        res.json({ "message": "ازمون با موفقیت تغییر یافت" });
 
     } catch (e) {
         console.log(e);

@@ -1,0 +1,13 @@
+get:
+  summary: get app file
+  tags:
+    - "PublicApi"
+  consumes:
+       - application/json
+  responses:
+    '200':
+      description: return app file
+      content:
+        application/json:
+          schema:
+            type: object

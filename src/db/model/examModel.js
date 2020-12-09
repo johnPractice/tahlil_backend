@@ -31,8 +31,10 @@ const examSchema = new Schema({
             validate(value) {
                 if (value)
                     mongoose.Types.ObjectId(value);
-
             }
+        },
+        grade: {
+            type: Number
         }
     }],
     members: [{
