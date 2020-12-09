@@ -73,9 +73,17 @@ examSchema.pre('save', async function(next) {
     const startDate = (new Date(exam.startDate).getTime());
     const endDate = (new Date(exam.endDate).getTime());
 
-    if (exam.isModified('startDate') || exam.isModified('endDate')) {
+    if (exam.isModified('questions')) {
+        const currentDate = (new Date()).getTime();
+        if (currentDate >= startDate) {
+            const err = new Error();
+            err.error = "شما قادر به تغییر سوالات پس از برگزاری آزمون نیستید";
+            next(err);
+        }
+    }
+    if (exam.isModified('startDate') || exam.isModified('endDate') || exam.isModified('examLength')) {
         if (
-            (startDate > endDate) ||
+            (startDate >= endDate) ||
             (parseFloat(endDate - startDate) < (60 * 1000 * exam.examLength))
         ) {
             const error = new Error();
