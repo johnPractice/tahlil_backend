@@ -129,7 +129,7 @@ questionSchema.methods.toJSON = function() {
     delete questionObject.updatedAt;
     delete questionObject.__v;
     delete questionObject.owner;
-    if (questionObject.answers.length > 0) {
+    if (questionObject.answers && questionObject.answers.length > 0) {
         questionObject.answers.forEach(item => {
             delete item._id;
         });

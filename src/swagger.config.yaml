@@ -84,9 +84,15 @@ paths:
   /class/{classId}/exams/{examId}:
     $ref: './routers/class/exam/exam.examId.swagger.yaml'
 
+################### Exam Attendance #####################
+  /exam/{examId}/questions:
+    $ref: './routers/exam/exam.questions.swagger.yaml'
+
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
+  /public/time:
+    $ref: './routers/publicApi/getTime.swagger.yaml' 
 
 
 
@@ -129,6 +135,10 @@ components:
           type: string
         ownerFullname:
           type: string
+        isOwned:
+          type: boolean
+        isPrivate:
+          type: boolean
 
     question:
       type: object
@@ -155,9 +165,11 @@ components:
         public:
           type: boolean
         imageQuestion:
-          type: string 
+          type: string
+          format: base64
         imageAnswer:
-          type: string 
+          type: string
+          format: base64
         question:
           type: string
         answers:
