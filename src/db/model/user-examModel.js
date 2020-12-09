@@ -12,10 +12,8 @@ const user_examSchema = new Schema({
         required: [true, 'ازمون باید مقدار معتبری داشته باشد']
     },
     answers: [{
-        question: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Question',
-            required: true
+        questionIndex: {
+            type: Number
         },
         userAnswer: {
             type: String,

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const user_examModel = require('./user-examModel');
+const questionModel = require('./questionModel');
 const Schema = mongoose.Schema;
 const examSchema = new Schema({
     owner: {
@@ -26,14 +27,10 @@ const examSchema = new Schema({
         // value as second
     },
     questions: [{
-        question: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Question",
-            validate(value) {
-                if (value)
-                    mongoose.Types.ObjectId(value);
-            }
+        index: {
+            type: Number
         },
+        question: {},
         grade: {
             type: Number
         }
@@ -77,7 +74,7 @@ examSchema.pre('save', async function(next) {
     if (exam.isModified('startDate') || exam.isModified('endDate') || exam.isModified('examLength')) {
         if (
             (startDate >= endDate) ||
-            (parseFloat(endDate - startDate) < (60 * 1000 * exam.examLength))
+            ((endDate - startDate) < (60 * 1000 * exam.examLength))
         ) {
             const error = new Error();
             error.error = "تاریخ امتحان مقادیر معتبری نیست";
@@ -105,14 +102,63 @@ examSchema.methods.toJSON = function() {
     delete userObject.useInClass;
     delete userObject.owner;
 
-    if (questions) {
-        for (let i = 0; i < questions.length; i++) {
-            delete userObject.questions[i]._id;
-            userObject.questions[i].question = questions[i].question.toJSON();
-        }
-    }
-
     return userObject;
+};
+examSchema.methods.setQuestions = async function (questions) {
+
+    if (!questions || questions.length == 0)
+        throw { message: "Invalid questions", code: 400 };
+
+    const exam = this;
+    exam.questions = [];
+    let index = 1;
+
+    await questions.forEach(async (obj) => {
+        let questionId = obj.question;
+        let { grade } = obj;
+
+        if (!questionId)
+            throw { message: "Invalid questionId", code: 400 };
+        let question = await questionModel.findById(questionId);
+        if (!question)
+            throw { message: "Invalid questionId", code: 400 };
+        if (!grade || typeof grade != 'number')
+            throw { message: "Invalid question grade", code: 400 };
+
+        let clonedQuestion = question.toJSON();
+        delete clonedQuestion._id;
+        delete clonedQuestion.id;
+        delete clonedQuestion.public;
+
+        exam.questions.push({
+            index,
+            question: clonedQuestion,
+            grade
+        });
+        index = index + 1;
+    });
+    await exam.save();
+};
+examSchema.methods.getQuestions = function (selectProperties) {
+    if (typeof selectProperties != 'string')
+        throw { message: "selectProperties should be a string", code: 503 };
+
+    const properties = selectProperties.split(" ");
+
+    const results = this.questions.map(obj => {
+        let newQuestion = {};
+        properties.forEach(property => {
+            if (obj.question[property])
+                newQuestion[property] = obj.question[property];
+        });
+        return {
+            index: obj.index,
+            question: newQuestion,
+            grade: obj.grade
+        };
+    });
+
+    return results;
 };
 
 examSchema.pre('deleteOne', { document: true, query: false }, async function (next) {

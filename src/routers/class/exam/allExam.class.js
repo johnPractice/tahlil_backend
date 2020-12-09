@@ -26,8 +26,7 @@ rout.get('/:classId/exams/:examId', auth, checkClassId, checkClassAdmin, async (
         const { Class } = req;
         await Class.populate({
             path: 'exams',
-            match: { _id: req.params.examId },
-            populate: { path: 'questions.question' }
+            match: { _id: req.params.examId }
         }).execPopulate();
 
         if (Class.exams.length == 0)
