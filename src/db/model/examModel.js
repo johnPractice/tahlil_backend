@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const user_examModel = require('./user-examModel');
 const Schema = mongoose.Schema;
 const examSchema = new Schema({
     owner: {
@@ -37,16 +38,6 @@ const examSchema = new Schema({
             type: Number
         }
     }],
-    members: [{
-        member: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-        grade: {
-            type: Number,
-            default: null
-        }
-    }],
     useInClass: {
         type: String,
         required: [true, 'کلاس باید وارد شود']
@@ -57,6 +48,11 @@ const examSchema = new Schema({
     autoCreate: true,
     autoIndex: true,
     timestamps: true,
+});
+examSchema.virtual('attendees', {
+    ref: 'UserExam',
+    localField: '_id',
+    foreignField: 'exam'
 });
 
 // const checkCLass = async({ id, owner }) => {
@@ -75,11 +71,8 @@ examSchema.pre('save', async function(next) {
 
     if (exam.isModified('questions')) {
         const currentDate = (new Date()).getTime();
-        if (currentDate >= startDate) {
-            const err = new Error();
-            err.error = "شما قادر به تغییر سوالات پس از برگزاری آزمون نیستید";
-            next(err);
-        }
+        if (currentDate >= startDate)
+            throw { message: "شما قادر به تغییر سوالات پس از برگزاری آزمون نیستید" };
     }
     if (exam.isModified('startDate') || exam.isModified('endDate') || exam.isModified('examLength')) {
         if (
@@ -121,6 +114,12 @@ examSchema.methods.toJSON = function() {
 
     return userObject;
 };
+
+examSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+
+    await user_examModel.deleteMany({ exam: this._id });
+
+});
 
 const examModel = mongoose.model('Exam', examSchema);
 module.exports = examModel;
