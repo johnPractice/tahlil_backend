@@ -118,7 +118,7 @@ questionSchema.statics.findByOwner = async function({ owner, page = 1, limit = 1
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
-    if (!question || !question.length > 0) throw new Error('nothing found');
+    if (!question/* || !question.length > 0*/) throw new Error('nothing found');
     return question;
 };
 
