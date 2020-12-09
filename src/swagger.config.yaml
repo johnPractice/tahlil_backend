@@ -93,6 +93,8 @@ paths:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
   /public/time:
     $ref: './routers/publicApi/getTime.swagger.yaml' 
+  /public/download/app:
+    $ref: './routers/publicApi/downloadApp.swagger.yaml' 
 
 
 
