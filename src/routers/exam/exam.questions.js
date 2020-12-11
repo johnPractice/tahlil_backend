@@ -2,17 +2,21 @@ const auth = require('../../middelware/auth');
 const checkExamId = require('../../middelware/exam/checkExamId');
 const checkClassAccess = require('../../middelware/class/checkClassAccess');
 const checkExamTime = require('../../middelware/exam/checkExamTime');
-const checkQuestionId = require('../../middelware/exam/checkQuestionId');
 
 const rout = require('express').Router();
 
 rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTime, async (req, res) => {
     try {
-        const { exam, user_examEndTime } = req;
+        const { exam, user_exam, user_examEndTime } = req;
 
-        await exam.populate('questions.question', 'question imageQuestion type options').execPopulate();
+        const questions = exam.getQuestions("question imageQuestion type options");
 
-        res.status(200).json({ questions: exam.questions, user_examEndTime });
+        user_exam.answers.forEach(answer => {
+            let questionObj = questions.find(obj => obj.index == answer.questionIndex);
+            questionObj.userAnswer = answer.userAnswer;
+        });
+
+        res.status(200).json({ questions, user_examEndTime });
 
     } catch (err) {
         //console.log(err)

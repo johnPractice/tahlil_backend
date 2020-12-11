@@ -136,7 +136,9 @@ classSchema.pre('deleteOne', { document: true, query: false }, async function (n
     const Class = this;
 
     //delete
-    await examModel.deleteMany({ useInClass: Class.classId });
+    //await examModel.deleteMany({ useInClass: Class.classId });
+    await Class.populate('exams').execPopulate();
+    await Class.exams.forEach(async (exam) => await exam.deleteOne());
 
     await classNoteModel.deleteMany({ _id: { $in: Class.notes } });
     

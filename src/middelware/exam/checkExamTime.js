@@ -17,6 +17,7 @@ const checkExamTime = async (req, res, next) => {
             if (currentTime >= endTime)
                 throw { message: "زمان شما در آزمون به پایان رسیده است", code: 403 };
             req.user_examEndTime = endTime;
+            req.user_exam = user_exam;
 
         } else {
             //user hasn't started the exam
@@ -26,6 +27,7 @@ const checkExamTime = async (req, res, next) => {
             });
             await newUser_exam.save();
             req.user_examEndTime = await newUser_exam.endTime;
+            req.user_exam = newUser_exam;
         }
         next();
     } catch (err) {
