@@ -23,13 +23,13 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
         if (!foundAnswer) {
             const newAnswer = {
                 questionIndex: questionObj.index,
-                userAnswer: answer,
+                userAnswerFile: answer,
                 answerGrade: null
             };
             user_exam.push(newAnswer);
 
         } else {
-            foundAnswer.userAnswer = answer;
+            foundAnswer.userAnswerFile = answer;
         }
         await user_exam.save();
 
