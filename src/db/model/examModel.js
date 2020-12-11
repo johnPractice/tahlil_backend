@@ -65,11 +65,14 @@ examSchema.pre('save', async function(next) {
     const exam = this;
     const startDate = (new Date(exam.startDate).getTime());
     const endDate = (new Date(exam.endDate).getTime());
+    const currentDate = (new Date()).getTime();
 
-    if (exam.isModified('questions')) {
-        const currentDate = (new Date()).getTime();
-        if (currentDate >= startDate)
-            throw { message: "شما قادر به تغییر سوالات پس از برگزاری آزمون نیستید" };
+    if (exam.isModified('startDate')) {
+        if (startDate < currentDate) {
+            const error = new Error();
+            error.error = "زمان شروع آزمون باید زمانی در آینده باشد";
+            next(error);
+        }
     }
     if (exam.isModified('startDate') || exam.isModified('endDate') || exam.isModified('examLength')) {
         if (
@@ -85,6 +88,11 @@ examSchema.pre('save', async function(next) {
         //     error.error = "تاریخ امتحان مقادیر معتبری نیست";
         //     next(error);
         // }
+    }
+    if (exam.isModified('questions')) {
+
+        if (currentDate >= startDate)
+            throw { message: "شما قادر به تغییر سوالات پس از برگزاری آزمون نیستید" };
     }
 
     next();

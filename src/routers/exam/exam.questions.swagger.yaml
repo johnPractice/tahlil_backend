@@ -23,6 +23,8 @@ get:
                 items:
                   type: object
                   properties:
+                    Index:
+                      type: integer
                     question:
                       type: object
                       properties:
@@ -36,6 +38,11 @@ get:
                           $ref: '../../swagger.config.yaml#/components/schemas/question/properties/options'
                     grade:
                       type: number
+                    answerText:
+                      type: string
+                    answerFile:
+                      type: string
+                      format: urlPath
               user_examEndTime:
                 type: string
                 format: date-time

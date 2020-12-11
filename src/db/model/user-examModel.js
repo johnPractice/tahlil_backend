@@ -15,11 +15,11 @@ const user_examSchema = new Schema({
         questionIndex: {
             type: Number
         },
-        userAnswerTest: {
+        answerText: {
             type: String,
             default: null
         },
-        userAnswerFile: {
+        answerFile: {
             type: String,
             default: null
         },
