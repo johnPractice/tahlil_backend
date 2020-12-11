@@ -83,6 +83,14 @@ questionSchema.pre('save', async function(next) {
         }
     }
     if (!question.hardness) throw new Error('hardness must be valid thing');
+    if (question.isModified('type')) {
+        if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
+            if (question.type == "TEST") {
+                if (question.options.length != 4) throw new Error("test question must have 4 options");
+                if (question.type == "MULTICHOISE" && question.options.length < 2) throw new Error("multi choise question must have atleas 2 option");
+            }
+        }
+    }
     if (question.public) {
         const bank = new Bank({ question: question.question, type: question.type, qId: question._id, hardness: question.hardness, course: question.course, base: question.base, chapter: question.chapter, owner: question.owner, imageQuestion: question.imageQuestion, imageAnswer: question.imageAnswer });
         if (question.answers) {
@@ -118,7 +126,7 @@ questionSchema.statics.findByOwner = async function({ owner, page = 1, limit = 1
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
-    if (!question/* || !question.length > 0*/) throw new Error('nothing found');
+    if (!question /* || !question.length > 0*/ ) throw new Error('nothing found');
     return question;
 };
 

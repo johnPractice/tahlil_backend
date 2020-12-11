@@ -12,12 +12,14 @@ const user_examSchema = new Schema({
         required: [true, 'ازمون باید مقدار معتبری داشته باشد']
     },
     answers: [{
-        question: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Question',
-            required: true
+        questionIndex: {
+            type: Number
         },
-        userAnswer: {
+        userAnswerTest: {
+            type: String,
+            default: null
+        },
+        userAnswerFile: {
             type: String,
             default: null
         },
@@ -35,7 +37,7 @@ const user_examSchema = new Schema({
     // TODO: check min (starttime+examLength or endDate-startTime)
 });
 
-user_examSchema.virtual('endTime').get(async function () {
+user_examSchema.virtual('endTime').get(async function() {
     if (!this.startTime)
         return this.startTime;
 

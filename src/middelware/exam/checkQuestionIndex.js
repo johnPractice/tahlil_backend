@@ -1,22 +1,19 @@
 const questionModel = require("../../db/model/questionModel");
 
-const checkQuestionId = async (req, res, next) => {
+const checkQuestionIndex = async (req, res, next) => {
     try {
         const { exam } = req;
-        const { questionId } = req.params;
+        const { questionIndex } = req.params;
 
-        if (!questionId)
+        if (!questionIndex)
             throw { message: "Invalid questionId", code: 400 };
 
         if (exam) {
-            const foundObj = exam.questions.find(obj => obj.question.equals(questionId));
+            const foundObj = exam.questions.find(obj => obj.index == questionIndex);
             if (!foundObj)
                 throw { message: "Question and Exam don't match", code: 400 };
-            const question = questionModel.findById(foundObj.question);
-            if (!question)
-                throw { message: "Invalid questionId", code: 400 };
 
-            req.question = question;
+            req.questionObj = foundObj;
         }
         next();
     } catch (err) {
@@ -25,4 +22,4 @@ const checkQuestionId = async (req, res, next) => {
         res.status(err.code).json({ error: err.message });
     }
 };
-module.exports = checkQuestionId;
+module.exports = checkQuestionIndex;
