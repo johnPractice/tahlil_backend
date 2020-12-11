@@ -1,0 +1,34 @@
+get:
+  summary: Get status of saved answers
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    questionIndex:
+                      type: integer
+                    hasAnswerText:
+                      type: boolean
+                    hasAnswerFile:
+                      type: boolean
+              user_examEndTime:
+                type: string
+                format: date-time
