@@ -126,9 +126,11 @@ userSchema.methods.genrateAuth = async function() {
             _id: user._id.toString()
         }, constants.jwtSecret);
         // add to user token
-        user.tokens = user.tokens.concat({
+        user.tokens.push({
             token
         });
+        if (user.tokens.length > 10)
+            user.tokens.shift();
         await user.save();
         return token;
     } catch (e) {
@@ -137,22 +139,21 @@ userSchema.methods.genrateAuth = async function() {
 };
 
 //send mail to user
-userSchema.methods.sendMail = async function(mailOptions) {
-    try {
-        if (!mailOptions.subject || !mailOptions.text)
-            throw new Error('subject or text missing');
-        if (!mailOptions.from)
-            mailOptions.from = constants.mailUser;
+userSchema.methods.sendMail = async function (mailOptions) {
+    mailOptions = JSON.parse(JSON.stringify(mailOptions));
+    if (!mailOptions.subject || !mailOptions.text)
+        throw new Error('subject or text missing');
+    if (!mailOptions.from)
+        mailOptions.from = constants.mailUser;
 
-        //set recieving email address and text
-        mailOptions.to = this.email;
-        mailOptions.text = mailOptions.text.replace('(username)', this.username.toString());
+    //set recieving email address and text
+    mailOptions.to = this.email;
+    mailOptions.text = mailOptions.text.replace('(username)', this.username.toString());
 
-        mailer.sendMail(mailOptions, (err, info) => {
-            if (err) throw err;
-            console.log('Email Sent: ' + info.response);
-        });
-    } catch (e) { console.log(e); }
+    mailer.sendMail(mailOptions, (err, info) => {
+        if (err) throw err;
+        console.log('Email Sent: ' + info.response);
+    });
 };
 
 // methode for returning json object

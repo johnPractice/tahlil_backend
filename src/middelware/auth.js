@@ -16,6 +16,13 @@ const auth = async(req, res, next) => {
             });
             if (!user) throw new Error('not found');
 
+            //for forgot password
+            if (req.isForgotPassword===true && decoded.iat) {
+                req.tokenExpiryDate = new Date(1000*decoded.iat + 5*60*1000);
+                user.tokens = user.tokens.filter((obj) => obj.token != token);
+                await user.save();
+            }
+
             req.token = token;
             req.user = user;
             next();
