@@ -52,5 +52,20 @@ user_examSchema.virtual('endTime').get(async function() {
     return this.exam.endDate;
 });
 
+user_examSchema.methods.toJSON = function() {
+    const userExamObject = this.toObject();
+    delete userExamObject.createdAt;
+    delete userExamObject.updatedAt;
+    delete userExamObject._id;
+    delete userExamObject.__v;
+    if (userExamObject.answers.length) {
+        userExamObject.answers.forEach(answer => {
+            if (answer.answerFile) answer.answerFile = answer.answerFile.replace("\\", "/");
+        });
+    }
+    return userExamObject;
+
+};
+
 const user_examModel = mongoose.model('UserExam', user_examSchema);
 module.exports = user_examModel;
