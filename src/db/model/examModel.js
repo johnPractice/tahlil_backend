@@ -100,8 +100,6 @@ examSchema.pre('save', async function(next) {
 });
 examSchema.methods.toJSON = function() {
     // this refer to clas
-    const questions = this.questions;
-
     const userObject = this.toObject();
     delete userObject.createdAt;
     delete userObject.updatedAt;
@@ -138,7 +136,7 @@ examSchema.methods.setQuestions = async function (questions) {
         delete clonedQuestion.id;
         delete clonedQuestion.public;
 
-        exam.questions.push({
+        await exam.questions.push({
             index,
             question: clonedQuestion,
             grade
@@ -148,6 +146,8 @@ examSchema.methods.setQuestions = async function (questions) {
     await exam.save();
 };
 examSchema.methods.getQuestions = function (selectProperties) {
+    //same as:  exam.questions.select("property1 property2 ... ");
+
     if (typeof selectProperties != 'string')
         throw { message: "selectProperties should be a string", code: 503 };
 
