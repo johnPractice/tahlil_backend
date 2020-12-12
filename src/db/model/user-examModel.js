@@ -52,6 +52,31 @@ user_examSchema.virtual('endTime').get(async function() {
     return this.exam.endDate;
 });
 
+//methods
+user_examSchema.methods.getQuestionsWithUserAnswers = async function (options) {
+    await this.populate('exam', 'questions').execPopulate();
+    let selectProperties = "question imageQuestion type options";
+    if (options && options.getQuestionAnswers === true)
+        selectProperties += " answers";
+    const questions = this.exam.getQuestions(selectProperties);
+
+    this.answers.forEach(answer => {
+        let questionObj = questions.find(obj => obj.index == answer.questionIndex);
+        questionObj.answerText = answer.answerText;
+        questionObj.answerFile = answer.answerFile;
+    });
+
+    return questions;
+     /* returnSchema:[{
+     *      index,
+     *      question,
+     *      grade,
+     *      answerText,   (can be undefined)
+     *      answerFile    (can be undefined)
+     * }]
+     */
+};
+
 user_examSchema.methods.toJSON = function() {
     const userExamObject = this.toObject();
     delete userExamObject.createdAt;
