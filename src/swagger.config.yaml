@@ -94,6 +94,10 @@ paths:
   /exam/{examId}/questions/status:
     $ref: './routers/exam/exam.questions.status.swagger.yaml'
 
+  /exam/{examId}/questions/review:
+    $ref: './routers/exam/exam.questions.review.swagger.yaml'
+
+
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
@@ -309,4 +313,27 @@ components:
               items:
                 type: object
 
-        
+    ExamQuestion&Answer:
+      type: object
+      properties:
+        index:
+          type: integer
+        question:
+          type: object
+          properties:
+            question:
+              $ref: '#/components/schemas/question/properties/question'
+            imageQuestion:
+              $ref: '#/components/schemas/question/properties/imageQuestion'
+            type:
+              $ref: '#/components/schemas/type'
+            options:
+              $ref: '#/components/schemas/question/properties/options'
+        grade:
+          type: number
+        answerText:
+          type: string
+        answerFile:
+          type: string
+          format: urlPath
+

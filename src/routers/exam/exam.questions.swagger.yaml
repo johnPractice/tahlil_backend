@@ -21,28 +21,7 @@ get:
               questions:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    Index:
-                      type: integer
-                    question:
-                      type: object
-                      properties:
-                        question:
-                          $ref: '../../swagger.config.yaml#/components/schemas/question/properties/question'
-                        imageQuestion:
-                          $ref: '../../swagger.config.yaml#/components/schemas/question/properties/imageQuestion'
-                        type:
-                          $ref: '../../swagger.config.yaml#/components/schemas/type'
-                        options:
-                          $ref: '../../swagger.config.yaml#/components/schemas/question/properties/options'
-                    grade:
-                      type: number
-                    answerText:
-                      type: string
-                    answerFile:
-                      type: string
-                      format: urlPath
+                  $ref: '../../swagger.config.yaml#/components/schemas/ExamQuestion&Answer'
               user_examEndTime:
                 type: string
                 format: date-time
