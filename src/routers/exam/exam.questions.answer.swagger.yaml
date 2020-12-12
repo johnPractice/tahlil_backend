@@ -1,0 +1,90 @@
+post:
+  summary: Post a question answer
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  - in: path
+    name: questionIndex
+    required: true
+    schema:
+      type: integer
+  - in: query
+    description: Answer Text
+    name: answer
+    schema:
+      type: string
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            answer:
+              type: string
+              format: base64
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              answerText:
+                type: string
+              answerFile:
+                type: string
+                format: urlPath
+              user_examEndTime:
+                type: string
+                format: date-time
+delete:
+  summary: Delete a question answer
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  - in: path
+    name: questionIndex
+    required: true
+    schema:
+      type: integer
+  - in: query
+    description: set to 'true' to delete answer file
+    name: deleteFile
+    schema:
+      type: boolean
+  - in: query
+    description: set to 'true' to delete answer Text
+    name: deleteText
+    schema:
+      type: boolean
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              answerText:
+                type: string
+              answerFile:
+                type: string
+                format: urlPath
+              user_examEndTime:
+                type: string
+                format: date-time

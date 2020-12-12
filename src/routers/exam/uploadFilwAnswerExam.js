@@ -10,9 +10,10 @@ const checkQuestionIndex = require('../../middelware/exam/checkQuestionIndex');
 
 rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, uploadAnswer.single('answer'), async(req, res) => {
     try {
-        const answer = (req.fileName) || req.query.answer;
+        const answerFile = req.fileName;
+        const answerText =  req.query.answer;
         // TODO: check exam and question to save answer path
-        if (!answer) {
+        if (!answerFile && !answerText) {
             res.status(400).json({ "error": "مشکلی رخ داده است" });
             return;
         }
@@ -23,36 +24,59 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
         if (!foundAnswer) {
             const newAnswer = {
                 questionIndex: questionObj.index,
-                userAnswerFile: answer,
                 answerGrade: null
             };
-            user_exam.push(newAnswer);
+            if (answerText)
+                newAnswer.answerText = answerText;
+            if (answerFile)
+                newAnswer.answerFile = answerFile;
+            user_exam.answers.push(newAnswer);
 
         } else {
-            foundAnswer.userAnswerFile = answer;
+            if (answerText)
+                foundAnswer.answerText = answerText;
+            if (answerFile)
+                foundAnswer.answerFile = answerFile;
         }
         await user_exam.save();
-
-        //const userExam = await (await userExamModel.findOne({ user: user._id, exam: exam._id }))
-        //    .select('answers')
-        //    .where('question')
-        //    .equals(question._id);
-        //if (!user_examEndTime) {
-        //    const newAnswer = await (await userExamModel.findOne({ user: user._id, exam: exam._id }));
-        //    const newUserAnswer = { question: question._id, answer: answer };
-        //    newAnswer.answers.push(newUserAnswer);
-        //    await newUserAnswer.save();
-        //} else {
-        //    userExam.answers.answer = answer;
-        //    await userExam.save();
-
-        //}
-        // .populate({ path: 'answers.question' });
-
-        res.status(200).json({ "message": "ok", answer, user_examEndTime });
+        res.status(200).json({ answerText: foundAnswer.answerText, answerFile: foundAnswer.answerFile, user_examEndTime });
 
     } catch (e) {
         res.json(e);
+    }
+});
+rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, async (req, res) => {
+    try {
+        const { questionObj, user_exam, user_examEndTime } = req;
+        const { deleteFile, deleteText } = req.query;
+
+        const foundAnswer = user_exam.answers.find(answer => answer.questionIndex == questionObj.index);
+        if (!foundAnswer)
+            throw { message: "جوابی برای حذف وجود ندارد", code: 400 };
+
+        let isDeleted = false;
+        if (deleteFile == 'true') {
+            foundAnswer.answerFile = null;
+            isDeleted = true;
+        }
+        //TODO: delete the file from folder
+
+        if (deleteText == 'true') {
+            foundAnswer.answerText = null;
+            isDeleted = true;
+        }
+
+        await user_exam.save();
+
+        if (!isDeleted)
+            throw { message: "deleteText & deleteFile are both false", code: 400 };
+
+        res.status(200).json({ answerText: foundAnswer.answerText, answerFile: foundAnswer.answerFile, user_examEndTime });
+
+    } catch (err) {
+        if (!err.code || err.code >= 600)
+            err.code = 400;
+        res.status(err.code).json({ error: err.message });
     }
 });
 module.exports = rout;

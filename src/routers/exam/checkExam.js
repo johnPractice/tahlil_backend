@@ -1,35 +1,38 @@
 const rout = require('express').Router();
-const userExamModel = require('../../db/model/user-examModel');
 const auth = require('../../middelware/auth');
 const checkExamId = require('../../middelware/exam/checkExamId');
 const checkClassAccess = require('../../middelware/class/checkClassAccess');
 const checkExamTime = require('../../middelware/exam/checkExamTime');
-const checkQuestionIndex = require('../../middelware/exam/checkQuestionIndex');
 
 
-rout.post('/:examId/check', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, async(req, res) => {
+rout.get('/:examId/questions/status', auth, checkExamId, checkClassAccess, checkExamTime, async(req, res) => {
     try {
-        const { questionObj, user_exam, user_examEndTime, exam, user } = req;
-        if (!exam || !user) {
-            res.status(400).json({ "error": "شما مجاز به دسترسی به این ادرس نیستید" });
-            return;
-        }
-        const userExam = await userExamModel.findOne({ user: user._id, exam });
-        if (!userExam || !userExam.answers.length) {
-            res.status(400).json({ "error": "مشکلی رخ داده است" });
-            return;
-        }
-        const checkedItem = [];
-        userExam.answers.forEach(answer => {
-            const temp = {};
-            temp.question = answer.questionIndex;
-            if (answer.userAnswerFile || answer.userAnswerTest) {
-                temp.answred = true;
-            } else temp.answred = false;
-            checkedItem.push(temp);
-        });
+        const { user_exam, user_examEndTime, exam } = req;
 
-        res.json({ user_examEndTime, checkedItem });
+        const answers = user_exam.answers;
+        answers.sort((a, b) => a.index - b.index);
+        const questionsCount = exam.questions.length;
+
+        const status = [];
+        let j = 0;
+        for (let i = 1; i <= questionsCount; i++) {
+            let s = {
+                questionIndex: i,
+                hasAnswerText: false,
+                hasAnswerFile: false
+            };
+            let answer = answers[j];
+            if (answer.questionIndex == i) {
+                if (answer.answerText != null)
+                    s.hasAnswerText = true;
+                if (answer.answerFile != null)
+                    s.hasAnswerFile = true;
+                j = j + 1;
+            }
+            status.push(s);
+        }
+        res.json({ status, user_examEndTime });
+
     } catch (e) {
         res.json(e);
     }

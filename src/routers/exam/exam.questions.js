@@ -13,7 +13,8 @@ rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTim
 
         user_exam.answers.forEach(answer => {
             let questionObj = questions.find(obj => obj.index == answer.questionIndex);
-            questionObj.userAnswer = answer.userAnswer;
+            questionObj.answerText = answer.answerText;
+            questionObj.answerFile = answer.answerFile;
         });
 
         res.status(200).json({ questions, user_examEndTime });

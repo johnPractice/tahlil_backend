@@ -88,6 +88,12 @@ paths:
   /exam/{examId}/questions:
     $ref: './routers/exam/exam.questions.swagger.yaml'
 
+  /exam/{examId}/questions/{questionIndex}/answer:
+    $ref: './routers/exam/exam.questions.answer.swagger.yaml'
+
+  /exam/{examId}/questions/status:
+    $ref: './routers/exam/exam.questions.status.swagger.yaml'
+
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
