@@ -24,7 +24,7 @@ const deleteUserMailOptions = {
 const forgotMail = {
     from: constants.mailUser,
     subject: 'forgot password',
-    text: 'Hi newpassword is: (password)'
+    text: 'Hi (username),\n     Please enter the link to get your new password: \nhttp://'+(constants.buildMode ? constants.urlName : constants.usrAddLocal) + '/user/forgot/(resetPasswordToken)'
 };
 
 module.exports = { mailer, signupMailOptions, deleteUserMailOptions, forgotMail };
