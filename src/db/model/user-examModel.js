@@ -53,7 +53,7 @@ user_examSchema.virtual('endTime').get(async function() {
 });
 
 //methods
-user_examSchema.methods.getQuestionsWithUserAnswers = async function (options) {
+user_examSchema.methods.getQuestionsWithUserAnswers = async function(options) {
     await this.populate('exam', 'questions').execPopulate();
     let selectProperties = "question imageQuestion type options";
     if (options && options.getQuestionAnswers === true)
@@ -67,7 +67,7 @@ user_examSchema.methods.getQuestionsWithUserAnswers = async function (options) {
     });
 
     return questions;
-     /* returnSchema:[{
+    /* returnSchema:[{
      *      index,
      *      question,
      *      grade,
@@ -83,11 +83,6 @@ user_examSchema.methods.toJSON = function() {
     delete userExamObject.updatedAt;
     delete userExamObject._id;
     delete userExamObject.__v;
-    if (userExamObject.answers.length) {
-        userExamObject.answers.forEach(answer => {
-            if (answer.answerFile) answer.answerFile = answer.answerFile.replace("\\", "/");
-        });
-    }
     return userExamObject;
 
 };

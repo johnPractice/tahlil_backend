@@ -1,5 +1,4 @@
 const rout = require('express').Router();
-const userExamModel = require('../../db/model/user-examModel');
 const auth = require('../../middelware/auth');
 const uploadAnswer = require('../../middelware/exam/fileUploadingExam');
 const checkExamId = require('../../middelware/exam/checkExamId');
@@ -16,17 +15,15 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
         const questionType = questionObj.question.type;
         const questionOptionsLength = questionObj.question.options.length;
         const answerFile = req.fileName;
-        let answerText =  req.query.answer;
+        let answerText = req.query.answer;
         // TODO: check exam and question to save answer path
         if (!answerFile && !answerText) {
             res.status(400).json({ "error": "مشکلی رخ داده است" });
             return;
-        }
-        else if (answerFile && questionType != 'LONGANSWER') {
+        } else if (answerFile && questionType != 'LONGANSWER') {
             //TODO: delete file
             throw { message: "File upload is for LONGANSWER questions only", code: 400 };
-        }
-        else if (answerText) {
+        } else if (answerText) {
             answerText = questionModel.validateAnswer({
                 answer: answerText,
                 questionType,
@@ -56,7 +53,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
                 foundAnswer.answerText = answerText;
             if (answerFile)
                 foundAnswer.answerFile = answerFile;
-            var response = {
+            response = {
                 answerText: foundAnswer.answerText,
                 answerFile: foundAnswer.answerFile,
                 user_examEndTime
@@ -71,7 +68,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
         res.status(err.code).json({ error: err.message });
     }
 });
-rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, async (req, res) => {
+rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, async(req, res) => {
     try {
         const { questionObj, user_exam, user_examEndTime } = req;
         const { deleteFile, deleteText } = req.query;

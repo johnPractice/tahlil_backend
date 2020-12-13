@@ -10,8 +10,11 @@ const storage = multer.diskStorage({
 
     // By default, multer removes file extensions so let's add them back
     filename: async function(req, file, cb) {
-        const userId = req.user._id;
-        req.fileName = baseRoot + '/uploads/' + await userId + '-' + file.fieldname + await path.extname(file.originalname);
+        if (!req.params.questionIndex || !req.user_exam._id) {
+            cb(null, false);
+            return cb(new Error('some fileds missed!'));
+        }
+        req.fileName = baseRoot + '/uploads/' + await req.user_exam._id + req.params.questionIndex + '-' + file.fieldname + await path.extname(file.originalname);
         cb(null, await req.user._id + '-' + file.fieldname + await path.extname(file.originalname));
     }
 });
