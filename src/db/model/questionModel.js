@@ -103,6 +103,38 @@ questionSchema.pre('save', async function(next) {
     }
     next();
 });
+questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptionsLength }) => {
+    let ans = JSON.parse(JSON.stringify(answer));
+    if (questionType == 'LONGANSWER' || questionType == 'SHORTANSWER') {
+
+        if (typeof ans != 'string')
+            throw { message: "LONGANSWER & SHORTANSWER questions accept only string answers", code: 400 };
+
+    } else if (questionType == 'TEST') {
+
+        ans = parseInt(ans);
+        if (isNaN(ans))
+            throw { message: "Answer for TEST questions must be an integer", code: 400 };
+        if (ans > questionOptionsLength)
+            throw { message: "Answer is more than options length", code: 400 };
+
+    } else if (questionType == 'MULTICHOISE') {
+
+        if(!Array.isArray(ans))
+            var answers = ans.split(',');
+        if (answers.length > questionOptionsLength)
+            throw { message: "Answer length is more than options length", code: 400 };
+        answers = answers.map(answer => {
+            let parsed = parseInt(answer);
+            if (isNaN(parsed))
+                throw { message: "Answer for MULTICHOISE questions must be an integer", code: 400 };
+            if (parsed > questionOptionsLength)
+                throw { message: "Answer is more than options length", code: 400 };
+            return parsed;
+        });
+    }
+    return ans;
+};
 // methode for after delete ==>delete from Bank
 questionSchema.pre('remove', async function(next) {
     const bank = await Bank.findOne({ qId: this._id });

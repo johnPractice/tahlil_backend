@@ -10,7 +10,7 @@ rout.get('/:examId/questions/status', auth, checkExamId, checkClassAccess, check
         const { user_exam, user_examEndTime, exam } = req;
 
         const answers = user_exam.answers;
-        answers.sort((a, b) => a.index - b.index);
+        answers.sort((a, b) => a.questionIndex - b.questionIndex);
         const questionsCount = exam.questions.length;
 
         const status = [];
@@ -22,7 +22,7 @@ rout.get('/:examId/questions/status', auth, checkExamId, checkClassAccess, check
                 hasAnswerFile: false
             };
             let answer = answers[j];
-            if (answer.questionIndex == i) {
+            if (answer && answer.questionIndex == i) {
                 if (answer.answerText != null)
                     s.hasAnswerText = true;
                 if (answer.answerFile != null)
@@ -31,10 +31,13 @@ rout.get('/:examId/questions/status', auth, checkExamId, checkClassAccess, check
             }
             status.push(s);
         }
-        res.json({ status, user_examEndTime });
+        res.status(200).json({ status, user_examEndTime });
 
-    } catch (e) {
-        res.json(e);
+    } catch (err) {
+        console.log(err)
+        if (!err.code || err.code >= 600)
+            err.code = 503;
+        res.status(err.code).json({ error: err.message });
     }
 });
 module.exports = rout;

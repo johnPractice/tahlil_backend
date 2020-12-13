@@ -16,10 +16,12 @@ post:
     schema:
       type: integer
   - in: query
-    description: Answer Text
+    description: AnswerText(int for TEST)(int,int,... for MULTICHOISE)
     name: answer
     schema:
-      type: string
+      oneOf:
+        - type: string
+        - type: integer
   requestBody:
     content:
       multipart/form-data:

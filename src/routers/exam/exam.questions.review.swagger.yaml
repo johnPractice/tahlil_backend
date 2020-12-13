@@ -1,0 +1,35 @@
+get:
+  summary: Review of user answers in examId
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              questions:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '../../swagger.config.yaml#/components/schemas/ExamQuestion&Answer'
+                    - type: object
+                      properties:
+                        question:
+                          type: object
+                          properties:
+                            answers:
+                              $ref: '../../swagger.config.yaml#/components/schemas/question/properties/answers'
+              user_examEndTime:
+                type: string
+                format: date-time
