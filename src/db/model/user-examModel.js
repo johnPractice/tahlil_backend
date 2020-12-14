@@ -57,7 +57,7 @@ user_examSchema.methods.getQuestionsWithUserAnswers = async function(options) {
     await this.populate('exam', 'questions').execPopulate();
     let selectProperties = "question imageQuestion type options";
     if (options && options.getQuestionAnswers === true)
-        selectProperties += " answers";
+        selectProperties += " answers imageAnswer";
     const questions = this.exam.getQuestions(selectProperties);
 
     this.answers.forEach(answer => {

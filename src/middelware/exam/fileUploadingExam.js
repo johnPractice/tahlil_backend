@@ -14,8 +14,9 @@ const storage = multer.diskStorage({
             cb(null, false);
             return cb(new Error('some fileds missed!'));
         }
-        req.fileName = baseRoot + '/uploads/' + await req.user_exam._id + req.params.questionIndex + '-' + file.fieldname + await path.extname(file.originalname);
-        cb(null, await req.user._id + '-' + file.fieldname + await path.extname(file.originalname));
+        const fileName = await req.user_exam._id + '-' + file.fieldname + '-' + req.params.questionIndex + await path.extname(file.originalname);
+        req.fileName = baseRoot + '/uploads/' + fileName;
+        cb(null, fileName);
     }
 });
 const uploadAnswer = multer({

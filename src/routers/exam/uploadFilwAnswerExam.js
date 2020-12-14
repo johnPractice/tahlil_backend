@@ -6,6 +6,7 @@ const checkClassAccess = require('../../middelware/class/checkClassAccess');
 const checkExamTime = require('../../middelware/exam/checkExamTime');
 const checkQuestionIndex = require('../../middelware/exam/checkQuestionIndex');
 const questionModel = require('../../db/model/questionModel');
+const fileDelete = require('../../functions/deleteFile');
 
 
 rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, uploadAnswer.single('answer'), async(req, res) => {
@@ -21,7 +22,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
             res.status(400).json({ "error": "مشکلی رخ داده است" });
             return;
         } else if (answerFile && questionType != 'LONGANSWER') {
-            //TODO: delete file
+            await fileDelete(answerFile);
             throw { message: "File upload is for LONGANSWER questions only", code: 400 };
         } else if (answerText) {
             answerText = questionModel.validateAnswer({
@@ -79,11 +80,11 @@ rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, check
 
         let isDeleted = false;
         if (deleteFile == 'true') {
+            if (foundAnswer.answerFile)
+                await fileDelete(foundAnswer.answerFile);
             foundAnswer.answerFile = null;
             isDeleted = true;
         }
-        //TODO: delete the file from folder
-
         if (deleteText == 'true') {
             foundAnswer.answerText = null;
             isDeleted = true;
