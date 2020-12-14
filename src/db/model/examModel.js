@@ -116,33 +116,36 @@ examSchema.methods.setQuestions = async function (questions) {
         throw { message: "Invalid questions", code: 400 };
 
     const exam = this;
-    exam.questions = [];
     let index = 1;
 
-    await questions.forEach(async (obj) => {
-        let questionId = obj.question;
-        let { grade } = obj;
+    exam.questions = await Promise.all(
+        questions.map(async (obj) => {
+            let questionId = obj.question;
+            let { grade } = obj;
 
-        if (!questionId)
-            throw { message: "Invalid questionId", code: 400 };
-        let question = await questionModel.findById(questionId);
-        if (!question)
-            throw { message: "Invalid questionId", code: 400 };
-        if (!grade || typeof grade != 'number')
-            throw { message: "Invalid question grade", code: 400 };
+            if (!questionId)
+                throw { message: "Invalid questionId", code: 400 };
+            let question = await questionModel.findById(questionId);
+            if (!question)
+                throw { message: "Invalid questionId", code: 400 };
+            if (grade == null)
+                grade = 0;
+            else if (!grade || typeof grade != 'number')
+                throw { message: "Invalid question grade", code: 400 };
 
-        let clonedQuestion = question.toJSON();
-        delete clonedQuestion._id;
-        delete clonedQuestion.id;
-        delete clonedQuestion.public;
+            let clonedQuestion = question.toJSON();
+            delete clonedQuestion._id;
+            delete clonedQuestion.id;
+            delete clonedQuestion.public;
 
-        await exam.questions.push({
-            index,
-            question: clonedQuestion,
-            grade
-        });
-        index = index + 1;
-    });
+            return {
+                index,
+                question: clonedQuestion,
+                grade
+            };
+            index = index + 1;
+        })
+    );
     await exam.save();
 };
 examSchema.methods.getQuestions = function (selectProperties) {
