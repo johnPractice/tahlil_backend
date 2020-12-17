@@ -45,6 +45,10 @@ post:
   responses:
     '200':
       description: exam created
+      content:
+        application/json:
+          schema:
+            $ref: '../../swagger.config.yaml#/components/schemas/Exam'
     '400':
       description: Error
       content:
