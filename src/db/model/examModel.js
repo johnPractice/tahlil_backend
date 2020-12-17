@@ -107,6 +107,8 @@ examSchema.methods.toJSON = function() {
     delete userObject.__v;
     delete userObject.useInClass;
     delete userObject.owner;
+    if (userObject.questions)
+        userObject.questions.forEach(obj => delete obj._id);
 
     return userObject;
 };
@@ -116,10 +118,9 @@ examSchema.methods.setQuestions = async function (questions) {
         throw { message: "Invalid questions", code: 400 };
 
     const exam = this;
-    let index = 1;
 
     exam.questions = await Promise.all(
-        questions.map(async (obj) => {
+        questions.map(async (obj,i) => {
             let questionId = obj.question;
             let { grade } = obj;
 
@@ -134,16 +135,15 @@ examSchema.methods.setQuestions = async function (questions) {
                 throw { message: "Invalid question grade", code: 400 };
 
             let clonedQuestion = question.toJSON();
-            delete clonedQuestion._id;
+            //delete clonedQuestion._id;
             delete clonedQuestion.id;
             delete clonedQuestion.public;
 
             return {
-                index,
+                index: i+1,
                 question: clonedQuestion,
                 grade
             };
-            index = index + 1;
         })
     );
     await exam.save();

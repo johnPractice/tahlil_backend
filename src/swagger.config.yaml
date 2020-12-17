@@ -299,6 +299,8 @@ components:
               items:
                 type: object
                 properties:
+                  index:
+                    type: integer
                   question:
                     allOf:
                       - $ref: '#/components/schemas/question'
@@ -308,10 +310,6 @@ components:
                             type: string
                   grade:
                     type: integer
-            members:
-              type: array
-              items:
-                type: object
 
     ExamQuestion&Answer:
       type: object
