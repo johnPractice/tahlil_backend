@@ -31,7 +31,9 @@ const examSchema = new Schema({
         index: {
             type: Number
         },
-        question: {},
+        question: {
+            type: questionModel.schema
+        },
         grade: {
             type: Number,
             validate: [g => g >= 0 , 'بارم برخی سوالات مقداری نامعتبر است'],
@@ -83,21 +85,10 @@ examSchema.pre('save', async function(next) {
             ((endDate - startDate) < (60 * 1000 * exam.examLength))
         ) {
             const error = new Error();
-            error.error = "تاریخ امتحان مقادیر معتبری نیست";
+            error.error = "تاریخ یا طول امتحان مقادیر معتبری نیست";
             next(error);
         }
-        // else if (new Date(startDate) < nowDate || endDate < nowDate) {
-        //     const error = new Error();
-        //     error.error = "تاریخ امتحان مقادیر معتبری نیست";
-        //     next(error);
-        // }
     }
-    if (exam.isModified('questions')) {
-
-        if (currentDate >= startDate)
-            throw { message: "شما قادر به تغییر سوالات پس از برگزاری آزمون نیستید" };
-    }
-
     next();
 
 });
@@ -111,7 +102,11 @@ examSchema.methods.toJSON = function() {
     delete userObject.useInClass;
     delete userObject.owner;
     if (userObject.questions)
-        userObject.questions.forEach(obj => delete obj._id);
+        userObject.questions.forEach((obj,i) => {
+            delete obj._id;
+            userObject.questions[i].question = (new questionModel(obj.question)).toJSON();
+            delete userObject.questions[i].question.id;
+        });
 
     return userObject;
 };

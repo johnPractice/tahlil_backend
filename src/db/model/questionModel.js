@@ -5,7 +5,7 @@ const questionSchema = Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        //required: true
     },
     question: {
         type: String,
@@ -69,7 +69,11 @@ const questionSchema = Schema({
 questionSchema.pre('save', async function (next) {
     const question = this;
     if (question.isModified('type') || question.isModified('answers') || question.isModified('options'))
-        question.validateFields();
+        questionModel.validateFields({
+            answers: this.answers,
+            options: this.options,
+            type: this.type
+        });
     // for update question  
     const checkBank = Bank.findOne({ qId: question._id });
     if (checkBank) {
@@ -105,8 +109,7 @@ questionSchema.pre('save', async function (next) {
     }
     next();
 });
-questionSchema.methods.validateFields = function () {
-    const { answers, options, type } = this;
+questionSchema.statics.validateFields = function ({ answers, options, type }) {
     let answer = "";
     if (type == 'TEST') {
 
@@ -122,7 +125,7 @@ questionSchema.methods.validateFields = function () {
             throw { message: "MULTICHOISE questions must have at least 2 options", code: 400 };
         if (!answers || answers.length > options.length)
             throw { message: "MULTICHOISE invalid answers", code: 400 };
-        answers.forEach(obj => answer += obj.answer);
+        answers.forEach((obj,i) => answer += ((i!=0)?",":"") + obj.answer);
 
     } else if (type == 'LONGANSWER' || question.type == 'SHORTANSWER') {
 
@@ -133,7 +136,6 @@ questionSchema.methods.validateFields = function () {
             answer = answers[0].answer;
         }
     }
-    
     questionModel.validateAnswer({ answer, questionType: type, questionOptionsLength: options.length });
     return true;
 };
@@ -154,8 +156,12 @@ questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptions
 
     } else if (questionType == 'MULTICHOISE') {
 
-        if(!Array.isArray(ans) && typeof ans == 'string')
+        if (!Array.isArray(ans) && typeof ans == 'string') {
             var answers = ans.split(',');
+            const noDuplicate = [...new Set(answers)];
+            if (noDuplicate.length != answers.length)
+                throw { message: "Duplicate answers", code: 400 };
+        }
         if (answers.length > questionOptionsLength)
             throw { message: "Answer length is more than options length", code: 400 };
         answers = answers.map(answer => {
