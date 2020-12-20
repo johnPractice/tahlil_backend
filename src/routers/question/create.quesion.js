@@ -4,7 +4,7 @@ const auth = require('../../middelware/auth');
 const checkAnswer = require('../../middelware/question/checkAnswer');
 
 
-rout.post('/', auth, checkAnswer, async(req, res) => {
+rout.post('/', auth, /*checkAnswer,*/ async(req, res) => {
     try {
         const user = req.user;
         const info = req.body;

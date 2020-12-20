@@ -66,8 +66,10 @@ const questionSchema = Schema({
 
 
 // methode
-questionSchema.pre('save', async function(next) {
+questionSchema.pre('save', async function (next) {
     const question = this;
+    if (question.isModified('type') || question.isModified('answers') || question.isModified('options'))
+        question.validateFields();
     // for update question  
     const checkBank = Bank.findOne({ qId: question._id });
     if (checkBank) {
@@ -103,6 +105,38 @@ questionSchema.pre('save', async function(next) {
     }
     next();
 });
+questionSchema.methods.validateFields = function () {
+    const { answers, options, type } = this;
+    let answer = "";
+    if (type == 'TEST') {
+
+        if (!options || options.length != 4)
+            throw { message: "TEST questions must have 4 options", code: 400 };
+        if (!answers || answers.length != 1)
+            throw { message: "TEST questions must have one answer", code: 400 };
+        answer = answers[0].answer;
+
+    } else if (type == 'MULTICHOISE') {
+
+        if (!options || options.length < 2)
+            throw { message: "MULTICHOISE questions must have at least 2 options", code: 400 };
+        if (!answers || answers.length > options.length)
+            throw { message: "MULTICHOISE invalid answers", code: 400 };
+        answers.forEach(obj => answer += obj.answer);
+
+    } else if (type == 'LONGANSWER' || question.type == 'SHORTANSWER') {
+
+        this.options = undefined;
+        if (answers) {
+            if (answers.length != 1)
+                throw { message: "LONGANSWER & SHORTANSWER questions must have one answer", code: 400 };
+            answer = answers[0].answer;
+        }
+    }
+    
+    questionModel.validateAnswer({ answer, questionType: type, questionOptionsLength: options.length });
+    return true;
+};
 questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptionsLength }) => {
     let ans = JSON.parse(JSON.stringify(answer));
     if (questionType == 'LONGANSWER' || questionType == 'SHORTANSWER') {
@@ -115,12 +149,12 @@ questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptions
         ans = parseInt(ans);
         if (isNaN(ans))
             throw { message: "Answer for TEST questions must be an integer", code: 400 };
-        if (ans > questionOptionsLength)
-            throw { message: "Answer is more than options length", code: 400 };
+        if (ans > questionOptionsLength || ans <= 0)
+            throw { message: "Answer is an invalid number", code: 400 };
 
     } else if (questionType == 'MULTICHOISE') {
 
-        if(!Array.isArray(ans))
+        if(!Array.isArray(ans) && typeof ans == 'string')
             var answers = ans.split(',');
         if (answers.length > questionOptionsLength)
             throw { message: "Answer length is more than options length", code: 400 };
@@ -128,8 +162,8 @@ questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptions
             let parsed = parseInt(answer);
             if (isNaN(parsed))
                 throw { message: "Answer for MULTICHOISE questions must be an integer", code: 400 };
-            if (parsed > questionOptionsLength)
-                throw { message: "Answer is more than options length", code: 400 };
+            if (parsed > questionOptionsLength || parsed <= 0)
+                throw { message: "Answer is an invalid number", code: 400 };
             return parsed;
         });
     }

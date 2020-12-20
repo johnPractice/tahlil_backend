@@ -3,7 +3,7 @@ const Question = require('../../db/model/questionModel');
 const auth = require('../../middelware/auth');
 const checkAnswer = require('../../middelware/question/checkAnswer');
 
-rout.put('/', auth, checkAnswer, async(req, res) => {
+rout.put('/', auth, /*checkAnswer,*/ async(req, res) => {
     try {
         const info = req.body;
         const user = req.user;
