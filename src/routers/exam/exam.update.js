@@ -19,7 +19,8 @@ rout.put('/', auth, async(req, res) => {
             return;
         }
         canUses.forEach(use => {
-            if (info[use] && findExam[use] != info[use]) findExam[use] = info[use];
+            if (info[use] != undefined && findExam[use] != info[use])
+                findExam[use] = info[use];
         });
         if (info.questions)
             await findExam.setQuestions(info.questions);

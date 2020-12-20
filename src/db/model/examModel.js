@@ -23,8 +23,9 @@ const examSchema = new Schema({
     },
     examLength: {
         type: Number,
-        required: [true, 'زمان ازمون باید مشخص شود'],
-        // value as second
+        required: [true, 'طول ازمون باید مشخص شود'],
+        validate: [t => t > 0 , 'طول آزمون مقداری نامعتبر است']
+        // value as minutes
     },
     questions: [{
         index: {
@@ -32,7 +33,9 @@ const examSchema = new Schema({
         },
         question: {},
         grade: {
-            type: Number
+            type: Number,
+            validate: [g => g >= 0 , 'بارم برخی سوالات مقداری نامعتبر است'],
+            required: [true, 'بارم تمامی سوالات را تعیین کنید']
         }
     }],
     useInClass: {
@@ -129,10 +132,6 @@ examSchema.methods.setQuestions = async function (questions) {
             let question = await questionModel.findById(questionId);
             if (!question)
                 throw { message: "Invalid questionId", code: 400 };
-            if (grade == null)
-                grade = 0;
-            else if (!grade || typeof grade != 'number')
-                throw { message: "Invalid question grade", code: 400 };
 
             let clonedQuestion = question.toJSON();
             //delete clonedQuestion._id;
