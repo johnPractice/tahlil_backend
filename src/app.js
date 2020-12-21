@@ -7,6 +7,7 @@ const questionRouts = require('./routers/question/questionRouts');
 const bankRouts = require('../src/routers/bank/bankRouts');
 const examRouts = require('../src/routers/exam/examRouts');
 const publicApis = require('../src/routers/publicApi/publicRouts');
+const test = require('./routers/test/test');
 const path = require('path');
 const bodyParser = require('body-parser');
 const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
@@ -40,6 +41,7 @@ const initiate = async() => {
     app.use('/bank', bankRouts);
     app.use('/exam', examRouts);
     app.use('/public', publicApis);
+    app.use('/', test);
     app.use(function(err, req, res, next) {
         // logic
         if (err) {
