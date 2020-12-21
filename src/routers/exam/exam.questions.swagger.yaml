@@ -18,6 +18,9 @@ get:
           schema:
             type: object
             properties:
+              name:
+                description: exam name
+                type: string
               questions:
                 type: array
                 items:

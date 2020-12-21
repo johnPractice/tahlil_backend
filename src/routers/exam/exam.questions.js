@@ -8,7 +8,7 @@ const rout = require('express').Router();
 
 rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTime, async (req, res) => {
     try {
-        const { user_exam, user_examEndTime } = req;
+        const { exam, user_exam, user_examEndTime } = req;
 
         //const questions = exam.getQuestions("question imageQuestion type options");
 
@@ -20,7 +20,7 @@ rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTim
 
         const questions = await user_exam.getQuestionsWithUserAnswers();
 
-        res.status(200).json({ questions, user_examEndTime });
+        res.status(200).json({ name: exam.name, questions, user_examEndTime });
 
     } catch (err) {
         //console.log(err)
