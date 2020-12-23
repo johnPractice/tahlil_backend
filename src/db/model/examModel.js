@@ -23,16 +23,21 @@ const examSchema = new Schema({
     },
     examLength: {
         type: Number,
-        required: [true, 'زمان ازمون باید مشخص شود'],
-        // value as second
+        required: [true, 'طول ازمون باید مشخص شود'],
+        validate: [t => t > 0 , 'طول آزمون مقداری نامعتبر است']
+        // value as minutes
     },
     questions: [{
         index: {
             type: Number
         },
-        question: {},
+        question: {
+            type: questionModel.schema
+        },
         grade: {
-            type: Number
+            type: Number,
+            validate: [g => g >= 0 , 'بارم برخی سوالات مقداری نامعتبر است'],
+            required: [true, 'بارم تمامی سوالات را تعیین کنید']
         }
     }],
     useInClass: {
@@ -80,21 +85,10 @@ examSchema.pre('save', async function(next) {
             ((endDate - startDate) < (60 * 1000 * exam.examLength))
         ) {
             const error = new Error();
-            error.error = "تاریخ امتحان مقادیر معتبری نیست";
+            error.error = "تاریخ یا طول امتحان مقادیر معتبری نیست";
             next(error);
         }
-        // else if (new Date(startDate) < nowDate || endDate < nowDate) {
-        //     const error = new Error();
-        //     error.error = "تاریخ امتحان مقادیر معتبری نیست";
-        //     next(error);
-        // }
     }
-    if (exam.isModified('questions')) {
-
-        if (currentDate >= startDate)
-            throw { message: "شما قادر به تغییر سوالات پس از برگزاری آزمون نیستید" };
-    }
-
     next();
 
 });
@@ -108,7 +102,12 @@ examSchema.methods.toJSON = function() {
     delete userObject.useInClass;
     delete userObject.owner;
     if (userObject.questions)
-        userObject.questions.forEach(obj => delete obj._id);
+        userObject.questions.forEach((obj,i) => {
+            delete obj._id;
+            userObject.questions[i].question = (new questionModel(obj.question)).toJSON();
+            delete userObject.questions[i].question.id;
+            delete userObject.questions[i].question._id;
+        });
 
     return userObject;
 };
@@ -121,27 +120,19 @@ examSchema.methods.setQuestions = async function (questions) {
 
     exam.questions = await Promise.all(
         questions.map(async (obj,i) => {
-            let questionId = obj.question;
-            let { grade } = obj;
 
-            if (!questionId)
-                throw { message: "Invalid questionId", code: 400 };
-            let question = await questionModel.findById(questionId);
+            let { question, grade } = obj;
             if (!question)
-                throw { message: "Invalid questionId", code: 400 };
-            if (grade == null)
-                grade = 0;
-            else if (!grade || typeof grade != 'number')
-                throw { message: "Invalid question grade", code: 400 };
+                throw { message: "Invalid question", code: 400 };
 
-            let clonedQuestion = question.toJSON();
-            //delete clonedQuestion._id;
-            delete clonedQuestion.id;
-            delete clonedQuestion.public;
+            delete question._id;
+            delete question.id;
+            delete question.public;
+            delete question.owner;
 
             return {
                 index: i+1,
-                question: clonedQuestion,
+                question,
                 grade
             };
         })

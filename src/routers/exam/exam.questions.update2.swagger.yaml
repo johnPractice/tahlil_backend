@@ -1,0 +1,32 @@
+put:
+  summary: Edit exam questions after exam startDate
+  tags:
+    - "Exam"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  - in: path
+    name: questionIndex
+    required: true
+    schema:
+      type: integer
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            grade:
+              type: integer
+            answers:
+              $ref: '../../swagger.config.yaml#/components/schemas/question/properties/answers'
+            imageAnswer:
+              $ref: '../../swagger.config.yaml#/components/schemas/question/properties/imageAnswer'
+  responses:
+    '200':
+      description: OK

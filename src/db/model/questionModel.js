@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Bank = require('./bankModel');
+const validator = require("validator");
 const questionSchema = Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        //required: true
     },
     question: {
         type: String,
@@ -13,7 +14,8 @@ const questionSchema = Schema({
     },
     imageQuestion: {
         type: String,
-        default: null
+        default: null,
+        validate: [i => i == null || validator.isBase64(i), 'imageQuestion is an Invalid Base64 string']
     },
     type: {
         type: String,
@@ -45,7 +47,15 @@ const questionSchema = Schema({
     }],
     imageAnswer: {
         type: String,
-        default: null
+        default: null,
+        validate: [function(i) {;
+            if (i == null)
+                return true;
+            console.log(this.type)
+            if (this.type != 'LONGANSWER')
+                throw new Error("imageAnswer is not settable for this question type");
+            return validator.isBase64(i);
+        }, 'imageAnswer is an Invalid Base64 string']
     },
     options: [{
         option: { type: String }
@@ -66,22 +76,28 @@ const questionSchema = Schema({
 
 
 // methode
-questionSchema.pre('save', async function(next) {
+questionSchema.pre('save', async function (next) {
     const question = this;
+    if (question.isModified('type') || question.isModified('answers') || question.isModified('options'))
+        questionModel.validateFields({
+            answers: this.answers,
+            options: this.options,
+            type: this.type
+        });
     // for update question  
     const checkBank = Bank.findOne({ qId: question._id });
     if (checkBank) {
         await checkBank.remove();
     }
-    if (question.isModified('imageQuestion') || question.isModified('imageAnswer')) {
-        const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-        const tests = ['imageAnswer', 'imageQuestion'];
-        for (let i = 0; i < tests.length; i++) {
-            if (question[tests[i]] != null) {
-                if (!base64regex.test(question[tests[i]])) throw new Error("it's not base64 format");
-            }
-        }
-    }
+    //if (question.isModified('imageQuestion') || question.isModified('imageAnswer')) {
+    //    const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+    //    const tests = ['imageAnswer', 'imageQuestion'];
+    //    for (let i = 0; i < tests.length; i++) {
+    //        if (question[tests[i]] != null) {
+    //            if (!base64regex.test(question[tests[i]])) throw new Error("it's not base64 format");
+    //        }
+    //    }
+    //}
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.isModified('type')) {
         if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
@@ -103,6 +119,36 @@ questionSchema.pre('save', async function(next) {
     }
     next();
 });
+questionSchema.statics.validateFields = function ({ answers, options, type }) {
+    let answer = "";
+    if (type == 'TEST') {
+
+        if (!options || options.length != 4)
+            throw { message: "TEST questions must have 4 options", code: 400 };
+        if (!answers || answers.length != 1)
+            throw { message: "TEST questions must have one answer", code: 400 };
+        answer = answers[0].answer;
+
+    } else if (type == 'MULTICHOISE') {
+
+        if (!options || options.length < 2)
+            throw { message: "MULTICHOISE questions must have at least 2 options", code: 400 };
+        if (!answers || answers.length > options.length)
+            throw { message: "MULTICHOISE invalid answers", code: 400 };
+        answers.forEach((obj,i) => answer += ((i!=0)?",":"") + obj.answer);
+
+    } else if (type == 'LONGANSWER' || question.type == 'SHORTANSWER') {
+
+        this.options = undefined;
+        if (answers) {
+            if (answers.length != 1)
+                throw { message: "LONGANSWER & SHORTANSWER questions must have one answer", code: 400 };
+            answer = answers[0].answer;
+        }
+    }
+    questionModel.validateAnswer({ answer, questionType: type, questionOptionsLength: options.length });
+    return true;
+};
 questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptionsLength }) => {
     let ans = JSON.parse(JSON.stringify(answer));
     if (questionType == 'LONGANSWER' || questionType == 'SHORTANSWER') {
@@ -115,21 +161,25 @@ questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptions
         ans = parseInt(ans);
         if (isNaN(ans))
             throw { message: "Answer for TEST questions must be an integer", code: 400 };
-        if (ans > questionOptionsLength)
-            throw { message: "Answer is more than options length", code: 400 };
+        if (ans > questionOptionsLength || ans <= 0)
+            throw { message: "Answer is an invalid number", code: 400 };
 
     } else if (questionType == 'MULTICHOISE') {
 
-        if(!Array.isArray(ans))
+        if (!Array.isArray(ans) && typeof ans == 'string') {
             var answers = ans.split(',');
+            const noDuplicate = [...new Set(answers)];
+            if (noDuplicate.length != answers.length)
+                throw { message: "Duplicate answers", code: 400 };
+        }
         if (answers.length > questionOptionsLength)
             throw { message: "Answer length is more than options length", code: 400 };
         answers = answers.map(answer => {
             let parsed = parseInt(answer);
             if (isNaN(parsed))
                 throw { message: "Answer for MULTICHOISE questions must be an integer", code: 400 };
-            if (parsed > questionOptionsLength)
-                throw { message: "Answer is more than options length", code: 400 };
+            if (parsed > questionOptionsLength || parsed <= 0)
+                throw { message: "Answer is an invalid number", code: 400 };
             return parsed;
         });
     }

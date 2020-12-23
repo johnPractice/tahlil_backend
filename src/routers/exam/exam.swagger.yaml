@@ -35,9 +35,9 @@ post:
                   - "grade"
                 properties:
                   question:
-                    type: string
+                    $ref: '../../swagger.config.yaml#/components/schemas/question'
                   grade:
-                    type: integer     
+                    type: integer
             examLength:
               type: integer
             useInClass:
@@ -90,7 +90,17 @@ put:
               type: string
               format: date-time
             questions:
-              type: Array     
+              type: array
+              items:
+                type: object
+                required: 
+                  - "question"
+                  - "grade"
+                properties:
+                  question:
+                    $ref: '../../swagger.config.yaml#/components/schemas/question'
+                  grade:
+                    type: integer
             examLength:
               type: integer                        
   responses:
