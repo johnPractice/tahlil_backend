@@ -75,6 +75,9 @@ paths:
   /exam:
     $ref: './routers/exam/exam.swagger.yaml' 
     
+  /exam/{examId}/questions/{questionIndex}:
+    $ref: './routers/exam/exam.questions.update2.swagger.yaml'
+
   /exam/{examId}:
     $ref: './routers/exam/exam.delete.swagger.yaml'
 
@@ -190,9 +193,10 @@ components:
             type: object
             properties:
               answer:
-                oneOf:
-                  - type: string
-                  - type: number
+                type: string
+                #oneOf:
+                #  - type: string
+                #  - type: number
         options:
           type: array
           items:
@@ -302,12 +306,7 @@ components:
                   index:
                     type: integer
                   question:
-                    allOf:
-                      - $ref: '#/components/schemas/question'
-                      - type: object
-                        properties:
-                          _id:
-                            type: string
+                    $ref: '#/components/schemas/question'
                   grade:
                     type: integer
 

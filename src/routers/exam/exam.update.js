@@ -65,8 +65,9 @@ rout.put('/', auth, async(req, res) => {
                 }
             }
         } else {
-            res.status(400).json(e);
-
+            if (!e.code || e.code >= 600)
+                e.code = 503;
+            res.status(e.code).json({ error: e.message });
         }
     }
 });

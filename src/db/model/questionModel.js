@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Bank = require('./bankModel');
+const validator = require("validator");
 const questionSchema = Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
@@ -13,7 +14,8 @@ const questionSchema = Schema({
     },
     imageQuestion: {
         type: String,
-        default: null
+        default: null,
+        validate: [i => i == null || validator.isBase64(i), 'imageQuestion is an Invalid Base64 string']
     },
     type: {
         type: String,
@@ -45,7 +47,15 @@ const questionSchema = Schema({
     }],
     imageAnswer: {
         type: String,
-        default: null
+        default: null,
+        validate: [function(i) {;
+            if (i == null)
+                return true;
+            console.log(this.type)
+            if (this.type != 'LONGANSWER')
+                throw new Error("imageAnswer is not settable for this question type");
+            return validator.isBase64(i);
+        }, 'imageAnswer is an Invalid Base64 string']
     },
     options: [{
         option: { type: String }
@@ -79,15 +89,15 @@ questionSchema.pre('save', async function (next) {
     if (checkBank) {
         await checkBank.remove();
     }
-    if (question.isModified('imageQuestion') || question.isModified('imageAnswer')) {
-        const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-        const tests = ['imageAnswer', 'imageQuestion'];
-        for (let i = 0; i < tests.length; i++) {
-            if (question[tests[i]] != null) {
-                if (!base64regex.test(question[tests[i]])) throw new Error("it's not base64 format");
-            }
-        }
-    }
+    //if (question.isModified('imageQuestion') || question.isModified('imageAnswer')) {
+    //    const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+    //    const tests = ['imageAnswer', 'imageQuestion'];
+    //    for (let i = 0; i < tests.length; i++) {
+    //        if (question[tests[i]] != null) {
+    //            if (!base64regex.test(question[tests[i]])) throw new Error("it's not base64 format");
+    //        }
+    //    }
+    //}
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.isModified('type')) {
         if (question.type == 'TEST' || question.type == 'MULTICHOISE') {

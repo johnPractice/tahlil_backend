@@ -15,7 +15,7 @@ rout.post('/', auth, async(req, res) => {
         }
         const findClass = await ClassModel.findOne({ classId: useInClass, owner: user._id });
         if (!findClass) {
-            res.status(400).json({ "error": "شما مجاز به ذسترسی به این ازمون نیستید" });
+            res.status(400).json({ "error": "این کلاس قابل دسترسی نیست" });
             return;
         }
         const newExam = new Exam();
@@ -51,8 +51,9 @@ rout.post('/', auth, async(req, res) => {
                 }
             }
         } else {
-            res.status(400).json(e);
-
+            if (!e.code || e.code >= 600)
+                e.code = 503;
+            res.status(e.code).json({ error: e.message });
         }
     }
 });
