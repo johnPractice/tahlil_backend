@@ -4,18 +4,18 @@ const { baseRoot } = require('../../../constants');
 const checkFolder = require('../../functions/generateFolder');
 const storage = multer.diskStorage({
     destination: async function(req, file, cb) {
-        await checkFolder(baseRoot + '/uploads');
-        cb(null, baseRoot + '/uploads');
+        await checkFolder(baseRoot + '/public/uploads/answers');
+        cb(null, baseRoot + '/public/uploads/answers');
     },
 
     // By default, multer removes file extensions so let's add them back
     filename: async function(req, file, cb) {
         if (!req.params.questionIndex || !req.user_exam._id) {
             cb(null, false);
-            return cb(new Error('some fileds missed!'));
+            return cb(new Error('some fields missing!'));
         }
         const fileName = await req.user_exam._id + '-' + file.fieldname + '-' + req.params.questionIndex + await path.extname(file.originalname);
-        req.fileName = baseRoot + '/uploads/' + fileName;
+        req.fileName = /*baseRoot + '/uploads/' +*/ fileName;
         cb(null, fileName);
     }
 });
