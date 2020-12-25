@@ -3,7 +3,7 @@ const Question = require('../../db/model/questionModel');
 const auth = require('../../middelware/auth');
 const checkAnswer = require('../../middelware/question/checkAnswer');
 
-rout.put('/', auth, /*checkAnswer,*/ async(req, res) => {
+rout.put('/', auth, async(req, res, next) => {
     try {
         const info = req.body;
         const user = req.user;
@@ -14,15 +14,8 @@ rout.put('/', auth, /*checkAnswer,*/ async(req, res) => {
                 question[use] = info[use];
         });
         await question.save();
-        res.json({ 'meesage': 'question updated', question });
-    } catch (e) {
-        if (e.message) {
-            res.status(400).json({ 'error': e.message });
-            return;
-        } else {
-            // console.log(e);
-            res.status(400).json({ 'error': e });
-        }
-    }
+        res.json({ 'message': 'question updated', question });
+
+    } catch (err) { next(err); }
 });
 module.exports = rout;

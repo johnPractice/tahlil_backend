@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Bank = require('./bankModel');
 const validator = require("validator");
@@ -10,7 +10,7 @@ const questionSchema = Schema({
     },
     question: {
         type: String,
-        required: true,
+        required: [true,'صورت سوال را تعیین کنید']
     },
     imageQuestion: {
         type: String,
@@ -19,27 +19,27 @@ const questionSchema = Schema({
     },
     type: {
         type: String,
-        required: true,
+        required: [true,'نوع سوال را انتخاب کنید'],
         enum: ['TEST', 'MULTICHOISE', 'LONGANSWER', 'SHORTANSWER'],
     },
     base: {
         type: String,
         enum: ['10', '11', '12'],
-        required: true,
+        required: [true,'پایه تحصیلی برای سوال انتخاب کنید']
     },
     course: {
         type: String,
-        required: true,
+        required: [true,'درس سوال را انتخاب کنید'],
         enum: ['MATH', 'PHYSIC', 'CHEMISTRY', 'BIOLOGY']
     },
     chapter: {
         type: String,
-        required: true,
+        required: [true,'فصل سوال را انتخاب کنید'],
         enum: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
     },
     hardness: {
         type: String,
-        required: true,
+        required: [true,'درجه سختی سوال را تعیین کنید'],
         enum: ['LOW', 'MEDIUM', 'HARD']
     },
     answers: [{
@@ -51,7 +51,6 @@ const questionSchema = Schema({
         validate: [function(i) {;
             if (i == null)
                 return true;
-            console.log(this.type)
             if (this.type != 'LONGANSWER')
                 throw new Error("imageAnswer is not settable for this question type");
             return validator.isBase64(i);
@@ -124,20 +123,20 @@ questionSchema.statics.validateFields = function ({ answers, options, type }) {
     if (type == 'TEST') {
 
         if (!options || options.length != 4)
-            throw { message: "TEST questions must have 4 options", code: 400 };
+            throw { message: "سوالات تستی باید چهار گزینه داشته باشند", code: 400 };
         if (!answers || answers.length != 1)
-            throw { message: "TEST questions must have one answer", code: 400 };
+            throw { message: "سوالات تستی باید یک پاسخ داشته باشند", code: 400 };
         answer = answers[0].answer;
 
     } else if (type == 'MULTICHOISE') {
 
         if (!options || options.length < 2)
-            throw { message: "MULTICHOISE questions must have at least 2 options", code: 400 };
+            throw { message: "سوالات چندگزینه‌ای حداقل دو گزینه باید داشته باشند", code: 400 };
         if (!answers || answers.length > options.length)
-            throw { message: "MULTICHOISE invalid answers", code: 400 };
+            throw { message: "جواب سوال چندگزینه‌ای نامعتبر است", code: 400 };
         answers.forEach((obj,i) => answer += ((i!=0)?",":"") + obj.answer);
 
-    } else if (type == 'LONGANSWER' || question.type == 'SHORTANSWER') {
+    } else if (type == 'LONGANSWER' || type == 'SHORTANSWER') {
 
         this.options = undefined;
         if (answers) {
