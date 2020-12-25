@@ -40,12 +40,16 @@ const initiate = async() => {
     app.use('/bank', bankRouts);
     app.use('/exam', examRouts);
     app.use('/public', publicApis);
-    app.use(function(err, req, res, next) {
-        // logic
-        if (err) {
-            res.status(400).json({ error: err.toString() });
+
+    //error middleware
+    app.use(function (err, req, res, next) {
+        if (err.errors) {
+            err.message = err.errors[Object.keys(err.errors)[0]].message;
+            err.code = 400;
         }
-        next();
+        else if (!err.code || err.code >= 600)
+            err.code = 503;
+        res.status(err.code).json({ error: err.message });
     });
 
     // 404 page
