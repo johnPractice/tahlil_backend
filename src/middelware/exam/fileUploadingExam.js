@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
             return cb(new Error('some fields missing!'));
         }
         const fileName = await req.user_exam._id + '-' + file.fieldname + '-' + req.params.questionIndex + await path.extname(file.originalname);
-        req.fileName = /*baseRoot + '/uploads/' +*/ fileName;
+        req.fileName = "uploads/answers/" + fileName;
         cb(null, fileName);
     }
 });

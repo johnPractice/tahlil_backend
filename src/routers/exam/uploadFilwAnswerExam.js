@@ -17,7 +17,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
 
         const questionType = questionObj.question.type;
         const questionOptionsLength = questionObj.question.options.length;
-        let answerFile = req.file.path;
+        let answerFile = req.fileName;
         let answerText = req.query.answer;
         // TODO: check exam and question to save answer path
         if (!answerFile && !answerText) {
@@ -34,8 +34,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
             });
         }
         //add url to path
-        answerFile = (constants.buildMode ? constants.urlName : constants.usrAddLocal + "/") + (answerFile.split("\public\\"))[1];
-        answerFile = answerFile.split("\\").join("/");
+        answerFile = (constants.buildMode ? constants.urlName : constants.usrAddLocal + "/") + answerFile;
         
         const foundAnswer = user_exam.answers.find(answer => answer.questionIndex == questionObj.index);
         if (!foundAnswer) {
@@ -86,7 +85,7 @@ rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, check
         let isDeleted = false;
         if (deleteFile == 'true') {
             if (foundAnswer.answerFile) {
-                const filePath = baseRoot +"/public/"+ foundAnswer.answerFile.substring(foundAnswer.answerFile.indexOf('/') + 1);
+                const filePath = baseRoot + "/public/" + foundAnswer.answerFile.split((constants.buildMode ? constants.urlName : constants.usrAddLocal + "/"))[1];
                 await fileDelete(filePath);
             }
             foundAnswer.answerFile = null;
