@@ -7,7 +7,10 @@ const questionRouts = require('./routers/question/questionRouts');
 const bankRouts = require('../src/routers/bank/bankRouts');
 const examRouts = require('../src/routers/exam/examRouts');
 const publicApis = require('../src/routers/publicApi/publicRouts');
-const test = require('./routers/test/test');
+const test = require('./routers/report/test');
+// const test2 = require('./routers/test/tesr2');
+const baseKarname = require('./routers/report/baseKarname');
+
 const path = require('path');
 const bodyParser = require('body-parser');
 const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
@@ -18,11 +21,13 @@ const initiate = async() => {
     const app = express();
     // start the db
     dbStart();
+    app.set('view engine', 'ejs');
 
     // create test api 
     app.get("/test", (req, res) => {
         res.status(200).json("Hello world");
     });
+
 
     // middelware use
     app.use(express.static(__dirname + '/views/404/dist'));
@@ -34,6 +39,7 @@ const initiate = async() => {
     app.use(bodyParser.json({ limit: "50mb" }));
     app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
     app.use(express.static('public'));
+    app.use(express.static('/karname'));
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(await swaggerParser.bundle(swagger_path)));
     app.use('/question', questionRouts);
     app.use('/user', userRouts);
@@ -42,6 +48,9 @@ const initiate = async() => {
     app.use('/exam', examRouts);
     app.use('/public', publicApis);
     app.use('/', test);
+    // app.use('/', test2);
+    app.use('/', baseKarname);
+
     app.use(function(err, req, res, next) {
         // logic
         if (err) {
