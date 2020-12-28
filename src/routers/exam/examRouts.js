@@ -8,7 +8,7 @@ const editMemeber = require('./exam.editUser');
 const examQuestions = require('./exam.questions');
 const examAnswer = require('./uploadFilwAnswerExam');
 const examStatus = require('./checkExam');
-
+const examAttendees = require('./exam.attendees');
 
 
 const app = express();
@@ -21,5 +21,6 @@ app.use('/', editMemeber);
 app.use('/', examQuestions);
 app.use('/', examAnswer);
 app.use('/', examStatus);
+app.use('/', examAttendees);
 
 module.exports = app;

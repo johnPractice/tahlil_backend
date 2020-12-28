@@ -83,6 +83,11 @@ user_examSchema.methods.toJSON = function() {
     delete userExamObject.updatedAt;
     delete userExamObject._id;
     delete userExamObject.__v;
+    delete userExamObject.exam;
+    if (this.populated('user'))
+        userExamObject.user = this.user.toJSON();
+    else delete userExamObject.user;
+        
     return userExamObject;
 
 };
