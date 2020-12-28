@@ -17,14 +17,15 @@ rout.get('/image-karname', async(req, res) => {
             };
 
             nodeHtmlToImage({
-                    output: './image.png',
+                    output: baseRoot + '/public/karname' + '/image.png',
                     html: html,
                 })
                 .then(() => {
-                    console.log('hi created');
-                    // res.status(200).json({ path: baseRoot + '/karname' + '/image.png' });
+                    res.status(200).json({ path: baseRoot + '\\public\\karname' + '\\image.png' });
                     // return;
-                })
+                }).catch(e => {
+                    res.status(400).json(e);
+                });
         })
         .catch(e => {
             res.status(400).json(e);
