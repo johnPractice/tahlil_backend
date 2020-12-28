@@ -34,7 +34,10 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
             });
         }
         //add url to path
+        console.log("baseroot: " + baseRoot);
+        console.log("answerFile before: " + answerFile);
         answerFile = (constants.buildMode ? constants.urlName : constants.usrAddLocal + "/") + answerFile;
+        console.log("answerFile after: " + answerFile);
         
         const foundAnswer = user_exam.answers.find(answer => answer.questionIndex == questionObj.index);
         if (!foundAnswer) {

@@ -10,7 +10,8 @@ const examSchema = new Schema({
     name: {
         type: String,
         required: [true, 'نام امتحان باید وارد شود'],
-        minlength: [6, 'نام طولانی  تری برای امتحان انتخاب کنید']
+        minlength: [6, 'نام طولانی  تری برای امتحان انتخاب کنید'],
+        maxlength: [25, 'طول نام آزمون بیشتر از حد مجاز است']
     },
     startDate: {
         type: Date,
