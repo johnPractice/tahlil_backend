@@ -100,6 +100,11 @@ paths:
   /exam/{examId}/questions/review:
     $ref: './routers/exam/exam.questions.review.swagger.yaml'
 
+  /exam/{examId}/attendees:
+    $ref: './routers/exam/exam.attendees.swagger.yaml'
+    
+  /exam/{examId}/attendees/{username}:
+    $ref: './routers/exam/attendees.username.swagger.yaml'
 
 ################### PublicAPi #####################
   /public/question/category:
