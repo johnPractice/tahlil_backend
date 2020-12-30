@@ -17,9 +17,6 @@ rout.get('/:classId/notes', auth, checkClassId, checkClassAccess, async (req, re
 
         res.status(200).json({ classNotes });
 
-    } catch (err) {
-        console.log(err);
-        res.sendStatus(503);
-    }
+    } catch (err) { next(err); }
 });
 module.exports = rout;
