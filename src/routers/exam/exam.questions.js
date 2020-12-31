@@ -26,9 +26,10 @@ rout.get('/:examId/questions/review', auth, checkExamId, checkClassAccess, async
         if (!user_exam)
             throw { message: "شما در این آزمون شرکت نکرده‌اید", code: 403 };
 
+        await user_exam.autoGrade();
         const questions = await user_exam.getQuestionsWithUserAnswers({ getQuestionAnswers: true });
 
-        res.status(200).json({ questions });
+        res.status(200).json({ questions, totalGrade: user_exam.totalGrade });
 
     } catch (err) { next(err); }
 });

@@ -135,6 +135,8 @@ examSchema.methods.setQuestions = async function (questions) {
 };
 examSchema.methods.getQuestions = function (selectProperties) {
     //same as:  exam.questions.select("property1 property2 ... ");
+    if (selectProperties === undefined)
+        return this.questions;
 
     if (typeof selectProperties != 'string')
         throw { message: "selectProperties should be a string", code: 503 };

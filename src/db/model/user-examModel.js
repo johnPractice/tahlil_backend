@@ -28,6 +28,10 @@ const user_examSchema = new Schema({
             default: null
         }
     }],
+    totalGrade: {
+        type: Number,
+        default: null
+    },
     startTime: {
         type: Date,
         required: [true, 'زمان شروع آزمون مقدار معتبری یاید داشته باشد'],
@@ -55,15 +59,21 @@ user_examSchema.virtual('endTime').get(async function() {
 //methods
 user_examSchema.methods.getQuestionsWithUserAnswers = async function(options) {
     await this.populate('exam', 'questions').execPopulate();
-    let selectProperties = "question imageQuestion type options";
-    if (options && options.getQuestionAnswers === true)
-        selectProperties += " answers imageAnswer";
+    if (options && options.getFullQuestions === true)
+        var selectProperties = undefined;
+    else {
+        var selectProperties = "question imageQuestion type options";
+        if (options && options.getQuestionAnswers === true)
+            selectProperties += " answers imageAnswer";
+    }
     const questions = this.exam.getQuestions(selectProperties);
 
     this.answers.forEach(answer => {
         let questionObj = questions.find(obj => obj.index == answer.questionIndex);
         questionObj.answerText = answer.answerText;
         questionObj.answerFile = answer.answerFile;
+        if (options && options.getQuestionAnswers === true)
+            questionObj.answerGrade = answer.answerGrade;
     });
 
     return questions;
@@ -75,6 +85,43 @@ user_examSchema.methods.getQuestionsWithUserAnswers = async function(options) {
      *      answerFile    (can be undefined)
      * }]
      */
+};
+user_examSchema.methods.setGrade = async function (questionIndex, answerGrade) {
+    const user_exam = this;
+    const answerObj = user_exam.answers.find(obj => obj.questionIndex == questionIndex);
+
+    if (!answerObj)
+        user_exam.answers.push({ questionIndex, answerGrade });
+    else
+        answerObj.answerGrade = answerGrade;
+
+    await user_exam.save();
+};
+user_examSchema.methods.autoGrade = async function (options) {
+    await this.populate('exam', 'questions').execPopulate();
+    const questions = this.exam.getQuestions();
+
+    let totalGrade = 0;
+    this.answers.forEach(answerObj => {
+        if (!(options && options.reAutoGrade === true) && answerObj.answerGrade !== null) {
+            //already graded automatically or manually
+            totalGrade += answerObj.answerGrade;
+            continue;
+        }
+
+        let { question, grade } =
+            questions.find(questionObj => questionObj.index == answerObj.questionIndex);
+        let correctness = question.checkAnswer(answerObj.answerText);
+        if (correctness === null)
+            answerObj.answerGrade = null;
+        else
+            answerObj.answerGrade = correctness * grade;
+
+        totalGrade += answerObj.answerGrade;
+    });
+    if (this.totalGrade === null || (options && options.reAutoGrade === true))
+        this.totalGrade = totalGrade;
+    await this.save();
 };
 
 user_examSchema.methods.toJSON = function() {

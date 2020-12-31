@@ -145,8 +145,7 @@ questionSchema.statics.validateFields = function ({ answers, options, type }) {
             throw { message: "LONGANSWER & SHORTANSWER questions must have one answer", code: 400 };
         answer = answers[0].answer;
     }
-    questionModel.validateAnswer({ answer, questionType: type, questionOptionsLength: options.length });
-    return true;
+    return questionModel.validateAnswer({ answer, questionType: type, questionOptionsLength: options.length });
 };
 questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptionsLength }) => {
     let ans = JSON.parse(JSON.stringify(answer));
@@ -210,6 +209,33 @@ questionSchema.statics.findByOwner = async function({ owner, page = 1, limit = 1
     if (!question /* || !question.length > 0*/ ) throw new Error('nothing found');
     return question;
 };
+questionSchema.methods.checkAnswer = function (answerText) {
+    /*
+     * answerText is in string format
+     * returns null for question types with no autograde
+     * returns answer correctness in scale of 0 to 1
+     * 1 for completely true
+     * 0 for completely false
+     * between 0 & 1 for multichoise questions
+     */
+    const { answers, options, type } = this;
+    if (type == 'LONGANSWER')
+        return null;
+    let parsedAnswers = questionModel.validateFields({ answers, options, type });
+
+    if (type == 'MULTICHOISE') {
+        parsedAnswers = parsedAnswers.split(",");
+        answerText = answerText.split(",");
+        let correctAnswersCount = 0;
+        answerText.forEach(answer => {
+            if (parsedAnswers.includes(answer))
+                correctAnswersCount++;
+        });
+        return (correctAnswersCount / (parsedAnswers.length));
+
+    } else
+        return (answerText == parsedAnswers ? 1 : 0);
+}
 
 //to json methode
 questionSchema.methods.toJSON = function() {
