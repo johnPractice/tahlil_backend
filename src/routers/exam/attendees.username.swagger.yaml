@@ -18,3 +18,33 @@ delete:
   responses:
     '200':
       description: OK
+
+get:
+  summary: Gets answers & grades(autograded) of an attendee
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  - in: path
+    name: username
+    required: true
+    schema:
+      type: string
+  - in: query
+    name: reAutoGrade
+    description: Resets all grades & total grade based on autograde
+    schema:
+      type: boolean
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../../swagger.config.yaml#/components/schemas/ExamReview'
