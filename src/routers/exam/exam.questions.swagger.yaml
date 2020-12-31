@@ -21,6 +21,8 @@ get:
               name:
                 description: exam name
                 type: string
+              classId:
+                type: string
               questions:
                 type: array
                 items:
