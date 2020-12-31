@@ -16,7 +16,7 @@ rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTim
 
     } catch (err) { next(err); }
 });
-rout.get('/:examId/questions/review', auth, checkExamId, checkClassAccess, async (req, res) => {
+rout.get('/:examId/questions/review', auth, checkExamId, checkClassAccess, async (req, res, next) => {
     try {
         const { exam, user } = req;
         if ((new Date()) <= exam.endDate)

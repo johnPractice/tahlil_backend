@@ -4,7 +4,7 @@ const checkClassId = require('../../../middelware/class/checkClassId');
 const checkClassAdmin = require('../../../middelware/class/checkClassAdmin');
 const classNoteModel = require('../../../db/model/classNoteModel');
 
-rout.post('/:classId/notes', auth, checkClassId, checkClassAdmin, async (req, res) => {
+rout.post('/:classId/notes', auth, checkClassId, checkClassAdmin, async (req, res, next) => {
     try {
         const { user, Class } = req;
 

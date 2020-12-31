@@ -11,7 +11,7 @@ const constants = require('../../../constants');
 const { baseRoot } = require('../../../constants');
 
 
-rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, uploadAnswer.single('answer'), async(req, res) => {
+rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, uploadAnswer.single('answer'), async(req, res, next) => {
     try {
         const { questionObj, user_exam, user_examEndTime } = req;
 
@@ -75,7 +75,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
 
     } catch (err) { next(err); }
 });
-rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, async(req, res) => {
+rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, async(req, res, next) => {
     try {
         const { questionObj, user_exam, user_examEndTime } = req;
         const { deleteFile, deleteText } = req.query;
