@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors')
 const swaggerUi = require("swagger-ui-express");
 const dbStart = require('../src/db/mongoose');
 const userRouts = require('../src/routers/user/userRouts');
@@ -32,6 +33,7 @@ const initiate = async() => {
 
     // app.use(bodyParser.json());
     // app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(cors());
     app.use(express.json({ limit: "50mb" }));
 
     app.use(bodyParser.json({ limit: "50mb" }));
