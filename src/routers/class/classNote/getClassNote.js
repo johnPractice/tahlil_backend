@@ -4,7 +4,7 @@ const checkClassAccess = require('../../../middelware/class/checkClassAccess');
 
 const rout = require('express').Router();
 
-rout.get('/:classId/notes', auth, checkClassId, checkClassAccess, async (req, res) => {
+rout.get('/:classId/notes', auth, checkClassId, checkClassAccess, async (req, res, next) => {
     try {
         const { Class } = req;
         await Class.populate('notes').execPopulate();

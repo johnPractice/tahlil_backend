@@ -72,29 +72,47 @@ rout.put('/', auth, async(req, res) => {
     }
 });
 //for editing some exam questions property after exam start
-rout.put('/:examId/questions/:questionIndex', auth, checkExamId, checkClassAdmin, checkQuestionIndex, async(req, res) => {
+rout.put('/:examId/questions/:questionIndex', auth, checkExamId, checkClassAdmin, checkQuestionIndex, async(req, res, next) => {
     try {
         const { exam, questionObj } = req;
+        const questionIndex = questionObj.index;
         const info = req.body;
-        if (info.grade !== undefined)
+        let reAutoGradable = false;
+
+        if (info.grade !== undefined) {
+            const gradeRatio = info.grade / questionObj.grade;
             questionObj.grade = info.grade;
-        const canUpdate = ['answers', 'imageAnswer'];/*question fields*/
-        canUpdate.forEach(property => {
-            if (info[property] !== undefined)
-                questionObj.question[property] = info[property];
-        });
+            await exam.populate('attendees', 'answers').execPopulate();
+            exam.attendees.forEach(async(user_exam) => {
+                let answerGrade = user_exam.getAnswerGrade(questionIndex);
+                if (answerGrade) {
+                    await user_exam.setAnswerGrade(questionIndex, answerGrade * gradeRatio);
+                    await user_exam.save();
+                }
+            })
+        }
+        if (info.answers !== undefined) {
+            questionObj.question.answers = info.answers;
+            reAutoGradable = true;
+        }
+        if (info.imageAnswer !== undefined)
+            questionObj.question.imageAnswer = info.imageAnswer;
         await exam.save();
+
+        if (reAutoGradable === true)
+            if (questionObj.question.type == 'TEST' || questionObj.question.type == 'MULTICHOISE' || questionObj.question.type == 'SHORTANSWER') {
+                await exam.populate('attendees').execPopulate();
+                await exam.attendees.forEach(async (user_exam) => {
+                    user_exam.totalGrade -= await user_exam.getAnswerGrade(req.params.questionIndex);
+                    await user_exam.setAnswerGrade(req.params.questionIndex, null);
+                    await user_exam.autoGrade();
+                    user_exam.totalGrade += await user_exam.getAnswerGrade(req.params.questionIndex);
+                    await user_exam.save();
+                });
+            }
         res.sendStatus(200);
 
-    } catch (err) {
-        if (err.errors) {
-            err.message = err.errors[Object.keys(err.errors)[0]].message;
-            err.code = 400;
-        }
-        else if (!err.code || err.code >= 600)
-            err.code = 503;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err); }
 });
 
 module.exports = rout;

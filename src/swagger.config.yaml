@@ -339,3 +339,24 @@ components:
           type: string
           format: urlPath
 
+    ExamReview:
+      type: object
+      properties:
+        questions:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/ExamQuestion&Answer'
+              - type: object
+                properties:
+                  question:
+                    type: object
+                    properties:
+                      answers:
+                        $ref: '#/components/schemas/question/properties/answers'
+                      imageAnswer:
+                        $ref: '#/components/schemas/question/properties/imageAnswer'
+                  answerGrade:
+                    type: number
+        totalGrade:
+          type: number

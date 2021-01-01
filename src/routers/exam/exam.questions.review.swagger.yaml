@@ -16,20 +16,4 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              questions:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '../../swagger.config.yaml#/components/schemas/ExamQuestion&Answer'
-                    - type: object
-                      properties:
-                        question:
-                          type: object
-                          properties:
-                            answers:
-                              $ref: '../../swagger.config.yaml#/components/schemas/question/properties/answers'
-              user_examEndTime:
-                type: string
-                format: date-time
+            $ref: '../../swagger.config.yaml#/components/schemas/ExamReview'

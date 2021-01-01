@@ -5,7 +5,7 @@ const checkClassNoteId = require('../../../middelware/class/checkClassNoteId');
 
 const rout = require('express').Router();
 
-rout.put('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin, checkClassNoteId, async (req, res) => {
+rout.put('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin, checkClassNoteId, async (req, res, next) => {
     try {
         const { classNote } = req;
 

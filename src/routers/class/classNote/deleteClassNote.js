@@ -5,7 +5,7 @@ const checkClassNoteId = require('../../../middelware/class/checkClassNoteId');
 
 const rout = require('express').Router();
 
-rout.delete('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin, checkClassNoteId, async (req, res) => {
+rout.delete('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin, checkClassNoteId, async (req, res, next) => {
     try {
         const { Class,classNote } = req;
 
