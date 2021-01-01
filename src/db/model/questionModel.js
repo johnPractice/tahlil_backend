@@ -88,15 +88,6 @@ questionSchema.pre('save', async function (next) {
     if (checkBank) {
         await checkBank.remove();
     }
-    //if (question.isModified('imageQuestion') || question.isModified('imageAnswer')) {
-    //    const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-    //    const tests = ['imageAnswer', 'imageQuestion'];
-    //    for (let i = 0; i < tests.length; i++) {
-    //        if (question[tests[i]] != null) {
-    //            if (!base64regex.test(question[tests[i]])) throw new Error("it's not base64 format");
-    //        }
-    //    }
-    //}
     if (!question.hardness) throw new Error('hardness must be valid thing');
     if (question.isModified('type')) {
         if (question.type == 'TEST' || question.type == 'MULTICHOISE') {
@@ -134,16 +125,25 @@ questionSchema.statics.validateFields = function ({ answers, options, type }) {
             throw { message: "سوالات چندگزینه‌ای حداقل دو گزینه باید داشته باشند", code: 400 };
         if (!answers || answers.length > options.length)
             throw { message: "جواب سوال چندگزینه‌ای نامعتبر است", code: 400 };
-        answers.forEach((obj,i) => answer += ((i!=0)?",":"") + obj.answer);
+        answers.forEach((obj, i) => answer += ((i != 0) ? "," : "") + obj.answer);
 
-    } else if (type == 'LONGANSWER' || type == 'SHORTANSWER') {
+    } else if (type == 'LONGANSWER') {
 
         this.options = undefined;
-        if (answers) {
+        if (answers && answers.length != 0) {
             if (answers.length != 1)
-                throw { message: "LONGANSWER & SHORTANSWER questions must have one answer", code: 400 };
+                throw { message: "LONGANSWER questions must have one answer", code: 400 };
             answer = answers[0].answer;
         }
+
+    } else if (type == 'SHORTANSWER') {
+
+        this.options = undefined;
+        if (!answers || answers.length == 0)
+            throw { message: "جواب سوال‌های پاسخ کوتاه را وارد نمایید", code: 400 };
+        if (answers.length != 1)
+            throw { message: "LONGANSWER & SHORTANSWER questions must have one answer", code: 400 };
+        answer = answers[0].answer;
     }
     questionModel.validateAnswer({ answer, questionType: type, questionOptionsLength: options.length });
     return true;
@@ -176,7 +176,7 @@ questionSchema.statics.validateAnswer = ({ answer, questionType, questionOptions
         answers = answers.map(answer => {
             let parsed = parseInt(answer);
             if (isNaN(parsed))
-                throw { message: "Answer for MULTICHOISE questions must be an integer", code: 400 };
+                throw { message: "پاسخ سوال را وارد کنید", code: 400 };
             if (parsed > questionOptionsLength || parsed <= 0)
                 throw { message: "Answer is an invalid number", code: 400 };
             return parsed;
