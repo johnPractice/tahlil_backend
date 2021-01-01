@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors')
 const swaggerUi = require("swagger-ui-express");
 const dbStart = require('../src/db/mongoose');
 const userRouts = require('../src/routers/user/userRouts');
@@ -32,6 +33,7 @@ const initiate = async() => {
 
     // app.use(bodyParser.json());
     // app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(cors());
     app.use(express.json({ limit: "50mb" }));
 
     app.use(bodyParser.json({ limit: "50mb" }));
@@ -48,12 +50,11 @@ const initiate = async() => {
     app.use('/', reportPage);
 
     //error middleware
-    app.use(function (err, req, res, next) {
+    app.use(function(err, req, res, next) {
         if (err.errors) {
             err.message = err.errors[Object.keys(err.errors)[0]].message;
             err.code = 400;
-        }
-        else if (!err.code || err.code >= 600)
+        } else if (!err.code || err.code >= 600)
             err.code = 503;
         res.status(err.code).json({ error: err.message });
     });
