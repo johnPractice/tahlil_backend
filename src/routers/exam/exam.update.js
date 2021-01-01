@@ -85,8 +85,10 @@ rout.put('/:examId/questions/:questionIndex', auth, checkExamId, checkClassAdmin
             await exam.populate('attendees', 'answers').execPopulate();
             exam.attendees.forEach(async(user_exam) => {
                 let answerGrade = user_exam.getAnswerGrade(questionIndex);
-                if (answerGrade)
+                if (answerGrade) {
                     await user_exam.setAnswerGrade(questionIndex, answerGrade * gradeRatio);
+                    await user_exam.save();
+                }
             })
         }
         if (info.answers !== undefined) {
@@ -101,8 +103,11 @@ rout.put('/:examId/questions/:questionIndex', auth, checkExamId, checkClassAdmin
             if (questionObj.question.type == 'TEST' || questionObj.question.type == 'MULTICHOISE' || questionObj.question.type == 'SHORTANSWER') {
                 await exam.populate('attendees').execPopulate();
                 await exam.attendees.forEach(async (user_exam) => {
+                    user_exam.totalGrade -= await user_exam.getAnswerGrade(req.params.questionIndex);
                     await user_exam.setAnswerGrade(req.params.questionIndex, null);
                     await user_exam.autoGrade();
+                    user_exam.totalGrade += await user_exam.getAnswerGrade(req.params.questionIndex);
+                    await user_exam.save();
                 });
             }
         res.sendStatus(200);

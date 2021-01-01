@@ -93,7 +93,7 @@ user_examSchema.methods.getQuestionsWithUserAnswers = async function(options) {
      * }]
      */
 };
-user_examSchema.methods.setAnswerGrade = async function (questionIndex, answerGrade) {
+user_examSchema.methods.setAnswerGrade = function (questionIndex, answerGrade) {
     const user_exam = this;
     const answerObj = user_exam.answers.find(obj => obj.questionIndex == questionIndex);
 
@@ -101,8 +101,6 @@ user_examSchema.methods.setAnswerGrade = async function (questionIndex, answerGr
         user_exam.answers.push({ questionIndex, answerGrade });
     else
         answerObj.answerGrade = answerGrade;
-
-    await user_exam.save();
 };
 user_examSchema.methods.getAnswerGrade = function (questionIndex) {
     const answerObj = this.answers.find(obj => obj.questionIndex == questionIndex);
