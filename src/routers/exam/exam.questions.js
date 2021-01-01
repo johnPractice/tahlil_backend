@@ -6,28 +6,15 @@ const user_examModel = require('../../db/model/user-examModel');
 
 const rout = require('express').Router();
 
-rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTime, async (req, res) => {
+rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTime, async (req, res, next) => {
     try {
-        const { exam, user_exam, user_examEndTime } = req;
-
-        //const questions = exam.getQuestions("question imageQuestion type options");
-
-        //user_exam.answers.forEach(answer => {
-        //    let questionObj = questions.find(obj => obj.index == answer.questionIndex);
-        //    questionObj.answerText = answer.answerText;
-        //    questionObj.answerFile = answer.answerFile;
-        //});
+        const { exam, Class, user_exam, user_examEndTime } = req;
 
         const questions = await user_exam.getQuestionsWithUserAnswers();
 
-        res.status(200).json({ name: exam.name, questions, user_examEndTime });
+        res.status(200).json({ name: exam.name, classId: Class.classId, questions, user_examEndTime });
 
-    } catch (err) {
-        //console.log(err)
-        if (!err.code || err.code >= 600)
-            err.code = 503;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err); }
 });
 rout.get('/:examId/questions/review', auth, checkExamId, checkClassAccess, async (req, res) => {
     try {
@@ -43,11 +30,6 @@ rout.get('/:examId/questions/review', auth, checkExamId, checkClassAccess, async
 
         res.status(200).json({ questions });
 
-    } catch (err) {
-        //console.log(err)
-        if (!err.code || err.code >= 600)
-            err.code = 503;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err); }
 });
 module.exports = rout;

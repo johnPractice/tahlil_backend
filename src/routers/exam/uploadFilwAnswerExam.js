@@ -23,9 +23,16 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
         if (!answerFile && !answerText) {
             res.status(400).json({ "error": "مشکلی رخ داده است" });
             return;
-        } else if (answerFile && questionType != 'LONGANSWER') {
-            await fileDelete(answerFile);
-            throw { message: "File upload is for LONGANSWER questions only", code: 400 };
+        } else if (answerFile) {
+            if (questionType != 'LONGANSWER') {
+                await fileDelete(answerFile);
+                throw { message: "File upload is for LONGANSWER questions only", code: 400 };
+            }
+            //add url to path
+            console.log("baseroot: " + baseRoot);
+            console.log("answerFile before: " + answerFile);
+            answerFile = (constants.buildMode ? constants.urlName : constants.usrAddLocal + "/") + answerFile;
+            console.log("answerFile after: " + answerFile);
         } else if (answerText) {
             answerText = questionModel.validateAnswer({
                 answer: answerText,
@@ -33,11 +40,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
                 questionOptionsLength
             });
         }
-        //add url to path
-        console.log("baseroot: " + baseRoot);
-        console.log("answerFile before: " + answerFile);
-        answerFile = (constants.buildMode ? constants.urlName : constants.usrAddLocal + "/") + answerFile;
-        console.log("answerFile after: " + answerFile);
+        
         
         const foundAnswer = user_exam.answers.find(answer => answer.questionIndex == questionObj.index);
         if (!foundAnswer) {
@@ -70,11 +73,7 @@ rout.post('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkCl
         await user_exam.save();
         res.status(200).json(response);
 
-    } catch (err) {
-        if (!err.code || err.code >= 600)
-            err.code = 503;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err); }
 });
 rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, checkClassAccess, checkExamTime, checkQuestionIndex, async(req, res) => {
     try {
@@ -106,10 +105,6 @@ rout.delete('/:examId/questions/:questionIndex/answer', auth, checkExamId, check
 
         res.status(200).json({ answerText: foundAnswer.answerText, answerFile: foundAnswer.answerFile, user_examEndTime });
 
-    } catch (err) {
-        if (!err.code || err.code >= 600)
-            err.code = 400;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err); }
 });
 module.exports = rout;

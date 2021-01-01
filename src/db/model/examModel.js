@@ -74,21 +74,14 @@ examSchema.pre('save', async function(next) {
     const currentDate = (new Date()).getTime();
 
     if (exam.isModified('startDate')) {
-        if (startDate < currentDate) {
-            const error = new Error();
-            error.error = "زمان شروع آزمون باید زمانی در آینده باشد";
-            next(error);
-        }
+        if (startDate < currentDate)
+            throw { message: "زمان شروع آزمون باید زمانی در آینده باشد", code: 400 };
     }
     if (exam.isModified('startDate') || exam.isModified('endDate') || exam.isModified('examLength')) {
         if (
             (startDate >= endDate) ||
             ((endDate - startDate) < (60 * 1000 * exam.examLength))
-        ) {
-            const error = new Error();
-            error.error = "تاریخ یا طول امتحان مقادیر معتبری نیست";
-            next(error);
-        }
+        ) throw { message: "تاریخ یا طول امتحان مقادیر معتبری نیست", code: 400 };
     }
     next();
 
