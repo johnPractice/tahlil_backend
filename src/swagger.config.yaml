@@ -108,7 +108,7 @@ paths:
 
 
 ################### Report#######################
-  /image-karname/{examId}:
+  /image-karname:
     $ref: './routers/report/report.swagger.yaml'
   /generateReport:
     $ref: './routers/report/report-html.swagger.yaml'
