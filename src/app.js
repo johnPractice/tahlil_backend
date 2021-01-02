@@ -15,10 +15,13 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
 const swaggerParser = require('swagger-parser');
+const puppeteer = require('puppeteer');
 
 const initiate = async() => {
     // create the app express
     const app = express();
+
+    await puppeteer.launch({ args: ['--no-sandbox'] });
     // start the db
     dbStart();
 
