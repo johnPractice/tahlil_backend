@@ -1,0 +1,21 @@
+get:
+  summary: Report for user
+  tags:
+    - "Report"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: report user exam
+      content:
+        application/json:
+    '400':
+      description: Error
+      content:
+        application/json:

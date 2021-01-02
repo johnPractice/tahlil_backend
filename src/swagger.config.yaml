@@ -106,6 +106,14 @@ paths:
   /exam/{examId}/attendees/{username}:
     $ref: './routers/exam/attendees.username.swagger.yaml'
 
+
+################### Report#######################
+  /image-karname/{examId}:
+    $ref: './routers/report/report.swagger.yaml'
+  /generateReport:
+    $ref: './routers/report/report-html.swagger.yaml'
+
+
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
