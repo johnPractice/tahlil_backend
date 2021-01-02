@@ -1,34 +1,42 @@
 const rout = require("express").Router();
 const axios = require('axios');
+const auth = require('../../middelware/auth');
 const nodeHtmlToImage = require('node-html-to-image');
 
-const { baseRoot } = require('../../../constants');
-
-const url = 'http://localhost:5000/generateReport';
+const { baseRoot, buildMode, usrAddLocal, urlName } = require('../../../constants');
 
 
-rout.get('/image-karname', async(req, res) => {
-    axios(url)
+
+rout.get('/image-karname/:examId', auth, async(req, res) => {
+            const { user } = req;
+            const { lastname, firstname } = user;
+            const { examId } = req.params;
+            const { authorization } = req.headers;
+            if (!examId) return res.status(400).json({ "error": "قسمت های ضروری باید وارد شوند" });
+            const url = `${buildMode==true?`${urlName}/generateReport/?examId=${examId}&userId=${user._id}&name=${firstname+' '+lastname}}`:`http://${usrAddLocal}/generateReport/?examId=${examId}&userId=${user._id}&name=${firstname+' '+lastname}`}`;
+    axios({
+            baseURL: url,
+            headers:{
+                authorization
+            }
+        })
         .then(response => {
             const html = response.data;
-            let options = {
-                "format": "A4",
-                "orientation": "landscape", // portrait or landscape
-            };
-
             nodeHtmlToImage({
                     output: baseRoot + '/public/karname' + '/image.png',
                     html: html,
                 })
                 .then(() => {
-                    res.status(200).json({ path: baseRoot + '\\public\\karname' + '\\image.png' });
-                    // return;
+                    return res.status(200).json({
+                        path: baseRoot + '\\public\\karname' + '\\image.png',
+                        url
+                    });
                 }).catch(e => {
-                    res.status(400).json(e);
+                   return res.status(400).json(e);
                 });
         })
         .catch(e => {
-            res.status(400).json(e);
+            return res.status(400).json(e);
         });
 });
 
