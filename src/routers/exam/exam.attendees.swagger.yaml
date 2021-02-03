@@ -21,4 +21,9 @@ get:
               attendees:
                 type: array
                 items:
-                  $ref: '../../swagger.config.yaml#/components/schemas/user'
+                  allOf:
+                    - type: object
+                      properties:
+                        totalGrade:
+                          $ref: '../../swagger.config.yaml#/components/schemas/ExamReview/properties/totalGrade'
+                    - $ref: '../../swagger.config.yaml#/components/schemas/user'
