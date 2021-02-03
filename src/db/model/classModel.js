@@ -3,6 +3,8 @@ const Schema = mongoose.Schema;
 const { nanoid } = require('nanoid');
 const examModel = require('./examModel');
 const classNoteModel = require('./classNoteModel');
+const User = require('./userModel');
+const user_examModel = require('./user-examModel');
 
 const classSchema = Schema({
     name: {
@@ -131,6 +133,35 @@ classSchema.methods.getMembersList = async function({ forAdmin }) {
 
     return this.members;
 };
+classSchema.methods.generateReport = async function (user) {
+    if (!user instanceof User)
+        throw { message: "Invalid User", code: 400 };
+    if (!user.isMemberOf(this))
+        throw { message: "User is not a member of the class", code: 400 };
+
+    const report = [];
+
+    await this.populate('exams', '_id name questions').execPopulate();
+    await Promise.all(
+        this.exams.forEach(exam => {
+            let newReport = {
+                examName: exam.name,
+                questionsCount: exam.questions.length,
+                userGrade: null,
+                userStartTime: null,
+                userEndTime: null
+            }
+            let user_exam = await user_examModel.findOne({ exam: exam._id, user: user._id });
+            if (user_exam) {
+                newReport.userGrade = user_exam.totalGrade;
+                newReport.userStartTime = user_exam.startTime;
+                newReport.userEndTime = user_exam.endTime;
+            }
+            report.push(newReport);
+        })
+    );
+    return report;
+}
 
 classSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
     const Class = this;
