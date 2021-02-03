@@ -15,13 +15,14 @@
         
         .container {
             width: 210mm;
+            height: 297mm;
             border: 1px solid black;
             margin: 20px auto;
             border-radius: 10px;
             padding: 40px;
             direction: rtl;
             position: relative;
-            overflow: auto;
+            overflow: hidden;
         }
         /* header */
         
@@ -46,6 +47,7 @@
             /* background-color: green; */
             display: flex;
             flex-direction: column;
+            align-items: flex-end;
             justify-content: space-between;
             font-size: 18px;
         }
@@ -54,11 +56,14 @@
             margin: 2px 0;
         }
         
-        
+        .header .right {
+            width: 15%;
+            background-color: red;
+        }
         
         .header .right img {
-            height: 40mm;
-            display: flex
+            height: 100%;
+            width: 100%;
         }
         /* table */
         
@@ -176,7 +181,7 @@
         
         .bottom {
             direction: ltr;
-            position: relative;
+            position: absolute;
             bottom: 0;
             height: 120px;
             display: flex;
@@ -215,53 +220,78 @@
 <body>
     <div class="container">
         <div class="header">
+            <div class="right">
+                <img src="https://www.eaclinic.co.uk/wp-content/uploads/2019/01/woman-face-eyes-1000x1000.jpg" alt="avatar">
+            </div>
             <div class="left">
                 <div class="items">
-                    <span>کلاس:</span>
-                    <span><%= reportHeader.Class %></span>
+                    <span>name:</span>
+                    <span>RezaMousavian</span>
                 </div>
                 <div class="items">
-                    <span>دبیر:</span>
-                    <span><%= reportHeader.classAdmin %></span>
+                    <span>class:</span>
+                    <span>frontEnd</span>
                 </div>
                 <div class="items">
-                    <span>نام‌کاربری:</span>
-                    <span><%= reportHeader.username %></span>
+                    <span>exam:</span>
+                    <span>css</span>
                 </div>
                 <div class="items">
-                    <span>نام:</span>
-                    <span><%= reportHeader.userFirstname %></span>
+                    <span>teacher:</span>
+                    <span>AliSedaghi</span>
                 </div>
                 <div class="items">
-                    <span>نام‌خانوادگی:</span>
-                    <span><%= reportHeader.userLastname %></span>
+                    <span>date:</span>
+                    <span>1398/02/01</span>
                 </div>
-                <div class="items">
-                    <span>زمان چاپ:</span>
-                    <span><%= reportHeader.currentDate %></span>
-                </div>
-            </div>
-            <div class="right">
-                <img src= "<%= reportHeader.userAvatar %>" alt="avatar"/>
             </div>
         </div>
         <div class="table">
             <div class="tr title">
-                <div class="tc">آزمون</div>
-                <div class="tc">تاریخ</div>
-                <div class="tc">تعداد سوالات</div>
+                <div class="tc">سوال</div>
+                <div class="tc">نمره</div>
                 <div class="tc">نمره اخذ شده</div>
-                <div class="tc">زمان شروع</div>
+                <div class="tc">توضیحات</div>
             </div>
-            <% for(var i = 0; i < report.length; i++) { %>
-                <div class="tr title">
-                    <div class="tc"><%= report[i].examName %></div>
-                    <div class="tc"><%= report[i].examDate %></div>
-                    <div class="tc"><%= report[i].questionsCount %></div>
-                    <div class="tc" dir="ltr"><%= report[i].userGrade %></div>
-                    <div class="tc"><%= report[i].userStartTime %></div>
+            <div class="tr">
+                <div class="tc">
+                    سوال یک
+                    <div class="question">
+                        <i class="fa fa-info-circle"></i> کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است
+                    </div>
                 </div>
-            <% } %>
+                <div class="tc">3</div>
+                <div class="tc">2</div>
+                <div class="tc"> </div>
+            </div>
+            <div class="tr">
+                <div class="tc">سوال یک
+                    <div class="question">
+                        <i class="fa fa-info-circle"></i> کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است
+                    </div>
+                </div>
+                <div class="tc">3</div>
+                <div class="tc">2</div>
+                <div class="tc"> </div>
+            </div>
+            <div class="tr">
+                <div class="tc">سوال یک</div>
+                <div class="tc">3</div>
+                <div class="tc">2</div>
+                <div class="tc"> </div>
+            </div>
+            <div class="tr">
+                <div class="tc">
+                    سوال یک
+
+                    <div class="question">
+                        <i class="fa fa-info-circle"></i> کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است کدام یک از گزینه های زیر صحیح است
+                    </div>
+                </div>
+                <div class="tc">3</div>
+                <div class="tc">2</div>
+                <div class="tc"> asffsdf sdkflsda fhskdah sdhg sdsdgh sdhgsdmsdg hsdgsbdjg sdng sdjlkdshgkdf gksfd </div>
+            </div>
         </div>
         <div class="print-btn" id="print-btn">
             <i class="fa fa-print"></i>

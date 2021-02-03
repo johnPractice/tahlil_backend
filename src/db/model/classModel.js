@@ -1,8 +1,10 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { nanoid } = require('nanoid');
 const examModel = require('./examModel');
 const classNoteModel = require('./classNoteModel');
+const User = require('./userModel');
+const user_examModel = require('./user-examModel');
 
 const classSchema = Schema({
     name: {
@@ -131,6 +133,35 @@ classSchema.methods.getMembersList = async function({ forAdmin }) {
 
     return this.members;
 };
+classSchema.methods.generateReport = async function (user) {
+    //if (!user instanceof User)
+    //    throw { message: "Invalid User", code: 400 };
+    if (!user.isMemberOf(this) && !user.isAdminOf(this))
+        throw { message: "User is not a member of the class", code: 400 };
+    let a = new Date().da
+    await this.populate('exams', '_id name questions startDate').execPopulate();
+    const report =
+        await Promise.all(this.exams.map(async exam => {
+            let newReport = {
+                examName: exam.name,
+                examDate: exam.startDate.toLocaleDateString('en-US'),
+                questionsCount: exam.questions.length.toString(),
+                userGrade: "0",
+                userStartTime: "غیبت",
+                userEndTime: "غیبت"
+            }
+            let user_exam = await user_examModel.findOne({ exam: exam._id, user: user._id });
+            if (user_exam) {
+                if (user_exam.isAutoGraded === false)
+                    await user_exam.autoGrade();
+                newReport.userGrade = user_exam.totalGrade.toString();
+                newReport.userStartTime = user_exam.startTime.toLocaleTimeString();
+            }
+            newReport.userGrade += " / " + exam.examTotalGrade;
+            return newReport;
+        }));
+    return report;
+}
 
 classSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
     const Class = this;

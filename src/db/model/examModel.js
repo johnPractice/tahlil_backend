@@ -57,6 +57,11 @@ examSchema.virtual('attendees', {
     localField: '_id',
     foreignField: 'exam'
 });
+examSchema.virtual('examTotalGrade').get(function () {
+    let sum = 0;
+    this.questions.forEach(q => sum += q.grade);
+    return sum;
+});
 
 // const checkCLass = async({ id, owner }) => {
 //     const findClass = await classModel.findOne({ classId: id });
