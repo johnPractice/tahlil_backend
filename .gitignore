@@ -2,8 +2,6 @@ node_modules
 constants.js
 .env
 .vscode
-uploads
-public
 .vs
 package-lock.json
 karname
