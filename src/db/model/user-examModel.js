@@ -131,7 +131,7 @@ user_examSchema.methods.autoGrade = async function (options) {
         }
     });
     if (this.totalGrade === null || (options && options.reAutoGrade === true))
-        this.totalGrade = totalGrade;
+        this.totalGrade = totalGrade.toFixed(2);
     this.isAutoGraded = true;
     await this.save();
 };
