@@ -47,7 +47,17 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../swagger.config.yaml#/components/schemas/ExamReview'
+            allOf:
+              - type: object
+                properties:
+                  userFirstname:
+                    type: string
+                  userLastname:
+                    type: string
+                  examName:
+                    type: string
+              - $ref: '../../swagger.config.yaml#/components/schemas/ExamReview'
+            
 
 put:
   summary: Sets answerGrades & totalGrade

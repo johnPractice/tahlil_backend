@@ -23,11 +23,19 @@ rout.get('/:examId/attendees', auth, checkExamId, checkClassAdmin, async (req, r
                     user_exam.autoGrade();
             });
 
-        res.status(200).json({ attendees: exam.attendees.map(obj=>obj.user) });
+        res.status(200).json({
+            attendees: exam.attendees.map(obj => {
+                let newObj = obj.toObject().user;
+                newObj.totalGrade = obj.totalGrade;
+                delete newObj.id;
+                delete newObj._id;
+                return newObj;
+            })
+        });
 
     } catch (err) { next(err); }
 });
-rout.delete('/:examId/attendees/:username', auth, checkExamId, checkClassAdmin, checkQuestionIndex, async (req, res, next) => {
+rout.delete('/:examId/attendees/:username', auth, checkExamId, checkClassAdmin, async (req, res, next) => {
     try {
         const { exam } = req;
         await exam.populate({
@@ -49,7 +57,7 @@ rout.delete('/:examId/attendees/:username', auth, checkExamId, checkClassAdmin, 
 });
 rout.get('/:examId/attendees/:username', auth, checkExamId, checkClassAdmin, async (req, res, next) => {
     try {
-        const { exam } = req;
+        const { exam, user } = req;
         const { reAutoGrade } = req.query;
 
         if ((new Date()) <= exam.endDate)
@@ -71,7 +79,13 @@ rout.get('/:examId/attendees/:username', auth, checkExamId, checkClassAdmin, asy
 
         const questions = await user_exam.getQuestionsWithUserAnswers({ getQuestionAnswers: true });
 
-        res.status(200).json({ questions, totalGrade: user_exam.totalGrade });
+        res.status(200).json({
+            userFirstname: user.firstname,
+            userLastname: user.lastname,
+            examName: exam.name,
+            questions,
+            totalGrade: user_exam.totalGrade
+        });
 
     } catch (err) { next(err); }
 });
