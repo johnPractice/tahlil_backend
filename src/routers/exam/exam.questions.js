@@ -18,7 +18,7 @@ rout.get('/:examId/questions', auth, checkExamId, checkClassAccess, checkExamTim
 });
 rout.get('/:examId/questions/review', auth, checkExamId, checkClassAccess, async (req, res, next) => {
     try {
-        const { exam, user } = req;
+        const { exam, user, Class } = req;
         if ((new Date()) <= exam.endDate)
             throw { message: "زمان آزمون هنوز به اتمام نرسیده است", code: 403 };
 
@@ -29,7 +29,7 @@ rout.get('/:examId/questions/review', auth, checkExamId, checkClassAccess, async
         await user_exam.autoGrade();
         const questions = await user_exam.getQuestionsWithUserAnswers({ getQuestionAnswers: true });
 
-        res.status(200).json({ questions, totalGrade: user_exam.totalGrade });
+        res.status(200).json({ classId: Class.classId, questions, totalGrade: user_exam.totalGrade });
 
     } catch (err) { next(err); }
 });

@@ -16,4 +16,9 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../swagger.config.yaml#/components/schemas/ExamReview'
+            allOf:
+              - type: object
+                properties:
+                  classId:
+                    type: string
+              - $ref: '../../swagger.config.yaml#/components/schemas/ExamReview'
