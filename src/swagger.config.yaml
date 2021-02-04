@@ -108,11 +108,11 @@ paths:
 
 
 ################### Report#######################
-  /image-karname:
-    $ref: './routers/report/report.swagger.yaml'
   /class/{classId}/report:
     $ref: './routers/report/report-html.swagger.yaml'
-
+  
+  /class/{classId}/reportImage:
+    $ref: './routers/report/report.swagger.yaml'
 
 ################### PublicAPi #####################
   /public/question/category:

@@ -10,7 +10,7 @@ const examRouts = require('../src/routers/exam/examRouts');
 const publicApis = require('../src/routers/publicApi/publicRouts');
 const reportPage = require('./routers/report/test');
 // const test2 = require('./routers/report/base');
-const baseKarname = require('./routers/report/baseKarname');
+const reportImage = require('./routers/report/baseKarname2');
 const path = require('path');
 const bodyParser = require('body-parser');
 const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
@@ -49,7 +49,7 @@ const initiate = async() => {
     app.use('/bank', bankRouts);
     app.use('/exam', examRouts);
     app.use('/public', publicApis);
-    app.use('/', baseKarname);
+    app.use('/', reportImage);
     app.use('/', reportPage);
 
     //error middleware
