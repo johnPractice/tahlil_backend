@@ -67,7 +67,7 @@ rout.get('/:examId/attendees/:username', auth, checkExamId, checkClassAdmin, asy
             path: 'attendees',
             populate: {
                 path: 'user',
-                select: 'username'
+                select: 'username firstname lastname'
             }
         }).execPopulate();
         const user_exam = await exam.attendees.find(attendee => attendee.user.username == req.params.username);
@@ -80,8 +80,8 @@ rout.get('/:examId/attendees/:username', auth, checkExamId, checkClassAdmin, asy
         const questions = await user_exam.getQuestionsWithUserAnswers({ getQuestionAnswers: true });
 
         res.status(200).json({
-            userFirstname: user.firstname,
-            userLastname: user.lastname,
+            userFirstname: user_exam.user.firstname,
+            userLastname: user_exam.user.lastname,
             examName: exam.name,
             questions,
             totalGrade: user_exam.totalGrade
