@@ -59,7 +59,8 @@ examSchema.virtual('attendees', {
 });
 examSchema.virtual('examTotalGrade').get(function () {
     let sum = 0;
-    this.questions.forEach(q => sum += q.grade);
+    if(this.questions)
+        this.questions.forEach(q => sum += q.grade);
     return sum;
 });
 
@@ -100,6 +101,7 @@ examSchema.methods.toJSON = function() {
     delete userObject.__v;
     delete userObject.useInClass;
     delete userObject.owner;
+    delete userObject.examTotalGrade;
     if (userObject.questions)
         userObject.questions.forEach((obj,i) => {
             delete obj._id;
