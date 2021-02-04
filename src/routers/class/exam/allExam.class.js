@@ -5,23 +5,16 @@ const Class = require('../../../db/model/classModel');
 const checkClassId = require('../../../middelware/class/checkClassId');
 const checkClassAccess = require('../../../middelware/class/checkClassAccess');
 const checkClassAdmin = require('../../../middelware/class/checkClassAdmin');
-rout.get('/:classId/exams', auth,checkClassId,checkClassAccess, async(req, res) => {
+rout.get('/:classId/exams', auth,checkClassId,checkClassAccess, async(req, res, next) => {
     try {
         const { Class } = req;
         
         const exams = await Exam.find({ useInClass: Class.classId }, '_id startDate name endDate examLength');
         
         res.status(200).json({ exams });
-    } catch (e) {
-        //console.log(e);
-        if (e.message) {
-            res.status(400).json({ "error": e.message });
-            return;
-        }
-        res.status(400).json({ "error": "مشکلی رخ داده است" });
-    }
+    } catch (err) { next(err);}
 });
-rout.get('/:classId/exams/:examId', auth, checkClassId, checkClassAdmin, async (req, res) => {
+rout.get('/:classId/exams/:examId', auth, checkClassId, checkClassAdmin, async (req, res, next) => {
     try {
         const { Class } = req;
         await Class.populate({
@@ -34,10 +27,6 @@ rout.get('/:classId/exams/:examId', auth, checkClassId, checkClassAdmin, async (
 
         res.status(200).json({ exam: Class.exams[0] });
 
-    } catch (err) {
-        if (!err.code || err.code >= 600)
-            err.code = 503;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err);}
 });
 module.exports = rout;
