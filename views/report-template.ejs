@@ -26,7 +26,7 @@
         /* header */
         
         .header {
-            width: 80%;
+            width: 90%;
             margin: 5px auto;
             display: black;
             display: flex;
@@ -34,7 +34,6 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: stretch;
-            width: 80%;
             margin-bottom: 30px;
             border-bottom: 1px solid black;
             /* border: 1px solid black; */
@@ -47,6 +46,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            align-items: flex-start;
             font-size: 18px;
         }
         
@@ -67,7 +67,7 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: stretch;
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
         }
         
@@ -217,27 +217,27 @@
         <div class="header">
             <div class="left">
                 <div class="items">
-                    <span>کلاس:</span>
+                    <span><b>کلاس:</b></span>
                     <span><%= reportHeader.Class %></span>
                 </div>
                 <div class="items">
-                    <span>دبیر:</span>
+                    <span><b>دبیر:</b></span>
                     <span><%= reportHeader.classAdmin %></span>
                 </div>
                 <div class="items">
-                    <span>نام‌کاربری:</span>
+                    <span><b>نام کاربری:</b></span>
                     <span><%= reportHeader.username %></span>
                 </div>
                 <div class="items">
-                    <span>نام:</span>
+                    <span><b>نام:</b></span>
                     <span><%= reportHeader.userFirstname %></span>
                 </div>
                 <div class="items">
-                    <span>نام‌خانوادگی:</span>
+                    <span><b>نام خانوادگی:</b></span>
                     <span><%= reportHeader.userLastname %></span>
                 </div>
                 <div class="items">
-                    <span>زمان چاپ:</span>
+                    <span><b>زمان چاپ:</b></span>
                     <span><%= reportHeader.currentDate %></span>
                 </div>
             </div>
