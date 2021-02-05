@@ -5,13 +5,29 @@ const checkClassAccess = require("../../middelware/class/checkClassAccess");
 const { usrAddLocal, buildMode,urlName } = require("../../../constants");
 const defaultAvatar = ((buildMode) ? urlName : ("http://" + usrAddLocal + "/")) + "uploads/avatar/defaultAvatar.png";
 
-rout.get("/class/:classId/report", auth, checkClassId, checkClassAccess, async (req, res, next) => {
+const queryTokenAuth = async(req, res, next) => {
+    const { token } = req.query;
+    if (token) {
+        newReq = { header: () => 'Bearer ' + token };
+
+        await auth(newReq, res, () => null);
+        req.token = newReq.token;
+        req.user = newReq.user;
+        next();
+
+    } else
+        await auth(req, res, next);
+}
+
+rout.get("/class/:classId/report", queryTokenAuth, checkClassId, checkClassAccess, async (req, res, next) => {
     try {
-        const { user,Class } = req;
+        const { user, Class } = req;
         
         await Class.populate('owner', 'firstname lastname').execPopulate();
         const ownerFullname = Class.owner.firstname + " " + Class.owner.lastname;
         await Class.depopulate('owner');
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getUTCHours() + 3, currentDate.getUTCMinutes() + 30);
         const reportHeader = {
             userAvatar: (user.avatar) ? ((user.avatar).split("\\").join("/")).split("//").join("/").replace('http:/', 'http://') : defaultAvatar,
             Class: Class.name + " " + Class.classId,
@@ -19,9 +35,8 @@ rout.get("/class/:classId/report", auth, checkClassId, checkClassAccess, async (
             username: user.username,
             userFirstname: user.firstname,
             userLastname: user.lastname,
-            currentDate: new Date().toLocaleString('en-US')
+            currentDate: currentDate.toLocaleString('en-US')
         };
-        console.log(reportHeader.userAvatar);
         const report = await Class.generateReport(user);
 
         res.render("report-template", { report, reportHeader });
