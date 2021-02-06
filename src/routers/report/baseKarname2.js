@@ -23,4 +23,4 @@ rout.get('/class/:classId/reportImage', async(req, res, next) => {
     res.status(200).json({ base64Image: image });
 });
 
-module.exports = rout;
+//module.exports = rout;
