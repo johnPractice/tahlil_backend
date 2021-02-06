@@ -13,6 +13,13 @@ post:
   responses:
     '200':
       description: New question is created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              questionId:
+                type: string
 
 put:
   summary: Edits a question

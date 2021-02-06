@@ -5,7 +5,7 @@ const checkClassNoteId = require('../../../middelware/class/checkClassNoteId');
 
 const rout = require('express').Router();
 
-rout.delete('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin, checkClassNoteId, async (req, res) => {
+rout.delete('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin, checkClassNoteId, async (req, res, next) => {
     try {
         const { Class,classNote } = req;
 
@@ -17,10 +17,6 @@ rout.delete('/:classId/notes/:classNoteId', auth, checkClassId, checkClassAdmin,
 
         res.sendStatus(200);
 
-    } catch (err) {
-        if (!err.code || err.code >= 600)
-            err.code = 400;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err); }
 });
 module.exports = rout;

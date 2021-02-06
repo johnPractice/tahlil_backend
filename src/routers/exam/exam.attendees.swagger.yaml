@@ -1,0 +1,29 @@
+get:
+  summary: Gets list of exam attendees
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              attendees:
+                type: array
+                items:
+                  allOf:
+                    - type: object
+                      properties:
+                        totalGrade:
+                          $ref: '../../swagger.config.yaml#/components/schemas/ExamReview/properties/totalGrade'
+                    - $ref: '../../swagger.config.yaml#/components/schemas/user'

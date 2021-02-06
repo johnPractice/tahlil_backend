@@ -4,7 +4,7 @@ const auth = require('../../middelware/auth');
 const checkAnswer = require('../../middelware/question/checkAnswer');
 
 
-rout.post('/', auth, checkAnswer, async(req, res) => {
+rout.post('/', auth, async(req, res, next) => {
     try {
         const user = req.user;
         const info = req.body;
@@ -20,12 +20,8 @@ rout.post('/', auth, checkAnswer, async(req, res) => {
         question.owner = user._id;
         await question.save();
         res.status(200).json({ questionId: question._id });
-    } catch (e) {
-        // console.log(e);
-        if (e.message) {
-            res.status(400).json(e.message);
-        } else { res.status(400).json(e); }
-    }
+
+    } catch (err) { next(err); }
 });
 
 module.exports = rout;

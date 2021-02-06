@@ -6,7 +6,7 @@ rout.post('/', auth, async(req, res) => {
     try {
         const { user } = req;
         const { useInClass } = req.body;
-        const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength', 'useInClass'];
+        const canUses = ['name', 'startDate', 'endDate', 'examLength', 'useInClass'];
         const info = req.body;
         if (!info.questions || info.questions.length == 0) res.status(400).json({ 'error': 'لطفا سوالی را برای ازمون انتخاب کنید' });
         if (Object.keys(info).length == 0) {
@@ -15,13 +15,14 @@ rout.post('/', auth, async(req, res) => {
         }
         const findClass = await ClassModel.findOne({ classId: useInClass, owner: user._id });
         if (!findClass) {
-            res.status(400).json({ "error": "شما مجاز به ذسترسی به این ازمون نیستید" });
+            res.status(400).json({ "error": "این کلاس قابل دسترسی نیست" });
             return;
         }
         const newExam = new Exam();
         canUses.forEach(use => {
             newExam[use] = info[use];
         });
+        await newExam.setQuestions(info.questions);
         newExam.owner = user._id;
         await newExam.save();
 
@@ -50,8 +51,9 @@ rout.post('/', auth, async(req, res) => {
                 }
             }
         } else {
-            res.status(400).json(e);
-
+            if (!e.code || e.code >= 600)
+                e.code = 503;
+            res.status(e.code).json({ error: e.message });
         }
     }
 });

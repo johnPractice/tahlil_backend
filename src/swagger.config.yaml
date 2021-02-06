@@ -75,6 +75,9 @@ paths:
   /exam:
     $ref: './routers/exam/exam.swagger.yaml' 
     
+  /exam/{examId}/questions/{questionIndex}:
+    $ref: './routers/exam/exam.questions.update2.swagger.yaml'
+
   /exam/{examId}:
     $ref: './routers/exam/exam.delete.swagger.yaml'
 
@@ -84,9 +87,40 @@ paths:
   /class/{classId}/exams/{examId}:
     $ref: './routers/class/exam/exam.examId.swagger.yaml'
 
+################### Exam Attendance #####################
+  /exam/{examId}/questions:
+    $ref: './routers/exam/exam.questions.swagger.yaml'
+
+  /exam/{examId}/questions/{questionIndex}/answer:
+    $ref: './routers/exam/exam.questions.answer.swagger.yaml'
+
+  /exam/{examId}/questions/status:
+    $ref: './routers/exam/exam.questions.status.swagger.yaml'
+
+  /exam/{examId}/questions/review:
+    $ref: './routers/exam/exam.questions.review.swagger.yaml'
+
+  /exam/{examId}/attendees:
+    $ref: './routers/exam/exam.attendees.swagger.yaml'
+    
+  /exam/{examId}/attendees/{username}:
+    $ref: './routers/exam/attendees.username.swagger.yaml'
+
+
+################### Report#######################
+  /class/{classId}/report:
+    $ref: './routers/report/report-html.swagger.yaml'
+  
+  /class/{classId}/reportImage:
+    $ref: './routers/report/report.swagger.yaml'
+
 ################### PublicAPi #####################
   /public/question/category:
     $ref: './routers/publicApi/questionCategory.swagger.yaml' 
+  /public/time:
+    $ref: './routers/publicApi/getTime.swagger.yaml' 
+  /public/download/app:
+    $ref: './routers/publicApi/downloadApp.swagger.yaml' 
 
 
 
@@ -129,6 +163,10 @@ components:
           type: string
         ownerFullname:
           type: string
+        isOwned:
+          type: boolean
+        isPrivate:
+          type: boolean
 
     question:
       type: object
@@ -155,9 +193,11 @@ components:
         public:
           type: boolean
         imageQuestion:
-          type: string 
+          type: string
+          format: base64
         imageAnswer:
-          type: string 
+          type: string
+          format: base64
         question:
           type: string
         answers:
@@ -166,9 +206,10 @@ components:
             type: object
             properties:
               answer:
-                oneOf:
-                  - type: string
-                  - type: number
+                type: string
+                #oneOf:
+                #  - type: string
+                #  - type: number
         options:
           type: array
           items:
@@ -275,18 +316,55 @@ components:
               items:
                 type: object
                 properties:
+                  index:
+                    type: integer
                   question:
-                    allOf:
-                      - $ref: '#/components/schemas/question'
-                      - type: object
-                        properties:
-                          _id:
-                            type: string
+                    $ref: '#/components/schemas/question'
                   grade:
                     type: integer
-            members:
-              type: array
-              items:
-                type: object
 
-        
+    ExamQuestion&Answer:
+      type: object
+      properties:
+        index:
+          type: integer
+        question:
+          type: object
+          properties:
+            question:
+              $ref: '#/components/schemas/question/properties/question'
+            imageQuestion:
+              $ref: '#/components/schemas/question/properties/imageQuestion'
+            type:
+              $ref: '#/components/schemas/type'
+            options:
+              $ref: '#/components/schemas/question/properties/options'
+        grade:
+          type: number
+        answerText:
+          type: string
+        answerFile:
+          type: string
+          format: urlPath
+
+    ExamReview:
+      type: object
+      properties:
+        questions:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/ExamQuestion&Answer'
+              - type: object
+                properties:
+                  question:
+                    type: object
+                    properties:
+                      answers:
+                        $ref: '#/components/schemas/question/properties/answers'
+                      imageAnswer:
+                        $ref: '#/components/schemas/question/properties/imageAnswer'
+                  answerGrade:
+                    type: number
+        totalGrade:
+          type: number

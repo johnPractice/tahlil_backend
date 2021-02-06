@@ -1,17 +1,18 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const classNoteSchema = Schema({
     title: {
         type: String,
-        minlength: 5,
-        required: [true, 'title is required']
+        minlength: [5, 'طول عنوان اعلان کمتر از حد مجاز است'],
+        maxlength: [25, 'طول عنوان اعلان بیشتر از حد مجاز است'],
+        required: [true, 'عنوان اعلان را وارد نمایید']
     },
     body: {
         type: String,
-        minlength: 5,
-        maxlength: 120,
-        required: [true, 'body is required']
+        minlength: [5, 'طول متن اعلان کمتر از حد مجاز است'],
+        maxlength: [120, 'طول متن اعلان بیشتر از حد مجاز است'],
+        required: [true, 'متن اعلان را وارد نمایید']
     },
     creator: {
         type: Schema.Types.ObjectId,

@@ -1,19 +1,13 @@
 const rout = require('express').Router();
-const Exam = require('../../db/model/examModel');
 const auth = require('../../middelware/auth');
-rout.delete('/:examId', auth, async(req, res) => {
+const checkExamId = require('../../middelware/exam/checkExamId');
+const checkClassAdmin = require('../../middelware/class/checkClassAdmin');
+rout.delete('/:examId', auth,checkExamId,checkClassAdmin, async(req, res) => {
     try {
-        const examId = req.params.examId;
-        const { user } = req;
-        if (!examId) {
-            res.status(400).json({ "error": "شناسه ی امتحان باید مقدار صحیحی وارد شود" });
-            return;
-        }
-        const examDelete = await Exam.findOneAndDelete({ _id: examId, owner: user._id });
-        if (!examDelete) {
-            res.status(400).json({ "error": "مشکلی رخ داده است دوباره تلاش کنید" });
-            return;
-        }
+        const examToDelete = req.exam;
+
+        await examToDelete.deleteOne();
+
         res.json({ "message": "امتحان با موفقیت حذف شد" });
     } catch (e) {
         console.log(e);
