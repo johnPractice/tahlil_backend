@@ -9,19 +9,15 @@ const bankRouts = require('../src/routers/bank/bankRouts');
 const examRouts = require('../src/routers/exam/examRouts');
 const publicApis = require('../src/routers/publicApi/publicRouts');
 const reportPage = require('./routers/report/test');
-// const test2 = require('./routers/report/base');
-const reportImage = require('./routers/report/baseKarname2');
 const path = require('path');
 const bodyParser = require('body-parser');
 const swagger_path = path.resolve(__dirname, './swagger.config.yaml');
 const swaggerParser = require('swagger-parser');
-const puppeteer = require('puppeteer');
 
 const initiate = async() => {
     // create the app express
     const app = express();
 
-    await puppeteer.launch({ args: ['--no-sandbox'] });
     // start the db
     dbStart();
 
@@ -34,8 +30,6 @@ const initiate = async() => {
     // middelware use
     app.use(express.static(__dirname + '/views/404/dist'));
 
-    // app.use(bodyParser.json());
-    // app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cors());
     app.use(express.json({ limit: "50mb" }));
 
@@ -66,7 +60,6 @@ const initiate = async() => {
         res.status(404).sendFile('index.html', {
             root: path.join(__dirname, './views/404/dist')
         });
-        // res.json('error')
     });
     return app;
 };
