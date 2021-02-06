@@ -49,7 +49,6 @@ const initiate = async() => {
     app.use('/bank', bankRouts);
     app.use('/exam', examRouts);
     app.use('/public', publicApis);
-    app.use('/', reportImage);
     app.use('/', reportPage);
 
     //error middleware
