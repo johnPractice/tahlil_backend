@@ -1,0 +1,94 @@
+delete:
+  summary: Removes an attendee from exam
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  - in: path
+    name: username
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: OK
+
+get:
+  summary: Gets answers & grades(autograded) of an attendee
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  - in: path
+    name: username
+    required: true
+    schema:
+      type: string
+  - in: query
+    name: reAutoGrade
+    description: Resets all grades & total grade based on autograde
+    schema:
+      type: boolean
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  userFirstname:
+                    type: string
+                  userLastname:
+                    type: string
+                  examName:
+                    type: string
+              - $ref: '../../swagger.config.yaml#/components/schemas/ExamReview'
+            
+
+put:
+  summary: Sets answerGrades & totalGrade
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  - in: path
+    name: username
+    required: true
+    schema:
+      type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            answerGrades:
+              type: array
+              description: all the grades in order
+              items:
+                type: number
+            totalGrade:
+              type: number
+  responses:
+    '200':
+      description: OK

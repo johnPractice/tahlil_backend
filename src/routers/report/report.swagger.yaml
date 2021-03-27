@@ -1,0 +1,24 @@
+get:
+  deprecated: true
+  summary: Report for user base64Image
+  tags:
+    - "Report"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: classId
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: base64 report image
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              base64Image:
+                type: string
+                format: base64

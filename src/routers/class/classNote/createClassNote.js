@@ -4,7 +4,7 @@ const checkClassId = require('../../../middelware/class/checkClassId');
 const checkClassAdmin = require('../../../middelware/class/checkClassAdmin');
 const classNoteModel = require('../../../db/model/classNoteModel');
 
-rout.post('/:classId/notes', auth, checkClassId, checkClassAdmin, async (req, res) => {
+rout.post('/:classId/notes', auth, checkClassId, checkClassAdmin, async (req, res, next) => {
     try {
         const { user, Class } = req;
 
@@ -27,11 +27,7 @@ rout.post('/:classId/notes', auth, checkClassId, checkClassAdmin, async (req, re
 
         res.status(201).json({ newClassNote: await newNote.toJSON() });
 
-    } catch (err) {
-        if (!err.code || err.code >= 600)
-            err.code = 400;
-        res.status(err.code).json({ error: err.message });
-    }
+    } catch (err) { next(err); }
 });
 
 module.exports = rout;

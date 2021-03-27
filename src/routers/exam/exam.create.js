@@ -1,28 +1,36 @@
 const rout = require('express').Router();
 const Exam = require('../../db/model/examModel');
+const ClassModel = require('../../db/model/classModel');
 const auth = require('../../middelware/auth');
 rout.post('/', auth, async(req, res) => {
     try {
         const { user } = req;
-        const canUses = ['name', 'startDate', 'endDate', 'questions', 'examLength', 'useInClass'];
+        const { useInClass } = req.body;
+        const canUses = ['name', 'startDate', 'endDate', 'examLength', 'useInClass'];
         const info = req.body;
         if (!info.questions || info.questions.length == 0) res.status(400).json({ 'error': 'لطفا سوالی را برای ازمون انتخاب کنید' });
         if (Object.keys(info).length == 0) {
             res.status(400).json({ "error": "برای ساخت آزمون فیلد های مربوطه را وارد کنید" });
             return;
         }
+        const findClass = await ClassModel.findOne({ classId: useInClass, owner: user._id });
+        if (!findClass) {
+            res.status(400).json({ "error": "این کلاس قابل دسترسی نیست" });
+            return;
+        }
         const newExam = new Exam();
         canUses.forEach(use => {
             newExam[use] = info[use];
         });
+        await newExam.setQuestions(info.questions);
         newExam.owner = user._id;
         await newExam.save();
 
         res.json(newExam);
     } catch (e) {
+        console.log(e);
         if (e && e.errors) {
             const keys = Object.keys(e.errors);
-            // console.log(e);
             if (e.message) {
                 if (Object.keys(e.errors).length > 1) {
                     const errors = [];
@@ -43,8 +51,9 @@ rout.post('/', auth, async(req, res) => {
                 }
             }
         } else {
-            res.status(400).json(e);
-
+            if (!e.code || e.code >= 600)
+                e.code = 503;
+            res.status(e.code).json({ error: e.message });
         }
     }
 });

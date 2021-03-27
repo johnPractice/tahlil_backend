@@ -35,9 +35,9 @@ post:
                   - "grade"
                 properties:
                   question:
-                    type: string
+                    $ref: '../../swagger.config.yaml#/components/schemas/question'
                   grade:
-                    type: integer     
+                    type: integer
             examLength:
               type: integer
             useInClass:
@@ -45,6 +45,10 @@ post:
   responses:
     '200':
       description: exam created
+      content:
+        application/json:
+          schema:
+            $ref: '../../swagger.config.yaml#/components/schemas/Exam'
     '400':
       description: Error
       content:
@@ -80,13 +84,25 @@ put:
             name:
               type: string
             startDate:
-              type: Date
+              type: string
+              format: date-time
             endDate:
-              type: Date
+              type: string
+              format: date-time
             questions:
-              type: Array     
+              type: array
+              items:
+                type: object
+                required: 
+                  - "question"
+                  - "grade"
+                properties:
+                  question:
+                    $ref: '../../swagger.config.yaml#/components/schemas/question'
+                  grade:
+                    type: integer
             examLength:
-              type: int                         
+              type: integer                        
   responses:
     '200':
       description: exam edited

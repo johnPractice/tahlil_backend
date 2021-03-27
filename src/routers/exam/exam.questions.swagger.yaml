@@ -1,0 +1,32 @@
+get:
+  summary: Attend exam & get questions
+  tags:
+    - "Exam Attendance"
+  security:
+    - bearerAuth: []
+  parameters:
+  - in: path
+    name: examId
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                description: exam name
+                type: string
+              classId:
+                type: string
+              questions:
+                type: array
+                items:
+                  $ref: '../../swagger.config.yaml#/components/schemas/ExamQuestion&Answer'
+              user_examEndTime:
+                type: string
+                format: date-time
